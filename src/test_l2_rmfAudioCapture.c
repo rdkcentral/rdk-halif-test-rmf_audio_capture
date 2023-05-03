@@ -18,16 +18,16 @@
 */
 
 /**
-* @file TODO: test_l2_rmfAudioCapture.c
-* @page module_name TODO: Required field, name of the main module
-* @subpage sub_page_name TODO: Add a function group if relevant
+* @file test_l2_rmfAudioCapture.c
+* @page AudioCapture HAL
+* @subpage L2 unit tests
 *
 * ## Module's Role
-* TODO: Explain the module's role in the system in general
-* This is to ensure that the API meets the operational requirements of the module across all vendors.
+* Level 2 unit tests will perform module level testing by exercising the full set of APIs to validate
+* various use cases. This is to ensure that the API meets the operational requirements of the module across all vendors.
 *
-* **Pre-Conditions:**  TODO: Add pre-conditions if any@n
-* **Dependencies:** TODO: Add dependencies if any@n
+* **Pre-Conditions:**  Launch video playback before commencing tests.@n
+* **Dependencies:** None@n
 *
 * Ref to API Definition specification documentation : [halSpec.md](../../../docs/halSpec.md)
 */

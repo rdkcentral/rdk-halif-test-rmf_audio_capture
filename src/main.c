@@ -18,16 +18,16 @@
 */
 
 /**
-* @file TODO: main.c
-* @page module_name TODO: Required field, name of the main module
-* @subpage sub_page_name TODO: Add a function group if relevant
+* @file main.c
+* @page AudioCapture
+* @subpage Unit tests
 *
 * ## Module's Role
-* TODO: Explain the module's role in the system in general
+* Unit test for AudioCapture HAL
 * This is to ensure that the API meets the operational requirements of the module across all vendors.
 *
-* **Pre-Conditions:**  TODO: Add pre-conditions if any@n
-* **Dependencies:** TODO: Add dependencies if any@n
+* **Pre-Conditions:**  Launch video playback before commencing tests.@n
+* **Dependencies:** None@n
 *
 * Ref to API Definition specification documentation : [halSpec.md](../../../docs/halSpec.md)
 */
