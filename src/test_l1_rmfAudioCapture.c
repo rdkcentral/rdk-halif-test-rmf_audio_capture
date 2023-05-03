@@ -81,14 +81,14 @@ void test_l1_rmfAudioCapture_positive_RMF_AudioCapture_Open (void)
 * | 02 | Call RMF_AudioCapture_Open() to open interface | handle must be a valid pointer | RMF_SUCCESS | Should pass |
 * | 03 | Call RMF_AudioCapture_Open() when already open | handle must be a valid pointer | RMF_INVALID_STATE | Should fail |
 * | 04 | Call RMF_AudioCapture_Close() to close interface | current handle | RMF_SUCCESS | Should pass |
-* | 05 | Call RMF_AudioCapture_Open() to reopen after close | handle must be a valid pointer | RMF_SUCCESS | Should pass |
-* | 06 | Call RMF_AudioCapture_Close() to close interface | current handle | RMF_SUCCESS | Should pass |
 */
-
 void test_l1_rmfAudioCapture_negative_RMF_AudioCapture_Open (void)
 {
 	UT_FAIL(This function needs to be implemented!); 
 }
+//TODO: Rearrange TCs. For L1, order matters. APIs should be called in the order of their trust worthiness. Do not use APIs that haven't been tested yet.
+// That means do not call getstatus() in a test for open() unless getstatus has completed UT before. Strictly necessary calls are ok, i. e., you can call
+// open before start. These compound test cases need to be consolidated under a different function that runs after the individual APIs are tested.
 
 /**
 * @brief Test positive scenarios for RMF_AudioCapture_GetStatus()
