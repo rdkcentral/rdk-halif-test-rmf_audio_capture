@@ -39,7 +39,7 @@
 
 
 /**
-* @brief Test positive scenarios for RMF_AudioCapture_Open_Type()
+* @brief Test positive scenarios with primary audio for RMF_AudioCapture_Open_Type()
 *
 * Probe various input scenarios for RMF_AudioCapture_Open_Type() and verify that it executes in accordance with the specification.
 *
@@ -55,18 +55,19 @@
 * | :-------: | ------------- | --------- | --------------- | ----- |
 * | 01 | Call `RMF_AudioCapture_Open_Type()` to open interface | handle must be a valid pointer, type is primary | RMF_SUCCESS | Should pass |
 * | 02 | Call `RMF_AudioCapture_Close()` to close interface | current handle | RMF_SUCCESS | Should pass |
-* | 03 | Call `RMF_AudioCapture_Open_Type()` to open aux audio on supported platform | handle must be a valid pointer, type is auxiliary | RMF_SUCCESS | Should pass |
+* | 03 | Call `RMF_AudioCapture_Open()` to ensure open works after open_type | handle must be a valid pointer | RMF_SUCCESS | Should pass |
 * | 04 | Call `RMF_AudioCapture_Close()` to close interface | current handle | RMF_SUCCESS | Should pass |
 * | 05 | Call `RMF_AudioCapture_Open_Type()` to check open->close->open sequence | handle must be a valid pointer, type is primary | RMF_SUCCESS | Should pass |
 * | 06 | Call `RMF_AudioCapture_Close()` to close interface | current handle | RMF_SUCCESS | Should pass |
 */
-void test_l1_rmfAudioCapture_positive_RMF_AudioCapture_Open_Type (void)
+//TODO add TCs where primary and aux are active at the same time.
+void test_l1_rmfAudioCapture_positive_RMF_AudioCapture_Open_Type_primary (void)
 {
 	UT_FAIL(This function needs to be implemented!); 
 }
 
 /**
-* @brief Test negative scenarios for RMF_AudioCapture_Open_Type()
+* @brief Test negative scenarios with primary audio for RMF_AudioCapture_Open_Type()
 *
 * Force various edge/error scenarios for RMF_AudioCapture_Open_Type() and verify that it executes in accordance with the specification.
 *
@@ -81,17 +82,16 @@ void test_l1_rmfAudioCapture_positive_RMF_AudioCapture_Open_Type (void)
 * | Variation / Step | Description | Test Data | Expected Result | Notes |
 * | :-------: | ------------- | --------- | --------------- | ----- |
 * | 01 | Call `RMF_AudioCapture_Open_Type()` with invalid handle | handle must be NULL, type=primary | RMF_INVALID_PARM | Should pass |
-* | 02 | Call `RMF_AudioCapture_Open_Type()` with junk type | handle must be NULL, type=xyz | RMF_INVALID_PARM | Should pass |
-* | 03 | Call `RMF_AudioCapture_Open_Type()` with unsupported type where aux audio is unsupported | handle must be valid, type=auxiliary | RMF_INVALID_PARM | Should pass |
+* | 02 | Call `RMF_AudioCapture_Open_Type()` with junk type and valid handle | handle is a valid pointer, type=xyz | RMF_INVALID_PARM | Should pass |
 * | 04 | Call `RMF_AudioCapture_Open_Type()` to open interface | handle must be a valid pointer, type=primary | RMF_SUCCESS | Should pass |
-* | 05 | Call `RMF_AudioCapture_Open_Type()` when already open | handle must be a valid pointer, type=primary | RMF_INVALID_STATE | Should pass |
+* | 05 | Call `RMF_AudioCapture_Open_Type()` when primary is already open | handle must be a valid pointer, type=primary | RMF_INVALID_STATE | Should pass |
 * | 06 | Call `RMF_AudioCapture_Close()` to close interface | current handle | RMF_SUCCESS | Should pass |
 */
-void test_l1_rmfAudioCapture_negative_RMF_AudioCapture_Open_Type (void)
+
+void test_l1_rmfAudioCapture_negative_RMF_AudioCapture_Open_Type_primary (void)
 {
 	UT_FAIL(This function needs to be implemented!); 
 }
-
 
 
 /**
@@ -629,6 +629,162 @@ void test_l1_rmfAudioCapture_negative_RMF_AudioCapture_GetCurrentSettings (void)
 	UT_FAIL(This function needs to be implemented!); 
 }
 
+
+/**
+* @brief Test positive scenarios with auxiliary audio for RMF_AudioCapture_Open_Type()
+*
+* Probe various input scenarios for RMF_AudioCapture_Open_Type() and verify that it executes in accordance with the specification.
+*
+* **Test Group ID:** Basic 01@n
+* **Test Case ID:** 021@n
+* @n
+* **Pre-Conditions:** AudioCapture interface is not open already.@n
+* **Dependencies:** None@n
+* **User Interaction:** None@n
+
+* **Test Procedure:**@n
+* | Variation / Step | Description | Test Data | Expected Result | Notes |
+* | :-------: | ------------- | --------- | --------------- | ----- |
+* | 01 | Call `RMF_AudioCapture_Open_Type()` to open interface | handle must be a valid pointer, type is auxiliary | RMF_SUCCESS | Should pass |
+* | 02 | Call `RMF_AudioCapture_Close()` to close interface | current handle | RMF_SUCCESS | Should pass |
+* | 03 | Call `RMF_AudioCapture_Open_Type()` to check open->close->open sequence | handle must be a valid pointer, type is auxiliary | RMF_SUCCESS | Should pass |
+* | 04 | Call `RMF_AudioCapture_Close()` to close interface | current handle | RMF_SUCCESS | Should pass |
+*/
+//TODO add TCs where primary and aux are active at the same time.
+void test_l1_rmfAudioCapture_positive_RMF_AudioCapture_Open_Type_auxiliary (void)
+{
+	UT_FAIL(This function needs to be implemented!); 
+}
+
+/**
+* @brief Test negative scenarios with auxiliary audio for RMF_AudioCapture_Open_Type()
+*
+* Force various edge/error scenarios for RMF_AudioCapture_Open_Type() and verify that it executes in accordance with the specification.
+*
+* **Test Group ID:** Basic 01@n
+* **Test Case ID:** 022@n
+* @n
+* **Pre-Conditions:** AudioCapture interface is not open already.@n
+* **Dependencies:** None@n
+* **User Interaction:** None@n
+
+* **Test Procedure:**@n
+* | Variation / Step | Description | Test Data | Expected Result | Notes |
+* | :-------: | ------------- | --------- | --------------- | ----- |
+* | 01 | Call `RMF_AudioCapture_Open_Type()` with invalid handle | handle must be NULL, type=auxiliary | RMF_INVALID_PARM | Should pass |
+* | 04 | Call `RMF_AudioCapture_Open_Type()` to open interface | handle must be a valid pointer, type=auxiliary | RMF_SUCCESS | Should pass |
+* | 05 | Call `RMF_AudioCapture_Open_Type()` when aux is already open | handle must be a valid pointer, type=auxiliary | RMF_INVALID_STATE | Should pass |
+* | 06 | Call `RMF_AudioCapture_Close()` to close interface | current handle | RMF_SUCCESS | Should pass |
+*/
+
+
+//TODO: Seperate test cases where aux capability is necessary.
+//TODO add TCs where primary and aux are active at the same time.
+//TODO: Mix open and open_Type aux/primary 
+void test_l1_rmfAudioCapture_negative_RMF_AudioCapture_Open_Type_auxiliary (void)
+{
+	UT_FAIL(This function needs to be implemented!); 
+}
+
+
+
+/**
+* @brief Test positive scenarios with primary and auxiliary audio for RMF_AudioCapture_Open_Type()
+*
+* Probe various input scenarios for RMF_AudioCapture_Open_Type() and verify that it executes in accordance with the specification.
+*
+* **Test Group ID:** Basic 01@n
+* **Test Case ID:** 023@n
+* @n
+* **Pre-Conditions:** AudioCapture interface is not open already.@n
+* **Dependencies:** None@n
+* **User Interaction:** None@n
+
+* **Test Procedure:**@n
+* | Variation / Step | Description | Test Data | Expected Result | Notes |
+* | :-------: | ------------- | --------- | --------------- | ----- |
+* | 01 | Call `RMF_AudioCapture_Open_Type()` to open aux interface | handle must be a valid pointer, type is auxiliary | RMF_SUCCESS | Should pass |
+* | 02 | Call `RMF_AudioCapture_Open_Type()` to open primary interface while aux is open | handle must be a valid pointer, type is primary | RMF_SUCCESS | Should pass |
+* | 03 | Call `RMF_AudioCapture_Close()` to close primary interface | current primary audio handle | RMF_SUCCESS | Should pass |
+* | 04 | Call `RMF_AudioCapture_Open()` to check interchangeability of Open and OpenType for primary audio | handle must be a valid pointer | RMF_SUCCESS | Should pass |
+* | 05 | Call `RMF_AudioCapture_Close()` to close aux interface | current aux audio handle | RMF_SUCCESS | Should pass |
+* | 06 | Call `RMF_AudioCapture_Open_Type()` to open aux interface while primary is open | handle must be a valid pointer, type is auxiliary | RMF_SUCCESS | Should pass |
+* | 07 | Call `RMF_AudioCapture_Close()` to close aux interface | current aux audio handle | RMF_SUCCESS | Should pass |
+* | 08 | Call `RMF_AudioCapture_Close()` to close primary interface | current primary audio handle | RMF_SUCCESS | Should pass |
+*/
+void test_l1_rmfAudioCapture_positive_RMF_AudioCapture_Open_Type_mixed (void)
+{
+	UT_FAIL(This function needs to be implemented!); 
+}
+
+/**
+* @brief Test negative scenarios with primary and auxiliary audio for RMF_AudioCapture_Open_Type()
+*
+* Force various edge/error scenarios for RMF_AudioCapture_Open_Type() and verify that it executes in accordance with the specification.
+*
+* **Test Group ID:** Basic 01@n
+* **Test Case ID:** 024@n
+* @n
+* **Pre-Conditions:** AudioCapture interface is not open already.@n
+* **Dependencies:** None@n
+* **User Interaction:** None@n
+
+* **Test Procedure:**@n
+* | Variation / Step | Description | Test Data | Expected Result | Notes |
+* | :-------: | ------------- | --------- | --------------- | ----- |
+* | 01 | Call `RMF_AudioCapture_Open_Type()` to open aux interface | handle must be a valid pointer, type is auxiliary | RMF_SUCCESS | Should pass |
+* | 02 | Call `RMF_AudioCapture_Open_Type()` to open aux interface while aux is already open | handle must be a valid pointer, type is auxiliary | RMF_INVALID_STATE | Should pass |
+* | 03 | Call `RMF_AudioCapture_Open_Type()` to open primary interface | handle must be a valid pointer, type is primary | RMF_SUCCESS | Should pass |
+* | 04 | Call `RMF_AudioCapture_Open_Type()` to open primary interface when primary is already open | handle must be a valid pointer, type is primary | RMF_INVALID_STATE | Should pass |
+* | 05 | Call `RMF_AudioCapture_Open()` to open primary interface when primary is already open | handle must be a valid pointer | RMF_INVALID_STATE | Should pass |
+* | 06 | Call `RMF_AudioCapture_Close()` to close primary interface | current primary audio handle | RMF_SUCCESS | Should pass |
+* | 07 | Call `RMF_AudioCapture_Close()` to close aux interface | current aux audio handle | RMF_SUCCESS | Should pass |
+*/
+void test_l1_rmfAudioCapture_negative_RMF_AudioCapture_Open_Type_mixed (void)
+{
+	UT_FAIL(This function needs to be implemented!); 
+}
+
+
+/**
+* @brief Test positive scenarios using auxiliary audio and aux+primary for start, stop, get status and get default settings APIs.
+*
+* Probe various input scenarios for RMF_AudioCapture APIs and verify that it executes in accordance with the specification.
+*
+* **Test Group ID:** Basic 01@n
+* **Test Case ID:** 025@n
+* @n
+* **Pre-Conditions:** AudioCapture interface is not open already.@n
+* **Dependencies:** None@n
+* **User Interaction:** None@n
+
+* **Test Procedure:**@n
+* | Variation / Step | Description | Test Data | Expected Result | Notes |
+* | :-------: | ------------- | --------- | --------------- | ----- |
+* | 01 | Call `RMF_AudioCapture_Open_Type()` to open interface | handle must be a valid pointer, type is auxiliary | RMF_SUCCESS | Should pass |
+* | 02 | Call `RMF_AudioCapture_GetStatus()` to check status of open interface | current handle | return RMF_SUCCESS, RMF_AudioCapture_Status.status must be 0 | Should pass |
+* | 03 | Call `RMF_AudioCapture_GetDefaultSettings()` to get default settings | valid settings | return RMF_SUCCESS | Should pass |
+* | 04 | Call `RMF_AudioCapture_Start()` to start audio capture | current handle, settings = default settings + dummy buffer ready callback | RMF_SUCCESS | Should pass |
+* | 05 | Call `RMF_AudioCapture_Open_Type()` to open interface | handle must be a valid pointer, type is primary | RMF_SUCCESS | Should pass |
+* | 06 | Call `RMF_AudioCapture_GetDefaultSettings()` to get default settings | valid settings | return RMF_SUCCESS | Should pass |
+* | 07 | Call `RMF_AudioCapture_Start()` to start audio capture | current primary audio handle, settings = default settings + dummy buffer ready callback | RMF_SUCCESS | Should pass |
+* | 08 | Call `RMF_AudioCapture_GetStatus()` to check current status of started auxiliary capture | current aux handle, valid settings | return RMF_SUCCESS, RMF_AudioCapture_Status.status must be 1, format and samplingFreq must have valid values | Should pass |
+* | 09 | Call `RMF_AudioCapture_GetStatus()` to check current status of started primary capture | current primary audio handle, valid settings | return RMF_SUCCESS, RMF_AudioCapture_Status.status must be 1, format and samplingFreq must have valid values | Should pass |
+* | 10 | Call `RMF_AudioCapture_GetCurrentSettings()` to confirm that the settings that were applied in start call are currently in effect | current aux handle, valid settings | return RMF_SUCCESS, settings parameter must match what was set in previous start call | Should pass |
+* | 11 | Call `RMF_AudioCapture_GetCurrentSettings()` to confirm that the settings that were applied in start call are currently in effect | current primary audio handle, valid settings | return RMF_SUCCESS, settings parameter must match what was set in previous start call | Should pass |
+* | 12 | Call `RMF_AudioCapture_Stop()` to stop the primary capture | current primary audio handle | RMF_SUCCESS | Should pass |
+* | 13 | Call `RMF_AudioCapture_GetStatus()` to check current status of stopped/open interface | current primary audio handle, valid settings | return RMF_SUCCESS, RMF_AudioCapture_Status.status must be 0 | Should pass |
+* | 14 | Call `RMF_AudioCapture_Stop()` to stop the aux capture | current aux handle | RMF_SUCCESS | Should pass |
+* | 15 | Call `RMF_AudioCapture_GetStatus()` to check current status of stopped/open interface | current aux handle, valid settings | return RMF_SUCCESS, RMF_AudioCapture_Status.status must be 0 | Should pass |
+* | 16 | Call `RMF_AudioCapture_Close()` to release primary audio resources after test | current primary handle | RMF_SUCCESS | Should pass |
+* | 17 | Call `RMF_AudioCapture_Close()` to release aux audio resources after test | current aux handle | RMF_SUCCESS | Should pass |
+*/
+void test_l1_rmfAudioCapture_positive_RMF_AudioCapture_misc_auxiliary (void)
+{
+	UT_FAIL(This function needs to be implemented!); 
+}
+
+
 static UT_test_suite_t * pSuite = NULL;
 
 /**
@@ -645,8 +801,8 @@ int test_l1_rmfAudioCapture_register ( void )
 		return -1;
 	}	
 
-	UT_add_test( pSuite, "RMF_AudioCapture_Open_Type_L1_positive" ,test_l1_rmfAudioCapture_positive_RMF_AudioCapture_Open_Type );
-	UT_add_test( pSuite, "RMF_AudioCapture_Open_Type_L1_negative" ,test_l1_rmfAudioCapture_negative_RMF_AudioCapture_Open_Type );
+	UT_add_test( pSuite, "RMF_AudioCapture_Open_Type_primary_L1_positive" ,test_l1_rmfAudioCapture_positive_RMF_AudioCapture_Open_Type_primary );
+	UT_add_test( pSuite, "RMF_AudioCapture_Open_Type_primary_L1_negative" ,test_l1_rmfAudioCapture_negative_RMF_AudioCapture_Open_Type_primary );
 	UT_add_test( pSuite, "RMF_AudioCapture_Open_L1_positive" ,test_l1_rmfAudioCapture_positive_RMF_AudioCapture_Open );
 	UT_add_test( pSuite, "RMF_AudioCapture_Open_L1_negative" ,test_l1_rmfAudioCapture_negative_RMF_AudioCapture_Open );
 	UT_add_test( pSuite, "RMF_AudioCapture_Close_L1_positive" ,test_l1_rmfAudioCapture_positive_RMF_AudioCapture_Close );
@@ -673,6 +829,17 @@ int test_l1_rmfAudioCapture_register ( void )
 
 	UT_add_test( pSuite, "RMF_AudioCapture_GetCurrentSettings_L1_positive" ,test_l1_rmfAudioCapture_positive_RMF_AudioCapture_GetCurrentSettings );
 	UT_add_test( pSuite, "RMF_AudioCapture_GetCurrentSettings_L1_negative" ,test_l1_rmfAudioCapture_negative_RMF_AudioCapture_GetCurrentSettings );
+
+	//If Auxiliary audio is supported, execute the below block.
+	{
+		UT_add_test( pSuite, "RMF_AudioCapture_Open_Type_auxiliary_L1_positive" ,test_l1_rmfAudioCapture_positive_RMF_AudioCapture_Open_Type_auxiliary );
+		UT_add_test( pSuite, "RMF_AudioCapture_Open_Type_auxiliary_L1_negative" ,test_l1_rmfAudioCapture_negative_RMF_AudioCapture_Open_Type_auxiliary );
+
+		UT_add_test( pSuite, "RMF_AudioCapture_Open_Type_mixed_L1_positive" ,test_l1_rmfAudioCapture_positive_RMF_AudioCapture_Open_Type_mixed );
+		UT_add_test( pSuite, "RMF_AudioCapture_Open_Type_mixed_L1_negative" ,test_l1_rmfAudioCapture_negative_RMF_AudioCapture_Open_Type_mixed );
+
+		UT_add_test( pSuite, "RMF_AudioCapture_auxiliary_misc_L1_positive" ,test_l1_rmfAudioCapture_positive_RMF_AudioCapture_misc_auxiliary );
+	}
 
 	return 0;
 } 
