@@ -18,11 +18,21 @@
 */
 
 /**
+ * @addtogroup RMF_AudioCapture RDK-V RMF AudioCapture
+ * @{
+ */
+
+/**
+ * @addtogroup RDK-V RMF AudioCapture Tests
+ * @ingroup RMF_AudioCapture RDK-V RMF AudioCapture
+ * @{
+ */
+
+/**
 * @file test_l1_rmfAudioCapture.c
-* @page AudioCapture HAL L1 tests
 *
 * ## Module's Role
-* Level 1 unit test cases for all APIs of AudioCapture HAL.
+* Level 1 unit test cases for all APIs of AudioCapture HAL
 * This is to ensure that the API meets the operational requirements of the module across all vendors.
 *
 * **Pre-Conditions:**  None@n
@@ -30,6 +40,7 @@
 *
 * Ref to API Definition specification documentation : [halSpec.md](../../../docs/halSpec.md)
 */
+
 
 #include <string.h>
 #include <stdlib.h>
@@ -39,7 +50,7 @@
 
 
 /**
-* @brief Test positive scenarios with primary audio for RMF_AudioCapture_Open_Type()
+* @brief Tests positive scenarios with primary audio for RMF_AudioCapture_Open_Type()
 *
 * Probe various input scenarios for RMF_AudioCapture_Open_Type() and verify that it executes in accordance with the specification.
 *
@@ -790,7 +801,7 @@ int test_l1_rmfAudioCapture_register ( void )
 	UT_add_test( pSuite, "RMF_AudioCapture_GetCurrentSettings_L1_positive" ,test_l1_rmfAudioCapture_positive_RMF_AudioCapture_GetCurrentSettings );
 	UT_add_test( pSuite, "RMF_AudioCapture_GetCurrentSettings_L1_negative" ,test_l1_rmfAudioCapture_negative_RMF_AudioCapture_GetCurrentSettings );
 
-	//If Auxiliary audio is supported, execute the below block.
+	// If Auxiliary audio is supported, execute the below block.
 	{
 		UT_add_test( pSuite, "RMF_AudioCapture_Open_Type_auxiliary_L1_positive" ,test_l1_rmfAudioCapture_positive_RMF_AudioCapture_Open_Type_auxiliary );
 		UT_add_test( pSuite, "RMF_AudioCapture_Open_Type_auxiliary_L1_negative" ,test_l1_rmfAudioCapture_negative_RMF_AudioCapture_Open_Type_auxiliary );
@@ -802,3 +813,4 @@ int test_l1_rmfAudioCapture_register ( void )
 	return 0;
 } 
 
+/** @} */ // End of RMF_AudioCapture RDK-V RMF AudioCapture

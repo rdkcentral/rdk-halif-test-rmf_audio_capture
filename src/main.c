@@ -18,12 +18,22 @@
 */
 
 /**
+ * @addtogroup RMF_AudioCapture RDK-V RMF AudioCapture
+ * @{
+ */
+
+/**
+ * @defgroup RDK-V RMF AudioCapture Tests
+ * @ingroup RMF_AudioCapture RDK-V RMF AudioCapture
+ * @{
+ */
+
+/**
 * @file main.c
-* @page AudioCapture
-* @subpage Unit tests
+* @mainpage
 *
 * ## Module's Role
-* Unit test for AudioCapture HAL
+* Tests for AudioCapture HAL
 * This is to ensure that the API meets the operational requirements of the module across all vendors.
 *
 * **Pre-Conditions:**  Launch video playback before commencing tests.@n
@@ -66,3 +76,5 @@ int main(int argc, char** argv)
 	return 0;
 
 }
+
+/** @} */ // End of RMF_AudioCapture RDK-V RMF AudioCapture

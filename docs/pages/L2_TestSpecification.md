@@ -1,9 +1,9 @@
 # L2 Test Specification template
 ## History
 
-| Version | Date(YY-MM-DD) | Author |Comments |
-| -------| ----- | ----- | ----- |
-| 1.0.0 | 19/05/23 | Chaithen T Sojan| Inital Document |
+| Version | Date(YY-MM-DD) | Comments |
+| -------| ----- | ----- |
+| 1.0.0 | 19/05/23 | Inital Document |
 
 ## Table of Contents
 
@@ -16,13 +16,9 @@
     - [References](#references)
   - [Level 2 Test Suite](#level-2-test-suite)
     - [Validate status and settings for simultaneous primary and auxiliary sessions](#validate-status-and-settings-for-simultaneous-primary-and-auxiliary-sessions)
-      - [Test Procedure :](#test-procedure-)
     - [Ensure satisfactory data transfer for primary audio capture](#ensure-satisfactory-data-transfer-for-primary-audio-capture)
-      - [Test Procedure :](#test-procedure--1)
     - [Ensure satisfactory data transfer for auxiliary audio capture](#ensure-satisfactory-data-transfer-for-auxiliary-audio-capture)
-      - [Test Procedure :](#test-procedure--2)
     - [Ensure satisfactory data transfer with simultaneous primary and auxiliary capture](#ensure-satisfactory-data-transfer-with-simultaneous-primary-and-auxiliary-capture)
-      - [Test Procedure :](#test-procedure--3)
 
 ## Overview
 
@@ -60,7 +56,7 @@ This document describes the level 2 testing suite for the RMF_AudioCapture modul
 
 ## Level 2 Test Suite
 
-The following functions are expecting to test the module operates correctly.
+The following functions are expecting to test the module operates correctly :
 
 ### Validate status and settings for simultaneous primary and auxiliary sessions
 
@@ -84,20 +80,20 @@ Device must support auxiliary audio capture. Launch video in the background befo
 
 | Variation / Steps | Description | Test Data | Expected Result | Notes|
 | -- | --------- | ---------- | -------------- | ----- |
-| 01 | Call `RMF_AudioCapture_Open_Type()` to open interface | handle must be a valid pointer, type is auxiliary | RMF_SUCCESS | Should pass |
-| 02 | Call `RMF_AudioCapture_GetStatus()` to check status of open interface | current handle | return RMF_SUCCESS, RMF_AudioCapture_Status.status must be 0 | Should ss |
-| 03 | Call `RMF_AudioCapture_GetDefaultSettings()` to get default settings | valid settings | return RMF_SUCCESS | Should pass |
+| 01 | Call `RMF_AudioCapture_Open_Type()` to open interface | handle must be a valid pointer; type is auxiliary | RMF_SUCCESS | Should pass |
+| 02 | Call `RMF_AudioCapture_GetStatus()` to check status of open interface | current handle | returns RMF_SUCCESS, RMF_AudioCapture_Status.status must be 0 | Should pass |
+| 03 | Call `RMF_AudioCapture_GetDefaultSettings()` to get default settings | valid settings | returns RMF_SUCCESS | Should pass |
 | 04 | Call `RMF_AudioCapture_Start()` to start audio capture | current handle, settings = default settings + dummy buffer ready callback | RMF_SUCCESS | Should pass |
-| 05 | Call `RMF_AudioCapture_Open_Type()` to open interface | handle must be a valid pointer, type is primary | RMF_SUCCESS | Should pass |
+| 05 | Call `RMF_AudioCapture_Open_Type()` to open interface | handle must be a valid pointer; type is primary | RMF_SUCCESS | Should pass |
 | 06 | Call `RMF_AudioCapture_Start()` to start audio capture | current primary audio handle, settings = default settings + dummy buffer ready callback | RMF_SUCCESS | Should pass |
-| 07 | Call `RMF_AudioCapture_GetStatus()` to check current status of started auxiliary capture | current aux handle, valid settings | return RMF_SUCCESS, RMF_AudioCapture_Status.status must be 1, format and samplingFreq must have valid values | Should pass |
-| 08 | Call `RMF_AudioCapture_GetStatus()` to check current status of started primary capture | current primary audio handle, valid settings | return RMF_SUCCESS, RMF_AudioCapture_Status.status must be 1, format and samplingFreq must have valid values | Should pass |
-| 09 | Call `RMF_AudioCapture_GetCurrentSettings()` to confirm that the settings that were applied in start call are currently in effect | current aux handle, valid ttings | return RMF_SUCCESS, settings parameter must match what was set in previous start call | Should pass |
-| 10 | Call `RMF_AudioCapture_GetCurrentSettings()` to confirm that the settings that were applied in start call are currently in effect | current primary audio ndle, valid settings | return RMF_SUCCESS, settings parameter must match what was set in previous start call | Should pass |
+| 07 | Call `RMF_AudioCapture_GetStatus()` to check current status of started auxiliary capture | current aux handle, valid settings | returns RMF_SUCCESS, RMF_AudioCapture_Status.status must be 1, format and samplingFreq must have valid values | Should pass |
+| 08 | Call `RMF_AudioCapture_GetStatus()` to check current status of started primary capture | current primary audio handle; valid settings | returns RMF_SUCCESS, RMF_AudioCapture_Status.status must be 1, format and samplingFreq must have valid values | Should pass |
+| 09 | Call `RMF_AudioCapture_GetCurrentSettings()` to confirm that the settings that were applied in start call are currently in effect | current aux handle, valid ttings | returns RMF_SUCCESS, settings parameter must match what was set in previous start call | Should pass |
+| 10 | Call `RMF_AudioCapture_GetCurrentSettings()` to confirm that the settings that were applied in start call are currently in effect | current primary audio ndle, valid settings | returns RMF_SUCCESS, settings parameter must match what was set in previous start call | Should pass |
 | 11 | Call `RMF_AudioCapture_Stop()` to stop the primary capture | current primary audio handle | RMF_SUCCESS | Should pass |
-| 12 | Call `RMF_AudioCapture_GetStatus()` to check current status of stopped/open interface | current primary audio handle, valid settings | return RMF_SUCCESS, RMF_AudioCapture_Status.status must be 0 | Should pass |
+| 12 | Call `RMF_AudioCapture_GetStatus()` to check current status of stopped/open interface | current primary audio handle, valid settings | returns RMF_SUCCESS, RMF_AudioCapture_Status.status must be 0 | Should pass |
 | 13 | Call `RMF_AudioCapture_Stop()` to stop the aux capture | current aux handle | RMF_SUCCESS | Should pass |
-| 14 | Call `RMF_AudioCapture_GetStatus()` to check current status of stopped/open interface | current aux handle, valid settings | return RMF_SUCCESS, RMF_AudioCapture_Status.status must be 0 | Should pass |
+| 14 | Call `RMF_AudioCapture_GetStatus()` to check current status of stopped/open interface | current aux handle, valid settings | returns RMF_SUCCESS, RMF_AudioCapture_Status.status must be 0 | Should pass |
 | 15 | Call `RMF_AudioCapture_Close()` to release primary audio resources after test | current primary handle | RMF_SUCCESS | Should pass |
 | 16 | Call `RMF_AudioCapture_Close()` to release aux audio resources after test | current aux handle | RMF_SUCCESS | Should pass |
 
@@ -127,7 +123,7 @@ Launch video in the background before starting test.
 | Variation / Steps | Description | Test Data | Expected Result | Notes|
 | -- | --------- | ---------- | -------------- | ----- |
 | 01 | Call `RMF_AudioCapture_Open()` to open interface | handle must be a valid pointer | RMF_SUCCESS | Should pass |
-| 02 | Call `RMF_AudioCapture_GetDefaultSettings()` to get default settings | valid settings | return RMF_SUCCESS | Should pass |
+| 02 | Call `RMF_AudioCapture_GetDefaultSettings()` to get default settings | valid settings | returns RMF_SUCCESS | Should pass |
 | 03 | Call `RMF_AudioCapture_Start()` with settings obtained above to start audio capture | settings=default settings from previous step, data callback will increment a static byte counter every time it runs, status callback NULL | RMF_SUCCESS | Should pass |
 | 04 | Call `RMF_AudioCapture_Stop()` to stop capture after 10 seconds | valid handle | RMF_SUCCESS | Should pass |
 | 05 | Call `RMF_AudioCapture_Close()` to release resources | current handle | RMF_SUCCESS | Should pass |
@@ -157,8 +153,8 @@ Device must support auxiliary audio. Launch video in the background before start
 
 | Variation / Steps | Description | Test Data | Expected Result | Notes|
 | -- | --------- | ---------- | -------------- | ----- |
-| 01 | Call `RMF_AudioCapture_Open_Type()` to open interface | handle must be a valid pointer, type is auxiliary | RMF_SUCCESS | Should pass |
-| 02 | Call `RMF_AudioCapture_GetDefaultSettings()` to get default settings | valid settings | return RMF_SUCCESS | Should pass |
+| 01 | Call `RMF_AudioCapture_Open_Type()` to open interface | handle must be a valid pointer; type is auxiliary | RMF_SUCCESS | Should pass |
+| 02 | Call `RMF_AudioCapture_GetDefaultSettings()` to get default settings | valid settings | returns RMF_SUCCESS | Should pass |
 | 03 | Call `RMF_AudioCapture_Start()` with settings obtained above to start audio capture | settings=default settings from previous step, data callback will increment a static byte counter every time it runs, status callback NULL | RMF_SUCCESS | Should pass |
 | 04 | Call `RMF_AudioCapture_Stop()` to stop capture after 10 seconds | valid handle | RMF_SUCCESS | Should pass |
 | 05 | Call `RMF_AudioCapture_Close()` to release resources | current handle | RMF_SUCCESS | Should pass |
@@ -188,10 +184,10 @@ Device must support auxiliary audio. Launch video in the background before start
 
 | Variation / Steps | Description | Test Data | Expected Result | Notes|
 | -- | --------- | ---------- | -------------- | ----- |
-| 01 | Call `RMF_AudioCapture_Open_Type()` to open interface | handle must be a valid pointer, type is auxiliary | RMF_SUCCESS | Should pass |
-| 02 | Call `RMF_AudioCapture_GetDefaultSettings()` to get default settings | valid settings | return RMF_SUCCESS | Should pass |
+| 01 | Call `RMF_AudioCapture_Open_Type()` to open interface | handle must be a valid pointer; type is auxiliary | RMF_SUCCESS | Should pass |
+| 02 | Call `RMF_AudioCapture_GetDefaultSettings()` to get default settings | valid settings | returns RMF_SUCCESS | Should pass |
 | 03 | Call `RMF_AudioCapture_Start()` with settings obtained above to start audio capture | settings=default settings from previous step, data callback will increment a static byte counter every time it runs, status callback NULL | RMF_SUCCESS | Should pass |
-| 04 | Call `RMF_AudioCapture_Open_Type()` to open interface | handle must be a valid pointer, type is primary | RMF_SUCCESS | Should pass |
+| 04 | Call `RMF_AudioCapture_Open_Type()` to open interface | handle must be a valid pointer; type is primary | RMF_SUCCESS | Should pass |
 | 05 | Call `RMF_AudioCapture_Start()` with settings obtained above to start audio capture | settings=default settings from previous step, data callback will increment a static byte counter every time it runs, status callback NULL | RMF_SUCCESS | Should pass |
 | 06 | Call `RMF_AudioCapture_Stop()` to stop capture after 10 seconds | valid primary handle | RMF_SUCCESS | Should pass |
 | 07 | Call `RMF_AudioCapture_Stop()` to stop capture after 10 seconds | valid auxiliary handle | RMF_SUCCESS | Should pass |

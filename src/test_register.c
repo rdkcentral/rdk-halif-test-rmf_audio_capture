@@ -17,6 +17,30 @@
 *  limitations under the License.
 */
 
+/**
+ * @addtogroup RMF_AudioCapture RDK-V RMF AudioCapture
+ * @{
+ */
+
+/**
+ * @addtogroup RDK-V RMF AudioCapture Tests
+ * @ingroup RMF_AudioCapture RDK-V RMF AudioCapture
+ * @{
+ */
+
+/**
+* @file test_register.c
+*
+* ## Module's Role
+* Registration of tests for AudioCapture HAL
+* This is to ensure that the API meets the operational requirements of the module across all vendors.
+*
+* **Pre-Conditions:**  Launch video playback before commencing tests.@n
+* **Dependencies:** None@n
+*
+* Ref to API Definition specification documentation : [halSpec.md](../../../docs/halSpec.md)
+*/
+
 #include <ut.h>
 
 /**
@@ -33,7 +57,7 @@ extern int test_l2_rmfAudioCapture_register( void );
 
 int UT_register_APIDEF_l1_tests( void )
 {
-	int registerFailed=0;
+	int registerFailed = 0;
 
 	registerFailed |= test_l1_rmfAudioCapture_register();
 
@@ -43,9 +67,11 @@ int UT_register_APIDEF_l1_tests( void )
 /* Register UT Functions */
 int UT_register_APIDEF_l2_tests( void )
 {
-	int registerFailed=0;
+	int registerFailed = 0;
 
 	registerFailed |= test_l2_rmfAudioCapture_register();
 
 	return registerFailed;
 }
+
+/** @} */ // End of RMF_AudioCapture RDK-V RMF AudioCapture

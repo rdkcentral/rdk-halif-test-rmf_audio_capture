@@ -18,12 +18,21 @@
 */
 
 /**
+ * @addtogroup RMF_AudioCapture RDK-V RMF AudioCapture
+ * @{
+ */
+
+/**
+ * @addtogroup RDK-V RMF AudioCapture Tests
+ * @ingroup RMF_AudioCapture RDK-V RMF AudioCapture
+ * @{
+ */
+
+/**
 * @file test_l2_rmfAudioCapture.c
-* @page AudioCapture HAL
-* @subpage L2 unit tests
 *
 * ## Module's Role
-* Level 2 unit tests will perform module level testing by exercising the full set of APIs to validate
+* Level 2 module tests will perform module level testing by exercising the full set of APIs to validate
 * various use cases. This is to ensure that the API meets the operational requirements of the module across all vendors.
 *
 * **Pre-Conditions:**  Launch video playback before commencing tests.@n
@@ -75,3 +84,5 @@ int test_l2_rmfAudioCapture_register ( void )
 
 	return 0;
 } 
+
+/** @} */ // End of RMF_AudioCapture RDK-V RMF AudioCapture
