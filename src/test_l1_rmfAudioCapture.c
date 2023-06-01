@@ -47,7 +47,7 @@
 
 #include <ut.h>
 #include <ut_log.h>
-
+#include "rmfAudioCapture.h"
 
 /**
 * @brief Tests positive scenarios with primary audio for RMF_AudioCapture_Open_Type()
@@ -71,7 +71,20 @@
 */
 void test_l1_rmfAudioCapture_positive_RMF_AudioCapture_Open_Type_primary (void)
 {
-	UT_FAIL(This function needs to be implemented!); 
+	RMF_AudioCaptureHandle handle;
+	rmf_Error result = RMF_SUCCESS;
+
+	result = RMF_AudioCapture_Open_Type(&handle, RMF_AC_TYPE_PRIMARY);
+	UT_ASSERT_EQUAL(result, RMF_SUCCESS);
+
+	result = RMF_AudioCapture_Close(handle);
+	UT_ASSERT_EQUAL(result, RMF_SUCCESS);
+
+	result = RMF_AudioCapture_Open_Type(&handle, RMF_AC_TYPE_PRIMARY);
+	UT_ASSERT_EQUAL(result, RMF_SUCCESS);
+
+	result = RMF_AudioCapture_Close(handle);
+	UT_ASSERT_EQUAL(result, RMF_SUCCESS);
 }
 
 /**
