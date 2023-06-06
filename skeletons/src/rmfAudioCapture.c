@@ -3,6 +3,13 @@
 #include <setjmp.h>
 #include "rmfAudioCapture.h"
 
+rmf_Error RMF_AudioCapture_Open_Type(RMF_AudioCaptureHandle* handle, RMF_AudioCaptureType rmfAcType)
+{
+  /*TODO: Implement Me!*/
+  (void)handle;
+  (void)rmfAcType;
+  return (rmf_Error)0;
+}
 
 rmf_Error RMF_AudioCapture_Open(RMF_AudioCaptureHandle* handle)
 {
