@@ -56,16 +56,12 @@
 #include <ut_log.h>
 #include "rmfAudioCapture.h"
 
-static rmf_Error dummy_data_cb(void *cbBufferReadyParm, void *AudioCaptureBuffer, unsigned int AudioCaptureBufferSize)
-{
-	return RMF_SUCCESS;
-}
-static rmf_Error dummy_status_change_cb(void *cbStatusParm)
+rmf_Error dummy_data_cb(void *cbBufferReadyParm, void *AudioCaptureBuffer, unsigned int AudioCaptureBufferSize)
 {
 	return RMF_SUCCESS;
 }
 
-static void prepare_dummy_start_settings(RMF_AudioCapture_Settings * settings)
+void prepare_dummy_start_settings(RMF_AudioCapture_Settings * settings)
 {
 	settings->cbBufferReady = dummy_data_cb;
 	settings->cbStatusChange = NULL;
@@ -87,7 +83,7 @@ static rmf_Error validate_settings(RMF_AudioCapture_Settings * settings)
 	return result;
 }
 
-static rmf_Error validate_status_active(RMF_AudioCapture_Status * status)
+rmf_Error validate_status_active(RMF_AudioCapture_Status * status)
 {
 	rmf_Error result = RMF_SUCCESS;
 
@@ -106,7 +102,7 @@ static rmf_Error validate_status_active(RMF_AudioCapture_Status * status)
 	return result;
 }
 
-static rmf_Error compare_settings(RMF_AudioCapture_Settings * left, RMF_AudioCapture_Settings * right)
+rmf_Error compare_settings(RMF_AudioCapture_Settings * left, RMF_AudioCapture_Settings * right)
 {
 	if(0 == memcmp(left, right, sizeof(RMF_AudioCapture_Settings)))
 		return RMF_SUCCESS;
@@ -826,17 +822,17 @@ void test_l1_rmfAudioCapture_negative_RMF_AudioCapture_Start (void)
 	// Step 7
 	bad_settings = settings;
 	bad_settings.format = racFormat_eMax; // bad format
-	result = RMF_AudioCapture_Start(handle, NULL);
+	result = RMF_AudioCapture_Start(handle, &bad_settings);
 	UT_ASSERT_EQUAL(result, RMF_INVALID_PARM);
 
 	bad_settings = settings;
 	bad_settings.samplingFreq = racFreq_eMax; // bad frequency
-	result = RMF_AudioCapture_Start(handle, NULL);
+	result = RMF_AudioCapture_Start(handle, &bad_settings);
 	UT_ASSERT_EQUAL(result, RMF_INVALID_PARM);
 
 	bad_settings = settings;
 	bad_settings.cbBufferReady = NULL; // bad callback
-	result = RMF_AudioCapture_Start(handle, NULL);
+	result = RMF_AudioCapture_Start(handle, &bad_settings);
 	UT_ASSERT_EQUAL(result, RMF_INVALID_PARM);
 
 	result = RMF_AudioCapture_Start(handle, &settings);
