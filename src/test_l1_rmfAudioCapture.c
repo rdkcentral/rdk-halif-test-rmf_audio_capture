@@ -56,7 +56,20 @@
 #include <ut_log.h>
 #include "rmfAudioCapture.h"
 
+bool is_aux_capture_supported()
+{
+	const char * config = getenv("AC_AUX_CAPTURE_SUPPORTED");
+	if((NULL != config) && (0 == strncasecmp(config, "TRUE", 4)))
+		return true;
+	else
+		return false;
+}
+
 rmf_Error dummy_data_cb(void *cbBufferReadyParm, void *AudioCaptureBuffer, unsigned int AudioCaptureBufferSize)
+{
+	return RMF_SUCCESS;
+}
+static rmf_Error dummy_status_change_cb(void *cbStatusParm)
 {
 	return RMF_SUCCESS;
 }
@@ -1492,7 +1505,7 @@ int test_l1_rmfAudioCapture_register ( void )
 	UT_add_test( pSuite, "RMF_AudioCapture_GetCurrentSettings_L1_positive" ,test_l1_rmfAudioCapture_positive_RMF_AudioCapture_GetCurrentSettings );
 	UT_add_test( pSuite, "RMF_AudioCapture_GetCurrentSettings_L1_negative" ,test_l1_rmfAudioCapture_negative_RMF_AudioCapture_GetCurrentSettings );
 
-	// If Auxiliary audio is supported, execute the below block.
+	if(true == is_aux_capture_supported())
 	{
 		UT_add_test( pSuite, "RMF_AudioCapture_Open_Type_auxiliary_L1_positive" ,test_l1_rmfAudioCapture_positive_RMF_AudioCapture_Open_Type_auxiliary );
 		UT_add_test( pSuite, "RMF_AudioCapture_Open_Type_auxiliary_L1_negative" ,test_l1_rmfAudioCapture_negative_RMF_AudioCapture_Open_Type_auxiliary );

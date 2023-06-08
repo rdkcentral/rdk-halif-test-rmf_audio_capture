@@ -28,8 +28,8 @@ rmf_Error RMF_AudioCapture_GetStatus(RMF_AudioCaptureHandle handle, RMF_AudioCap
 
 rmf_Error RMF_AudioCapture_GetDefaultSettings(RMF_AudioCapture_Settings* settings)
 {
-  /*TODO: Implement Me!*/
-  (void)settings;
+  settings->format = racFormat_e16BitStereo;
+  settings->samplingFreq = racFreq_e44100;
   return (rmf_Error)0;
 }
 

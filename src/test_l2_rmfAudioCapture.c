@@ -57,10 +57,12 @@
 #include "rmfAudioCapture.h"
 
 #define MEASUREMENT_WINDOW_SECONDS 10
+
 extern void prepare_dummy_start_settings(RMF_AudioCapture_Settings * settings);
 extern rmf_Error dummy_data_cb(void *cbBufferReadyParm, void *AudioCaptureBuffer, unsigned int AudioCaptureBufferSize);
 extern rmf_Error validate_status_active(RMF_AudioCapture_Status * status);
 extern rmf_Error compare_settings(RMF_AudioCapture_Settings * left, RMF_AudioCapture_Settings * right);
+extern bool is_aux_capture_supported();
 
 static rmf_Error counting_data_cb(void *context_blob, void *AudioCaptureBuffer, unsigned int AudioCaptureBufferSize)
 {
@@ -117,8 +119,10 @@ static rmf_Error validate_bytes_received(RMF_AudioCapture_Settings * settings, u
 	}
 
 	uint64_t computed_bytes_received = seconds * num_channels * sampling_rate * bits_per_sample / 8;
-	uint64_t percentage_received = bytes_received / computed_bytes_received * 100;
-	if((90 <= percentage_received) && (110 >= percentage_received))
+	double percentage_received = (double)bytes_received / (double)computed_bytes_received * 100;
+	UT_LOG("Actual bytes received: %" PRIu64 ", Expected bytes received: %" PRIu64 ", Computed percentage: %f\n",
+		bytes_received, computed_bytes_received, percentage_received);
+	if((90.0 <= percentage_received) && (110.0 >= percentage_received))
 		return RMF_SUCCESS;
 	else
 		return RMF_ERROR;
@@ -177,13 +181,15 @@ void test_l2_rmfAudioCapture_simultaneous_sessions (void)
 	result = RMF_AudioCapture_Start(aux_handle, &settings); //Started primary audio capture
 	UT_ASSERT_EQUAL(result, RMF_SUCCESS);
 
+	usleep(100 * 1000); // Small delay before checking status so that the internal structures have a chance to update.
+
 	result = RMF_AudioCapture_GetStatus (aux_handle, &status);
 	result = validate_status_active(&status);
-	UT_ASSERT_EQUAL(0, result);
+	UT_ASSERT_EQUAL(result, RMF_SUCCESS);
 
 	result = RMF_AudioCapture_GetStatus (prim_handle, &status);
 	result = validate_status_active(&status);
-	UT_ASSERT_EQUAL(0, result);
+	UT_ASSERT_EQUAL(result, RMF_SUCCESS);
 
 	result = RMF_AudioCapture_GetCurrentSettings(aux_handle, &current_settings);
 	UT_ASSERT_EQUAL(result, RMF_SUCCESS);
@@ -197,6 +203,9 @@ void test_l2_rmfAudioCapture_simultaneous_sessions (void)
 
 	result = RMF_AudioCapture_Stop(aux_handle);
 	UT_ASSERT_EQUAL(result, RMF_SUCCESS);
+
+	usleep(100 * 1000); // Small delay before checking status so that the internal structures have a chance to update.
+
 	result = RMF_AudioCapture_GetStatus (aux_handle, &status);
 	UT_ASSERT_EQUAL(0, status.started);
 
@@ -371,12 +380,13 @@ int test_l2_rmfAudioCapture_register ( void )
 		return -1;
 	}	
 
-	
-	UT_add_test( pSuite, "test_l2_rmfAudioCapture_simultaneous_sessions" ,test_l2_rmfAudioCapture_simultaneous_sessions );
 	UT_add_test( pSuite, "test_l2_rmfAudioCapture_primary_data_check" ,test_l2_rmfAudioCapture_primary_data_check );
-	UT_add_test( pSuite, "test_l2_rmfAudioCapture_auxiliary_data_check" ,test_l2_rmfAudioCapture_auxiliary_data_check );
-	UT_add_test( pSuite, "test_l2_rmfAudioCapture_combined_data_check" ,test_l2_rmfAudioCapture_combined_data_check );
-
+	if(true == is_aux_capture_supported())
+	{
+		UT_add_test( pSuite, "test_l2_rmfAudioCapture_simultaneous_sessions" ,test_l2_rmfAudioCapture_simultaneous_sessions );
+		UT_add_test( pSuite, "test_l2_rmfAudioCapture_auxiliary_data_check" ,test_l2_rmfAudioCapture_auxiliary_data_check );
+		UT_add_test( pSuite, "test_l2_rmfAudioCapture_combined_data_check" ,test_l2_rmfAudioCapture_combined_data_check );
+	}
 	return 0;
 } 
 
