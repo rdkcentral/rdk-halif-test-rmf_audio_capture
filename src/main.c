@@ -18,14 +18,22 @@
 */
 
 /**
- * @addtogroup RMF_AudioCapture RDK-V RMF AudioCapture
+ * @addtogroup HPK HPK
  * @{
+ *
  */
 
 /**
- * @defgroup RDK-V RMF AudioCapture Tests
- * @ingroup RMF_AudioCapture RDK-V RMF AudioCapture
+ * @addtogroup RMF_AudioCapture RMF Audio Capture
  * @{
+ *
+ */
+
+/**
+ * @defgroup RMF Audio Capture Tests
+ * @{
+ * @par
+ * Unit Testing Suite for RMF Audio Capture HAL
  */
 
 /**
@@ -76,5 +84,6 @@ int main(int argc, char** argv)
 	return 0;
 
 }
-
-/** @} */ // End of RMF_AudioCapture RDK-V RMF AudioCapture
+/** @} */ // End of RMF AudioCapture Tests
+/** @} */ // End of RMF_AudioCapture RMF AudioCapture
+/** @} */ // End of HPK
