@@ -38,4 +38,12 @@
 	}\
 	} while(0)
 
+#define SOFT_ASSERT_EQUAL(left, right) do{\
+	if(left != right)\
+	{\
+		UT_LOG("Soft assert failed.");\
+		UT_FAIL("Soft assert failed.");\
+	}\
+	} while(0)
+
 #endif //__TEST_LX_RMFAUDIOCAPTURE_HELPER_H__

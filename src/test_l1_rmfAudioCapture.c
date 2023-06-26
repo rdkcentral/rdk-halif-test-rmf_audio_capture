@@ -178,15 +178,15 @@ void test_l1_rmfAudioCapture_positive_RMF_AudioCapture_Open_Type_primary (void)
 	VALIDATE_SUCCESSFUL_OPEN(result);
 
 	result = RMF_AudioCapture_Close(handle);
-	UT_ASSERT_EQUAL(result, RMF_SUCCESS);
+	SOFT_ASSERT_EQUAL(result, RMF_SUCCESS);
 
 	result = RMF_AudioCapture_Open_Type(&handle, RMF_AC_TYPE_PRIMARY);
-	UT_ASSERT_EQUAL(result, RMF_SUCCESS);
+	SOFT_ASSERT_EQUAL(result, RMF_SUCCESS);
 	if(RMF_SUCCESS != result)
 		UT_LOG("Failed open->close->open sequence.");
 
 	result = RMF_AudioCapture_Close(handle);
-	UT_ASSERT_EQUAL(result, RMF_SUCCESS);
+	SOFT_ASSERT_EQUAL(result, RMF_SUCCESS);
 	UT_LOG("\n Out  %s\n",__FUNCTION__);
 }
 
@@ -221,21 +221,21 @@ void test_l1_rmfAudioCapture_negative_RMF_AudioCapture_Open_Type_primary (void)
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	result = RMF_AudioCapture_Open_Type(NULL, RMF_AC_TYPE_PRIMARY);
-	UT_ASSERT_EQUAL(result, RMF_INVALID_PARM);
+	SOFT_ASSERT_EQUAL(result, RMF_INVALID_PARM);
 
 	result = RMF_AudioCapture_Open_Type(&handle, "junk");
-	UT_ASSERT_EQUAL(result, RMF_INVALID_PARM);
+	SOFT_ASSERT_EQUAL(result, RMF_INVALID_PARM);
 
 	result = RMF_AudioCapture_Open_Type(&handle, RMF_AC_TYPE_PRIMARY);
 	VALIDATE_SUCCESSFUL_OPEN(result);
 
 	result = RMF_AudioCapture_Open_Type(&handle, RMF_AC_TYPE_PRIMARY);
-	UT_ASSERT_EQUAL(result, RMF_INVALID_STATE);
+	SOFT_ASSERT_EQUAL(result, RMF_INVALID_STATE);
 	if(RMF_INVALID_STATE != result)
 		UT_LOG("Failed to reject a second primary capture request.");
 
 	result = RMF_AudioCapture_Close(handle);
-	UT_ASSERT_EQUAL(result, RMF_SUCCESS);
+	SOFT_ASSERT_EQUAL(result, RMF_SUCCESS);
 	UT_LOG("\n Out  %s\n",__FUNCTION__);
 }
 
@@ -276,25 +276,25 @@ void test_l1_rmfAudioCapture_positive_RMF_AudioCapture_Open (void)
 	VALIDATE_SUCCESSFUL_OPEN(result);
 
 	result = RMF_AudioCapture_Close(handle);
-	UT_ASSERT_EQUAL(result, RMF_SUCCESS);
+	SOFT_ASSERT_EQUAL(result, RMF_SUCCESS);
 
 	result = RMF_AudioCapture_Open(&handle);
-	UT_ASSERT_EQUAL(result, RMF_SUCCESS);
+	SOFT_ASSERT_EQUAL(result, RMF_SUCCESS);
 	if(RMF_SUCCESS != result)
 		UT_LOG("Failed open->close->open sequence.");
 	result = RMF_AudioCapture_Close(handle);
-	UT_ASSERT_EQUAL(result, RMF_SUCCESS);
+	SOFT_ASSERT_EQUAL(result, RMF_SUCCESS);
 
 
 	result = RMF_AudioCapture_Open_Type(&handle, RMF_AC_TYPE_PRIMARY);
-	UT_ASSERT_EQUAL(result, RMF_SUCCESS);
+	SOFT_ASSERT_EQUAL(result, RMF_SUCCESS);
 	result = RMF_AudioCapture_Close(handle);
-	UT_ASSERT_EQUAL(result, RMF_SUCCESS);
+	SOFT_ASSERT_EQUAL(result, RMF_SUCCESS);
 
 	result = RMF_AudioCapture_Open(&handle);
-	UT_ASSERT_EQUAL(result, RMF_SUCCESS);
+	SOFT_ASSERT_EQUAL(result, RMF_SUCCESS);
 	result = RMF_AudioCapture_Close(handle);
-	UT_ASSERT_EQUAL(result, RMF_SUCCESS);
+	SOFT_ASSERT_EQUAL(result, RMF_SUCCESS);
 	UT_LOG("\n Out  %s\n",__FUNCTION__);
 }
 
@@ -331,28 +331,28 @@ void test_l1_rmfAudioCapture_negative_RMF_AudioCapture_Open (void)
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	result = RMF_AudioCapture_Open(NULL);
-	UT_ASSERT_EQUAL(result, RMF_INVALID_PARM);
+	SOFT_ASSERT_EQUAL(result, RMF_INVALID_PARM);
 
 	result = RMF_AudioCapture_Open(&handle);
 	VALIDATE_SUCCESSFUL_OPEN(result);
 
 	result = RMF_AudioCapture_Open(&handle);
-	UT_ASSERT_EQUAL(result, RMF_INVALID_STATE);
+	SOFT_ASSERT_EQUAL(result, RMF_INVALID_STATE);
 	if(RMF_INVALID_STATE != result)
 		UT_LOG("Failed to reject a second primary capture request.");
 	result = RMF_AudioCapture_Open_Type(&handle, RMF_AC_TYPE_PRIMARY);
-	UT_ASSERT_EQUAL(result, RMF_INVALID_STATE);
+	SOFT_ASSERT_EQUAL(result, RMF_INVALID_STATE);
 	if(RMF_INVALID_STATE != result)
 		UT_LOG("Failed to reject a second primary capture request.");
 	result = RMF_AudioCapture_Close(handle);
-	UT_ASSERT_EQUAL(result, RMF_SUCCESS);
+	SOFT_ASSERT_EQUAL(result, RMF_SUCCESS);
 
 	result = RMF_AudioCapture_Open_Type(&handle, RMF_AC_TYPE_PRIMARY);
-	UT_ASSERT_EQUAL(result, RMF_SUCCESS);
+	SOFT_ASSERT_EQUAL(result, RMF_SUCCESS);
 	result = RMF_AudioCapture_Open(&handle);
-	UT_ASSERT_EQUAL(result, RMF_INVALID_STATE);
+	SOFT_ASSERT_EQUAL(result, RMF_INVALID_STATE);
 	result = RMF_AudioCapture_Close(handle);
-	UT_ASSERT_EQUAL(result, RMF_SUCCESS);
+	SOFT_ASSERT_EQUAL(result, RMF_SUCCESS);
 	UT_LOG("\n Out  %s\n",__FUNCTION__);
 }
 
@@ -387,7 +387,7 @@ void test_l1_rmfAudioCapture_positive_RMF_AudioCapture_Close (void)
 	VALIDATE_SUCCESSFUL_OPEN(result);
 
 	result = RMF_AudioCapture_Close(handle);
-	UT_ASSERT_EQUAL(result, RMF_SUCCESS);
+	SOFT_ASSERT_EQUAL(result, RMF_SUCCESS);
 	UT_LOG("\n Out  %s\n",__FUNCTION__);
 }
 
@@ -432,31 +432,31 @@ void test_l1_rmfAudioCapture_positive_RMF_AudioCapture_Close_complex (void)
 	VALIDATE_SUCCESSFUL_OPEN(result);
 
 	result = RMF_AudioCapture_GetDefaultSettings(&settings);
-	UT_ASSERT_EQUAL(result, RMF_SUCCESS);
+	SOFT_ASSERT_EQUAL(result, RMF_SUCCESS);
 
 	test_l1_prepare_dummy_start_settings(&settings);
 	result = RMF_AudioCapture_Start(handle, &settings);
 	VALIDATE_SUCCESSFUL_START(result, handle);
 
 	result = RMF_AudioCapture_Stop(handle);
-	UT_ASSERT_EQUAL(result, RMF_SUCCESS);
+	SOFT_ASSERT_EQUAL(result, RMF_SUCCESS);
 	result = RMF_AudioCapture_Close(handle);
-	UT_ASSERT_EQUAL(result, RMF_SUCCESS);
+	SOFT_ASSERT_EQUAL(result, RMF_SUCCESS);
 	result = RMF_AudioCapture_Start(handle, &settings);
-	UT_ASSERT_EQUAL(result, RMF_INVALID_HANDLE);
+	SOFT_ASSERT_EQUAL(result, RMF_INVALID_HANDLE);
 
 	result = RMF_AudioCapture_Open(&handle);
-	UT_ASSERT_EQUAL(result, RMF_SUCCESS);
+	SOFT_ASSERT_EQUAL(result, RMF_SUCCESS);
 	result = RMF_AudioCapture_Start(handle, &settings);
-	UT_ASSERT_EQUAL(result, RMF_SUCCESS);
+	SOFT_ASSERT_EQUAL(result, RMF_SUCCESS);
 	result = RMF_AudioCapture_Stop(handle);
-	UT_ASSERT_EQUAL(result, RMF_SUCCESS);
+	SOFT_ASSERT_EQUAL(result, RMF_SUCCESS);
 	result = RMF_AudioCapture_Start(handle, &settings);
-	UT_ASSERT_EQUAL(result, RMF_SUCCESS);
+	SOFT_ASSERT_EQUAL(result, RMF_SUCCESS);
 	result = RMF_AudioCapture_Stop(handle);
-	UT_ASSERT_EQUAL(result, RMF_SUCCESS);
+	SOFT_ASSERT_EQUAL(result, RMF_SUCCESS);
 	result = RMF_AudioCapture_Close(handle);
-	UT_ASSERT_EQUAL(result, RMF_SUCCESS);
+	SOFT_ASSERT_EQUAL(result, RMF_SUCCESS);
 	UT_LOG("\n Out  %s\n",__FUNCTION__);
 }
 
@@ -490,19 +490,19 @@ void test_l1_rmfAudioCapture_negative_RMF_AudioCapture_Close (void)
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	result = RMF_AudioCapture_Close(NULL);
-	UT_ASSERT_EQUAL(result, RMF_INVALID_HANDLE);
+	SOFT_ASSERT_EQUAL(result, RMF_INVALID_HANDLE);
 
 	result = RMF_AudioCapture_Open(&handle);
 	VALIDATE_SUCCESSFUL_OPEN(result);
 
 	result = RMF_AudioCapture_Close(NULL);
-	UT_ASSERT_EQUAL(result, RMF_INVALID_HANDLE);
+	SOFT_ASSERT_EQUAL(result, RMF_INVALID_HANDLE);
 
 	result = RMF_AudioCapture_Close(handle);
-	UT_ASSERT_EQUAL(result, RMF_SUCCESS);
+	SOFT_ASSERT_EQUAL(result, RMF_SUCCESS);
 
 	result = RMF_AudioCapture_Close(handle);
-	UT_ASSERT_EQUAL(result, RMF_INVALID_HANDLE);
+	SOFT_ASSERT_EQUAL(result, RMF_INVALID_HANDLE);
 	UT_LOG("\n Out  %s\n",__FUNCTION__);
 }
 
@@ -541,19 +541,19 @@ void test_l1_rmfAudioCapture_negative_RMF_AudioCapture_Close_complex (void)
 	VALIDATE_SUCCESSFUL_OPEN(result);
 
 	result = RMF_AudioCapture_GetDefaultSettings(&settings);
-	UT_ASSERT_EQUAL(result, RMF_SUCCESS);
+	SOFT_ASSERT_EQUAL(result, RMF_SUCCESS);
 
 	test_l1_prepare_dummy_start_settings(&settings);
 	result = RMF_AudioCapture_Start(handle, &settings);
 	VALIDATE_SUCCESSFUL_START(result, handle);
 
 	result = RMF_AudioCapture_Close(handle);
-	UT_ASSERT_EQUAL(result, RMF_INVALID_STATE);
+	SOFT_ASSERT_EQUAL(result, RMF_INVALID_STATE);
 
 	result = RMF_AudioCapture_Stop(handle);
-	UT_ASSERT_EQUAL(result, RMF_SUCCESS);
+	SOFT_ASSERT_EQUAL(result, RMF_SUCCESS);
 	result = RMF_AudioCapture_Close(handle);
-	UT_ASSERT_EQUAL(result, RMF_SUCCESS);
+	SOFT_ASSERT_EQUAL(result, RMF_SUCCESS);
 	UT_LOG("\n Out  %s\n",__FUNCTION__);
 }
 
@@ -590,17 +590,17 @@ void test_l1_rmfAudioCapture_positive_RMF_AudioCapture_GetDefaultSettings (void)
 	VALIDATE_SUCCESSFUL_OPEN(result);
 
 	result = RMF_AudioCapture_GetDefaultSettings(&settings);
-	UT_ASSERT_EQUAL(result, RMF_SUCCESS);
+	SOFT_ASSERT_EQUAL(result, RMF_SUCCESS);
 	result = test_l1_validate_settings(&settings);
-	UT_ASSERT_EQUAL(result, RMF_SUCCESS);
+	SOFT_ASSERT_EQUAL(result, RMF_SUCCESS);
 
 	result = RMF_AudioCapture_GetDefaultSettings(&settings);
-	UT_ASSERT_EQUAL(result, RMF_SUCCESS);
+	SOFT_ASSERT_EQUAL(result, RMF_SUCCESS);
 	result = test_l1_validate_settings(&settings);
-	UT_ASSERT_EQUAL(result, RMF_SUCCESS);
+	SOFT_ASSERT_EQUAL(result, RMF_SUCCESS);
 
 	result = RMF_AudioCapture_Close(handle);
-	UT_ASSERT_EQUAL(result, RMF_SUCCESS);
+	SOFT_ASSERT_EQUAL(result, RMF_SUCCESS);
 	UT_LOG("\n Out  %s\n",__FUNCTION__);
 }
 
@@ -641,9 +641,9 @@ void test_l1_rmfAudioCapture_positive_RMF_AudioCapture_GetDefaultSettings_comple
 	VALIDATE_SUCCESSFUL_OPEN(result);
 
 	result = RMF_AudioCapture_GetDefaultSettings(&settings);
-	UT_ASSERT_EQUAL(result, RMF_SUCCESS);
+	SOFT_ASSERT_EQUAL(result, RMF_SUCCESS);
 	result = test_l1_validate_settings(&settings);
-	UT_ASSERT_EQUAL(result, RMF_SUCCESS);
+	SOFT_ASSERT_EQUAL(result, RMF_SUCCESS);
 	
 	test_l1_prepare_dummy_start_settings(&settings);
 	settings.delayCompensation_ms += 1000; // Increase delay compensation before start to introduce a deviation from the default parameters.
@@ -654,23 +654,23 @@ void test_l1_rmfAudioCapture_positive_RMF_AudioCapture_GetDefaultSettings_comple
 	RMF_AudioCapture_Settings settings_v2;
 	settings_v2.delayCompensation_ms = 0; //Set baseline as 0 before calling getDefaultSettings.
 	result = RMF_AudioCapture_GetDefaultSettings(&settings_v2);
-	UT_ASSERT_EQUAL(result, RMF_SUCCESS);
+	SOFT_ASSERT_EQUAL(result, RMF_SUCCESS);
 	result = test_l1_validate_settings(&settings_v2);
-	UT_ASSERT_EQUAL(result, RMF_SUCCESS);
+	SOFT_ASSERT_EQUAL(result, RMF_SUCCESS);
 	UT_ASSERT_FALSE(settings.delayCompensation_ms == settings_v2.delayCompensation_ms);
 
 	result = RMF_AudioCapture_Stop(handle);
-	UT_ASSERT_EQUAL(result, RMF_SUCCESS);
+	SOFT_ASSERT_EQUAL(result, RMF_SUCCESS);
 
 	settings_v2.delayCompensation_ms = 0; //Set baseline as 0 before calling getDefaultSettings.
 	result = RMF_AudioCapture_GetDefaultSettings(&settings_v2);
-	UT_ASSERT_EQUAL(result, RMF_SUCCESS);
+	SOFT_ASSERT_EQUAL(result, RMF_SUCCESS);
 	result = test_l1_validate_settings(&settings_v2);
-	UT_ASSERT_EQUAL(result, RMF_SUCCESS);
+	SOFT_ASSERT_EQUAL(result, RMF_SUCCESS);
 	UT_ASSERT_FALSE(settings.delayCompensation_ms == settings_v2.delayCompensation_ms);
 
 	result = RMF_AudioCapture_Close(handle);
-	UT_ASSERT_EQUAL(result, RMF_SUCCESS);
+	SOFT_ASSERT_EQUAL(result, RMF_SUCCESS);
 	UT_LOG("\n Out  %s\n",__FUNCTION__);
 }
 
@@ -705,19 +705,19 @@ void test_l1_rmfAudioCapture_negative_RMF_AudioCapture_GetDefaultSettings (void)
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	result = RMF_AudioCapture_GetDefaultSettings(&settings);
-	UT_ASSERT_EQUAL(result, RMF_INVALID_STATE);
+	SOFT_ASSERT_EQUAL(result, RMF_INVALID_STATE);
 
 	result = RMF_AudioCapture_Open(&handle);
 	VALIDATE_SUCCESSFUL_OPEN(result);
 
 	result = RMF_AudioCapture_GetDefaultSettings(NULL);
-	UT_ASSERT_EQUAL(result, RMF_INVALID_PARM);
+	SOFT_ASSERT_EQUAL(result, RMF_INVALID_PARM);
 
 	result = RMF_AudioCapture_Close(handle);
-	UT_ASSERT_EQUAL(result, RMF_SUCCESS);
+	SOFT_ASSERT_EQUAL(result, RMF_SUCCESS);
 
 	result = RMF_AudioCapture_GetDefaultSettings(&settings);
-	UT_ASSERT_EQUAL(result, RMF_INVALID_STATE);
+	SOFT_ASSERT_EQUAL(result, RMF_INVALID_STATE);
 	UT_LOG("\n Out  %s\n",__FUNCTION__);
 }
 /**
@@ -757,9 +757,9 @@ void test_l1_rmfAudioCapture_negative_RMF_AudioCapture_GetDefaultSettings_comple
 	VALIDATE_SUCCESSFUL_OPEN(result);
 
 	result = RMF_AudioCapture_GetDefaultSettings(&settings);
-	UT_ASSERT_EQUAL(result, RMF_SUCCESS);
+	SOFT_ASSERT_EQUAL(result, RMF_SUCCESS);
 	result = test_l1_validate_settings(&settings);
-	UT_ASSERT_EQUAL(result, RMF_SUCCESS);
+	SOFT_ASSERT_EQUAL(result, RMF_SUCCESS);
 	
 	test_l1_prepare_dummy_start_settings(&settings); 
 	
@@ -767,16 +767,16 @@ void test_l1_rmfAudioCapture_negative_RMF_AudioCapture_GetDefaultSettings_comple
 	VALIDATE_SUCCESSFUL_START(result, handle);
 
 	result = RMF_AudioCapture_GetDefaultSettings(NULL);
-	UT_ASSERT_EQUAL(result, RMF_INVALID_PARM);
+	SOFT_ASSERT_EQUAL(result, RMF_INVALID_PARM);
 
 	result = RMF_AudioCapture_Stop(handle);
-	UT_ASSERT_EQUAL(result, RMF_SUCCESS);
+	SOFT_ASSERT_EQUAL(result, RMF_SUCCESS);
 
 	result = RMF_AudioCapture_GetDefaultSettings(NULL);
-	UT_ASSERT_EQUAL(result, RMF_INVALID_PARM);
+	SOFT_ASSERT_EQUAL(result, RMF_INVALID_PARM);
 
 	result = RMF_AudioCapture_Close(handle);
-	UT_ASSERT_EQUAL(result, RMF_SUCCESS);
+	SOFT_ASSERT_EQUAL(result, RMF_SUCCESS);
 	UT_LOG("\n Out  %s\n",__FUNCTION__);
 }
 
@@ -825,9 +825,9 @@ void test_l1_rmfAudioCapture_positive_RMF_AudioCapture_Start (void)
 	VALIDATE_SUCCESSFUL_OPEN(result);
 
 	result = RMF_AudioCapture_GetDefaultSettings(&settings);
-	UT_ASSERT_EQUAL(result, RMF_SUCCESS);
+	SOFT_ASSERT_EQUAL(result, RMF_SUCCESS);
 	result = test_l1_validate_settings(&settings);
-	UT_ASSERT_EQUAL(result, RMF_SUCCESS);
+	SOFT_ASSERT_EQUAL(result, RMF_SUCCESS);
 	
 	test_l1_prepare_dummy_start_settings(&settings);
 	
@@ -835,40 +835,40 @@ void test_l1_rmfAudioCapture_positive_RMF_AudioCapture_Start (void)
 	VALIDATE_SUCCESSFUL_START(result, handle);
 
 	result = RMF_AudioCapture_Stop(handle);
-	UT_ASSERT_EQUAL(result, RMF_SUCCESS);
+	SOFT_ASSERT_EQUAL(result, RMF_SUCCESS);
 
 	result = RMF_AudioCapture_GetDefaultSettings(&settings);
-	UT_ASSERT_EQUAL(result, RMF_SUCCESS);
+	SOFT_ASSERT_EQUAL(result, RMF_SUCCESS);
 	result = test_l1_validate_settings(&settings);
-	UT_ASSERT_EQUAL(result, RMF_SUCCESS);
+	SOFT_ASSERT_EQUAL(result, RMF_SUCCESS);
 	settings.delayCompensation_ms += 2000;
 	test_l1_prepare_dummy_start_settings(&settings);
 	result = RMF_AudioCapture_Start(handle, &settings);
-	UT_ASSERT_EQUAL(result, RMF_SUCCESS);
+	SOFT_ASSERT_EQUAL(result, RMF_SUCCESS);
 	result = RMF_AudioCapture_GetCurrentSettings(handle, &current_settings);
-	UT_ASSERT_EQUAL(result, RMF_SUCCESS);
+	SOFT_ASSERT_EQUAL(result, RMF_SUCCESS);
 	result = test_l1_compare_settings(&settings, &current_settings);
-	UT_ASSERT_EQUAL(result, RMF_SUCCESS);
+	SOFT_ASSERT_EQUAL(result, RMF_SUCCESS);
 
 	result = RMF_AudioCapture_Stop(handle);
-	UT_ASSERT_EQUAL(result, RMF_SUCCESS);
+	SOFT_ASSERT_EQUAL(result, RMF_SUCCESS);
 
 	result = RMF_AudioCapture_Close(handle);
-	UT_ASSERT_EQUAL(result, RMF_SUCCESS);
+	SOFT_ASSERT_EQUAL(result, RMF_SUCCESS);
 
 	result = RMF_AudioCapture_Open(&handle);
-	UT_ASSERT_EQUAL(result, RMF_SUCCESS);
+	SOFT_ASSERT_EQUAL(result, RMF_SUCCESS);
 	result = RMF_AudioCapture_GetDefaultSettings(&settings);
-	UT_ASSERT_EQUAL(result, RMF_SUCCESS);
+	SOFT_ASSERT_EQUAL(result, RMF_SUCCESS);
 	result = test_l1_validate_settings(&settings);
-	UT_ASSERT_EQUAL(result, RMF_SUCCESS);
+	SOFT_ASSERT_EQUAL(result, RMF_SUCCESS);
 	test_l1_prepare_dummy_start_settings(&settings);
 	result = RMF_AudioCapture_Start(handle, &settings);
-	UT_ASSERT_EQUAL(result, RMF_SUCCESS);
+	SOFT_ASSERT_EQUAL(result, RMF_SUCCESS);
 	result = RMF_AudioCapture_Stop(handle);
-	UT_ASSERT_EQUAL(result, RMF_SUCCESS);
+	SOFT_ASSERT_EQUAL(result, RMF_SUCCESS);
 	result = RMF_AudioCapture_Close(handle);
-	UT_ASSERT_EQUAL(result, RMF_SUCCESS);
+	SOFT_ASSERT_EQUAL(result, RMF_SUCCESS);
 	UT_LOG("\n Out  %s\n",__FUNCTION__);
 }
 
@@ -913,56 +913,56 @@ void test_l1_rmfAudioCapture_negative_RMF_AudioCapture_Start (void)
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	result = RMF_AudioCapture_Start(NULL, NULL);
-	UT_ASSERT_EQUAL(result, RMF_INVALID_HANDLE);
+	SOFT_ASSERT_EQUAL(result, RMF_INVALID_HANDLE);
 
 	result = RMF_AudioCapture_Open(&handle);
 	VALIDATE_SUCCESSFUL_OPEN(result);
 
 	result = RMF_AudioCapture_GetDefaultSettings(&settings);
-	UT_ASSERT_EQUAL(result, RMF_SUCCESS);
+	SOFT_ASSERT_EQUAL(result, RMF_SUCCESS);
 	result = test_l1_validate_settings(&settings);
-	UT_ASSERT_EQUAL(result, RMF_SUCCESS);
+	SOFT_ASSERT_EQUAL(result, RMF_SUCCESS);
 	test_l1_prepare_dummy_start_settings(&settings);
 	// step 4
 	result = RMF_AudioCapture_Start(NULL, NULL);
-	UT_ASSERT_EQUAL(result, RMF_INVALID_HANDLE);
+	SOFT_ASSERT_EQUAL(result, RMF_INVALID_HANDLE);
 	
 	result = RMF_AudioCapture_Start(NULL, &settings);
-	UT_ASSERT_EQUAL(result, RMF_INVALID_HANDLE);
+	SOFT_ASSERT_EQUAL(result, RMF_INVALID_HANDLE);
 
 	result = RMF_AudioCapture_Start(handle, NULL);
-	UT_ASSERT_EQUAL(result, RMF_INVALID_PARM);
+	SOFT_ASSERT_EQUAL(result, RMF_INVALID_PARM);
 
 	// Step 7
 	bad_settings = settings;
 	bad_settings.format = racFormat_eMax; // bad format
 	result = RMF_AudioCapture_Start(handle, &bad_settings);
-	UT_ASSERT_EQUAL(result, RMF_INVALID_PARM);
+	SOFT_ASSERT_EQUAL(result, RMF_INVALID_PARM);
 
 	bad_settings = settings;
 	bad_settings.samplingFreq = racFreq_eMax; // bad frequency
 	result = RMF_AudioCapture_Start(handle, &bad_settings);
-	UT_ASSERT_EQUAL(result, RMF_INVALID_PARM);
+	SOFT_ASSERT_EQUAL(result, RMF_INVALID_PARM);
 
 	bad_settings = settings;
 	bad_settings.cbBufferReady = NULL; // bad callback
 	result = RMF_AudioCapture_Start(handle, &bad_settings);
-	UT_ASSERT_EQUAL(result, RMF_INVALID_PARM);
+	SOFT_ASSERT_EQUAL(result, RMF_INVALID_PARM);
 
 	result = RMF_AudioCapture_Start(handle, &settings);
-	UT_ASSERT_EQUAL(result, RMF_SUCCESS);
+	SOFT_ASSERT_EQUAL(result, RMF_SUCCESS);
 	// Step 11
 	result = RMF_AudioCapture_Start(handle, &settings);
-	UT_ASSERT_EQUAL(result, RMF_INVALID_STATE);
+	SOFT_ASSERT_EQUAL(result, RMF_INVALID_STATE);
 
 	result = RMF_AudioCapture_Stop(handle);
-	UT_ASSERT_EQUAL(result, RMF_SUCCESS);
+	SOFT_ASSERT_EQUAL(result, RMF_SUCCESS);
 
 	result = RMF_AudioCapture_Close(handle);
-	UT_ASSERT_EQUAL(result, RMF_SUCCESS);
+	SOFT_ASSERT_EQUAL(result, RMF_SUCCESS);
 
 	result = RMF_AudioCapture_Start(handle, &settings);
-	UT_ASSERT_EQUAL(result, RMF_INVALID_HANDLE);
+	SOFT_ASSERT_EQUAL(result, RMF_INVALID_HANDLE);
 	UT_LOG("\n Out  %s\n",__FUNCTION__);
 }
 
@@ -1007,34 +1007,34 @@ void test_l1_rmfAudioCapture_positive_RMF_AudioCapture_Stop (void)
 	VALIDATE_SUCCESSFUL_OPEN(result);
 
 	result = RMF_AudioCapture_GetDefaultSettings(&settings);
-	UT_ASSERT_EQUAL(result, RMF_SUCCESS);
+	SOFT_ASSERT_EQUAL(result, RMF_SUCCESS);
 	test_l1_prepare_dummy_start_settings(&settings);
 	
 	result = RMF_AudioCapture_Start(handle, &settings);
-	UT_ASSERT_EQUAL(result, RMF_SUCCESS);
+	SOFT_ASSERT_EQUAL(result, RMF_SUCCESS);
 	result = RMF_AudioCapture_Stop(handle);
-	UT_ASSERT_EQUAL(result, RMF_SUCCESS);
+	SOFT_ASSERT_EQUAL(result, RMF_SUCCESS);
 
 	// Step 5
 	result = RMF_AudioCapture_Start(handle, &settings);
-	UT_ASSERT_EQUAL(result, RMF_SUCCESS);
+	SOFT_ASSERT_EQUAL(result, RMF_SUCCESS);
 	result = RMF_AudioCapture_Stop(handle);
-	UT_ASSERT_EQUAL(result, RMF_SUCCESS);
+	SOFT_ASSERT_EQUAL(result, RMF_SUCCESS);
 	result = RMF_AudioCapture_Close(handle);
-	UT_ASSERT_EQUAL(result, RMF_SUCCESS);
+	SOFT_ASSERT_EQUAL(result, RMF_SUCCESS);
 
 	// Step 8
 	result = RMF_AudioCapture_Open(&handle);
-	UT_ASSERT_EQUAL(result, RMF_SUCCESS);
+	SOFT_ASSERT_EQUAL(result, RMF_SUCCESS);
 	result = RMF_AudioCapture_GetDefaultSettings(&settings);
-	UT_ASSERT_EQUAL(result, RMF_SUCCESS);
+	SOFT_ASSERT_EQUAL(result, RMF_SUCCESS);
 	test_l1_prepare_dummy_start_settings(&settings);
 	result = RMF_AudioCapture_Start(handle, &settings);
-	UT_ASSERT_EQUAL(result, RMF_SUCCESS);
+	SOFT_ASSERT_EQUAL(result, RMF_SUCCESS);
 	result = RMF_AudioCapture_Stop(handle);
-	UT_ASSERT_EQUAL(result, RMF_SUCCESS);
+	SOFT_ASSERT_EQUAL(result, RMF_SUCCESS);
 	result = RMF_AudioCapture_Close(handle);
-	UT_ASSERT_EQUAL(result, RMF_SUCCESS);
+	SOFT_ASSERT_EQUAL(result, RMF_SUCCESS);
 	UT_LOG("\n Out  %s\n",__FUNCTION__);
 }
 
@@ -1074,33 +1074,33 @@ void test_l1_rmfAudioCapture_negative_RMF_AudioCapture_Stop (void)
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	result = RMF_AudioCapture_Stop(NULL);
-	UT_ASSERT_EQUAL(result, RMF_INVALID_HANDLE);
+	SOFT_ASSERT_EQUAL(result, RMF_INVALID_HANDLE);
 
 	result = RMF_AudioCapture_Open(&handle);
 	VALIDATE_SUCCESSFUL_OPEN(result);
 
 	result = RMF_AudioCapture_Stop(handle);
-	UT_ASSERT_EQUAL(result, RMF_INVALID_STATE);
+	SOFT_ASSERT_EQUAL(result, RMF_INVALID_STATE);
 
 	result = RMF_AudioCapture_GetDefaultSettings(&settings);
-	UT_ASSERT_EQUAL(result, RMF_SUCCESS);
+	SOFT_ASSERT_EQUAL(result, RMF_SUCCESS);
 	test_l1_prepare_dummy_start_settings(&settings);
 	result = RMF_AudioCapture_Start(handle, &settings);
-	UT_ASSERT_EQUAL(result, RMF_SUCCESS);
+	SOFT_ASSERT_EQUAL(result, RMF_SUCCESS);
 
 	// Step 6
 	result = RMF_AudioCapture_Stop(NULL);
-	UT_ASSERT_EQUAL(result, RMF_INVALID_HANDLE);
+	SOFT_ASSERT_EQUAL(result, RMF_INVALID_HANDLE);
 
 	result = RMF_AudioCapture_Stop(handle);
-	UT_ASSERT_EQUAL(result, RMF_SUCCESS);
+	SOFT_ASSERT_EQUAL(result, RMF_SUCCESS);
 	result = RMF_AudioCapture_Stop(handle);
-	UT_ASSERT_EQUAL(result, RMF_INVALID_STATE);
+	SOFT_ASSERT_EQUAL(result, RMF_INVALID_STATE);
 
 	result = RMF_AudioCapture_Close(handle);
-	UT_ASSERT_EQUAL(result, RMF_SUCCESS);
+	SOFT_ASSERT_EQUAL(result, RMF_SUCCESS);
 	result = RMF_AudioCapture_Stop(NULL);
-	UT_ASSERT_EQUAL(result, RMF_INVALID_HANDLE);
+	SOFT_ASSERT_EQUAL(result, RMF_INVALID_HANDLE);
 	UT_LOG("\n Out  %s\n",__FUNCTION__);
 }
 
@@ -1142,26 +1142,26 @@ void test_l1_rmfAudioCapture_positive_RMF_AudioCapture_GetStatus (void)
 	VALIDATE_SUCCESSFUL_OPEN(result);
 
 	result = RMF_AudioCapture_GetStatus (handle, &status);
-	UT_ASSERT_EQUAL(0, status.started);
+	SOFT_ASSERT_EQUAL(0, status.started);
 
 	result = RMF_AudioCapture_GetDefaultSettings(&settings);
-	UT_ASSERT_EQUAL(result, RMF_SUCCESS);
+	SOFT_ASSERT_EQUAL(result, RMF_SUCCESS);
 	test_l1_prepare_dummy_start_settings(&settings);
 	result = RMF_AudioCapture_Start(handle, &settings);
-	UT_ASSERT_EQUAL(result, RMF_SUCCESS);
+	SOFT_ASSERT_EQUAL(result, RMF_SUCCESS);
 	result = RMF_AudioCapture_GetStatus (handle, &status);
-	UT_ASSERT_EQUAL(0, status.started);
+	SOFT_ASSERT_EQUAL(0, status.started);
 	result = test_l1_validate_status_active(&status);
-	UT_ASSERT_EQUAL(result, RMF_SUCCESS);
+	SOFT_ASSERT_EQUAL(result, RMF_SUCCESS);
 
 	//Step 6
 	result = RMF_AudioCapture_Stop(handle);
-	UT_ASSERT_EQUAL(result, RMF_SUCCESS);
+	SOFT_ASSERT_EQUAL(result, RMF_SUCCESS);
 	result = RMF_AudioCapture_GetStatus (handle, &status);
-	UT_ASSERT_EQUAL(0, status.started);
+	SOFT_ASSERT_EQUAL(0, status.started);
 
 	result = RMF_AudioCapture_Close(handle);
-	UT_ASSERT_EQUAL(result, RMF_SUCCESS);
+	SOFT_ASSERT_EQUAL(result, RMF_SUCCESS);
 	UT_LOG("\n Out  %s\n",__FUNCTION__);
 }
 
@@ -1206,43 +1206,43 @@ void test_l1_rmfAudioCapture_negative_RMF_AudioCapture_GetStatus (void)
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	result = RMF_AudioCapture_GetStatus (NULL, &status);
-	UT_ASSERT_EQUAL(result, RMF_INVALID_HANDLE);
+	SOFT_ASSERT_EQUAL(result, RMF_INVALID_HANDLE);
 
 	//Step 2
 	result = RMF_AudioCapture_Open(&handle);
 	VALIDATE_SUCCESSFUL_OPEN(result);
 
 	result = RMF_AudioCapture_GetStatus(NULL, &status);
-	UT_ASSERT_EQUAL(result, RMF_INVALID_HANDLE);
+	SOFT_ASSERT_EQUAL(result, RMF_INVALID_HANDLE);
 	result = RMF_AudioCapture_GetStatus(handle, NULL);
-	UT_ASSERT_EQUAL(result, RMF_INVALID_PARM);
+	SOFT_ASSERT_EQUAL(result, RMF_INVALID_PARM);
 
 	//Step 5
 	result = RMF_AudioCapture_GetDefaultSettings(&settings);
-	UT_ASSERT_EQUAL(result, RMF_SUCCESS);
+	SOFT_ASSERT_EQUAL(result, RMF_SUCCESS);
 	test_l1_prepare_dummy_start_settings(&settings);
 	result = RMF_AudioCapture_Start(handle, &settings);
-	UT_ASSERT_EQUAL(result, RMF_SUCCESS);
+	SOFT_ASSERT_EQUAL(result, RMF_SUCCESS);
 	result = RMF_AudioCapture_GetStatus(NULL, &status);
-	UT_ASSERT_EQUAL(result, RMF_INVALID_HANDLE);
+	SOFT_ASSERT_EQUAL(result, RMF_INVALID_HANDLE);
 	result = RMF_AudioCapture_GetStatus(handle, NULL);
-	UT_ASSERT_EQUAL(result, RMF_INVALID_PARM);
+	SOFT_ASSERT_EQUAL(result, RMF_INVALID_PARM);
 
 	//Step 9
 	result = RMF_AudioCapture_Stop(handle);
-	UT_ASSERT_EQUAL(result, RMF_SUCCESS);
+	SOFT_ASSERT_EQUAL(result, RMF_SUCCESS);
 	result = RMF_AudioCapture_GetStatus(NULL, &status);
-	UT_ASSERT_EQUAL(result, RMF_INVALID_HANDLE);
+	SOFT_ASSERT_EQUAL(result, RMF_INVALID_HANDLE);
 	result = RMF_AudioCapture_GetStatus(handle, NULL);
-	UT_ASSERT_EQUAL(result, RMF_INVALID_PARM);
+	SOFT_ASSERT_EQUAL(result, RMF_INVALID_PARM);
 
 	//Step 12
 	result = RMF_AudioCapture_Close(handle);
-	UT_ASSERT_EQUAL(result, RMF_SUCCESS);
+	SOFT_ASSERT_EQUAL(result, RMF_SUCCESS);
 	result = RMF_AudioCapture_GetStatus(handle, &status);
-	UT_ASSERT_EQUAL(result, RMF_INVALID_HANDLE);
+	SOFT_ASSERT_EQUAL(result, RMF_INVALID_HANDLE);
 	result = RMF_AudioCapture_GetStatus(handle, NULL);
-	UT_ASSERT_EQUAL(result, RMF_INVALID_HANDLE);
+	SOFT_ASSERT_EQUAL(result, RMF_INVALID_HANDLE);
 	UT_LOG("\n Out  %s\n",__FUNCTION__);
 }
 
@@ -1286,50 +1286,50 @@ void test_l1_rmfAudioCapture_positive_RMF_AudioCapture_GetCurrentSettings (void)
 	memset(&current_settings, 0, sizeof(current_settings));
 	
 	result = RMF_AudioCapture_Open(&handle);
-	UT_ASSERT_EQUAL(result, RMF_SUCCESS);
+	SOFT_ASSERT_EQUAL(result, RMF_SUCCESS);
 	VALIDATE_SUCCESSFUL_OPEN(result);
 
 	//Step 2
 	result = RMF_AudioCapture_GetDefaultSettings(&settings);
-	UT_ASSERT_EQUAL(result, RMF_SUCCESS);
+	SOFT_ASSERT_EQUAL(result, RMF_SUCCESS);
 	result = test_l1_validate_settings(&settings);
-	UT_ASSERT_EQUAL(result, RMF_SUCCESS);
+	SOFT_ASSERT_EQUAL(result, RMF_SUCCESS);
 	settings.delayCompensation_ms += 1000; // Increase delay compensation before start to introduce a deviation from the default parameters.
 	test_l1_prepare_dummy_start_settings(&settings);
 	
 	result = RMF_AudioCapture_Start(handle, &settings);
-	UT_ASSERT_EQUAL(result, RMF_SUCCESS);
+	SOFT_ASSERT_EQUAL(result, RMF_SUCCESS);
 	//Step 4
 	result = RMF_AudioCapture_GetCurrentSettings(handle, &current_settings);
-	UT_ASSERT_EQUAL(result, RMF_SUCCESS);
+	SOFT_ASSERT_EQUAL(result, RMF_SUCCESS);
 	result = test_l1_compare_settings(&settings, &current_settings);
-	UT_ASSERT_EQUAL(result, RMF_SUCCESS);
+	SOFT_ASSERT_EQUAL(result, RMF_SUCCESS);
 
 	result = RMF_AudioCapture_Stop(handle);
-	UT_ASSERT_EQUAL(result, RMF_SUCCESS);
+	SOFT_ASSERT_EQUAL(result, RMF_SUCCESS);
 
 	//Step 6
 	settings.delayCompensation_ms = 0; //Set baseline as 0 before calling getDefaultSettings.
 	result = RMF_AudioCapture_GetDefaultSettings(&settings);
-	UT_ASSERT_EQUAL(result, RMF_SUCCESS);
+	SOFT_ASSERT_EQUAL(result, RMF_SUCCESS);
 	result = test_l1_validate_settings(&settings);
-	UT_ASSERT_EQUAL(result, RMF_SUCCESS);
+	SOFT_ASSERT_EQUAL(result, RMF_SUCCESS);
 	test_l1_prepare_dummy_start_settings(&settings);
 	settings.delayCompensation_ms += 2000; // Increase delay compensation before start to introduce a deviation from the default parameters.
 	
 	result = RMF_AudioCapture_Start(handle, &settings);
-	UT_ASSERT_EQUAL(result, RMF_SUCCESS);
+	SOFT_ASSERT_EQUAL(result, RMF_SUCCESS);
 	//Step 8
 	result = RMF_AudioCapture_GetCurrentSettings(handle, &current_settings);
-	UT_ASSERT_EQUAL(result, RMF_SUCCESS);
+	SOFT_ASSERT_EQUAL(result, RMF_SUCCESS);
 	result = test_l1_compare_settings(&settings, &current_settings);
-	UT_ASSERT_EQUAL(result, RMF_SUCCESS);
+	SOFT_ASSERT_EQUAL(result, RMF_SUCCESS);
 
 	result = RMF_AudioCapture_Stop(handle);
-	UT_ASSERT_EQUAL(result, RMF_SUCCESS);
+	SOFT_ASSERT_EQUAL(result, RMF_SUCCESS);
 
 	result = RMF_AudioCapture_Close(handle);
-	UT_ASSERT_EQUAL(result, RMF_SUCCESS);
+	SOFT_ASSERT_EQUAL(result, RMF_SUCCESS);
 	UT_LOG("\n Out  %s\n",__FUNCTION__);
 }
 
@@ -1372,43 +1372,43 @@ void test_l1_rmfAudioCapture_negative_RMF_AudioCapture_GetCurrentSettings (void)
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	result = RMF_AudioCapture_GetCurrentSettings(NULL, &current_settings);
-	UT_ASSERT_EQUAL(result, RMF_INVALID_HANDLE);
+	SOFT_ASSERT_EQUAL(result, RMF_INVALID_HANDLE);
 
 	//Step 2
 	result = RMF_AudioCapture_Open(&handle);
 	VALIDATE_SUCCESSFUL_OPEN(result);
 
 	result = RMF_AudioCapture_GetCurrentSettings(handle, &current_settings);
-	UT_ASSERT_EQUAL(result, RMF_INVALID_STATE);
+	SOFT_ASSERT_EQUAL(result, RMF_INVALID_STATE);
 
 	//Step 4
 	result = RMF_AudioCapture_GetDefaultSettings(&settings);
-	UT_ASSERT_EQUAL(result, RMF_SUCCESS);
+	SOFT_ASSERT_EQUAL(result, RMF_SUCCESS);
 	result = test_l1_validate_settings(&settings);
-	UT_ASSERT_EQUAL(result, RMF_SUCCESS);
+	SOFT_ASSERT_EQUAL(result, RMF_SUCCESS);
 	test_l1_prepare_dummy_start_settings(&settings);	
 	result = RMF_AudioCapture_Start(handle, &settings);
-	UT_ASSERT_EQUAL(result, RMF_SUCCESS);
+	SOFT_ASSERT_EQUAL(result, RMF_SUCCESS);
 	result = RMF_AudioCapture_GetCurrentSettings(NULL, &current_settings);
-	UT_ASSERT_EQUAL(result, RMF_INVALID_HANDLE);
+	SOFT_ASSERT_EQUAL(result, RMF_INVALID_HANDLE);
 	result = RMF_AudioCapture_GetCurrentSettings(handle, NULL);
-	UT_ASSERT_EQUAL(result, RMF_INVALID_PARM);
+	SOFT_ASSERT_EQUAL(result, RMF_INVALID_PARM);
 
 	//Step 8
 	result = RMF_AudioCapture_Stop(handle);
-	UT_ASSERT_EQUAL(result, RMF_SUCCESS);
+	SOFT_ASSERT_EQUAL(result, RMF_SUCCESS);
 	result = RMF_AudioCapture_GetCurrentSettings(handle, &current_settings);
-	UT_ASSERT_EQUAL(result, RMF_INVALID_STATE);
+	SOFT_ASSERT_EQUAL(result, RMF_INVALID_STATE);
 	result = RMF_AudioCapture_GetCurrentSettings(handle, NULL);
-	UT_ASSERT_EQUAL(result, RMF_INVALID_PARM);
+	SOFT_ASSERT_EQUAL(result, RMF_INVALID_PARM);
 	result = RMF_AudioCapture_GetCurrentSettings(NULL, &current_settings);
-	UT_ASSERT_EQUAL(result, RMF_INVALID_HANDLE);
+	SOFT_ASSERT_EQUAL(result, RMF_INVALID_HANDLE);
 
 	//Step 12
 	result = RMF_AudioCapture_Close(handle);
-	UT_ASSERT_EQUAL(result, RMF_SUCCESS);
+	SOFT_ASSERT_EQUAL(result, RMF_SUCCESS);
 	result = RMF_AudioCapture_GetCurrentSettings(handle, &current_settings);
-	UT_ASSERT_EQUAL(result, RMF_INVALID_HANDLE);
+	SOFT_ASSERT_EQUAL(result, RMF_INVALID_HANDLE);
 	UT_LOG("\n Out  %s\n",__FUNCTION__);
 }
 
@@ -1446,13 +1446,13 @@ void test_l1_rmfAudioCapture_positive_RMF_AudioCapture_Open_Type_auxiliary (void
 
 
 	result = RMF_AudioCapture_Close(handle);
-	UT_ASSERT_EQUAL(result, RMF_SUCCESS);
+	SOFT_ASSERT_EQUAL(result, RMF_SUCCESS);
 
 	result = RMF_AudioCapture_Open_Type(&handle, RMF_AC_TYPE_AUXILIARY);
-	UT_ASSERT_EQUAL(result, RMF_SUCCESS);
+	SOFT_ASSERT_EQUAL(result, RMF_SUCCESS);
 
 	result = RMF_AudioCapture_Close(handle);
-	UT_ASSERT_EQUAL(result, RMF_SUCCESS);
+	SOFT_ASSERT_EQUAL(result, RMF_SUCCESS);
 	UT_LOG("\n Out  %s\n",__FUNCTION__);
 }
 
@@ -1485,16 +1485,16 @@ void test_l1_rmfAudioCapture_negative_RMF_AudioCapture_Open_Type_auxiliary (void
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	result = RMF_AudioCapture_Open_Type(NULL, RMF_AC_TYPE_AUXILIARY);
-	UT_ASSERT_EQUAL(result, RMF_INVALID_PARM);
+	SOFT_ASSERT_EQUAL(result, RMF_INVALID_PARM);
 
 	result = RMF_AudioCapture_Open_Type(&handle, RMF_AC_TYPE_AUXILIARY);
 	VALIDATE_SUCCESSFUL_OPEN(result);
 
 	result = RMF_AudioCapture_Open_Type(&handle, RMF_AC_TYPE_AUXILIARY);
-	UT_ASSERT_EQUAL(result, RMF_INVALID_STATE);
+	SOFT_ASSERT_EQUAL(result, RMF_INVALID_STATE);
 
 	result = RMF_AudioCapture_Close(handle);
-	UT_ASSERT_EQUAL(result, RMF_SUCCESS);
+	SOFT_ASSERT_EQUAL(result, RMF_SUCCESS);
 	UT_LOG("\n Out  %s\n",__FUNCTION__);
 }
 
@@ -1544,22 +1544,22 @@ void test_l1_rmfAudioCapture_positive_RMF_AudioCapture_Open_Type_mixed (void)
 	}
 
 	result = RMF_AudioCapture_Close(prim_handle);
-	UT_ASSERT_EQUAL(result, RMF_SUCCESS);
+	SOFT_ASSERT_EQUAL(result, RMF_SUCCESS);
 
 	result = RMF_AudioCapture_Open(&prim_handle);
-	UT_ASSERT_EQUAL(result, RMF_SUCCESS);
+	SOFT_ASSERT_EQUAL(result, RMF_SUCCESS);
 
 	result = RMF_AudioCapture_Close(aux_handle);
-	UT_ASSERT_EQUAL(result, RMF_SUCCESS);
+	SOFT_ASSERT_EQUAL(result, RMF_SUCCESS);
 
 	result = RMF_AudioCapture_Open_Type(&aux_handle, RMF_AC_TYPE_AUXILIARY);
-	UT_ASSERT_EQUAL(result, RMF_SUCCESS);
+	SOFT_ASSERT_EQUAL(result, RMF_SUCCESS);
 
 	result = RMF_AudioCapture_Close(aux_handle);
-	UT_ASSERT_EQUAL(result, RMF_SUCCESS);
+	SOFT_ASSERT_EQUAL(result, RMF_SUCCESS);
 
 	result = RMF_AudioCapture_Close(prim_handle);
-	UT_ASSERT_EQUAL(result, RMF_SUCCESS);
+	SOFT_ASSERT_EQUAL(result, RMF_SUCCESS);
 	UT_LOG("\n Out  %s\n",__FUNCTION__);
 }
 
@@ -1598,7 +1598,7 @@ void test_l1_rmfAudioCapture_negative_RMF_AudioCapture_Open_Type_mixed (void)
 	VALIDATE_SUCCESSFUL_OPEN(result);
 
 	result = RMF_AudioCapture_Open_Type(&aux_handle, RMF_AC_TYPE_AUXILIARY);
-	UT_ASSERT_EQUAL(result, RMF_INVALID_STATE);
+	SOFT_ASSERT_EQUAL(result, RMF_INVALID_STATE);
 
 	result = RMF_AudioCapture_Open_Type(&prim_handle, RMF_AC_TYPE_PRIMARY);
 	if(RMF_SUCCESS != result)
@@ -1608,14 +1608,14 @@ void test_l1_rmfAudioCapture_negative_RMF_AudioCapture_Open_Type_mixed (void)
 		UT_FAIL_FATAL("Aborting test - unable to start primary capture.");
 	}
 	result = RMF_AudioCapture_Open_Type(&prim_handle, RMF_AC_TYPE_PRIMARY);
-	UT_ASSERT_EQUAL(result, RMF_INVALID_STATE);
+	SOFT_ASSERT_EQUAL(result, RMF_INVALID_STATE);
 	result = RMF_AudioCapture_Open(&prim_handle);
-	UT_ASSERT_EQUAL(result, RMF_INVALID_STATE);
+	SOFT_ASSERT_EQUAL(result, RMF_INVALID_STATE);
 
 	result = RMF_AudioCapture_Close(prim_handle);
-	UT_ASSERT_EQUAL(result, RMF_SUCCESS);
+	SOFT_ASSERT_EQUAL(result, RMF_SUCCESS);
 	result = RMF_AudioCapture_Close(aux_handle);
-	UT_ASSERT_EQUAL(result, RMF_SUCCESS);
+	SOFT_ASSERT_EQUAL(result, RMF_SUCCESS);
 	UT_LOG("\n Out  %s\n",__FUNCTION__);
 }
 
