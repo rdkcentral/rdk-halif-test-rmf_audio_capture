@@ -1690,14 +1690,15 @@ int test_l1_rmfAudioCapture_register ( void )
 	UT_add_test( pSuite, "RMF_AudioCapture_GetDefaultSettings_L1_positive" ,test_l1_rmfAudioCapture_positive_RMF_AudioCapture_GetDefaultSettings );
 	UT_add_test( pSuite, "RMF_AudioCapture_GetDefaultSettings_L1_negative" ,test_l1_rmfAudioCapture_negative_RMF_AudioCapture_GetDefaultSettings );
 
-	UT_add_test( pSuite, "RMF_AudioCapture_Close_L1_positive_complex" ,test_l1_rmfAudioCapture_positive_RMF_AudioCapture_Close_complex );
-	UT_add_test( pSuite, "RMF_AudioCapture_Close_L1_negative_complex" ,test_l1_rmfAudioCapture_negative_RMF_AudioCapture_Close_complex );
 
 	UT_add_test( pSuite, "RMF_AudioCapture_Start_L1_positive" ,test_l1_rmfAudioCapture_positive_RMF_AudioCapture_Start );
 	UT_add_test( pSuite, "RMF_AudioCapture_Start_L1_negative" ,test_l1_rmfAudioCapture_negative_RMF_AudioCapture_Start );
 	UT_add_test( pSuite, "RMF_AudioCapture_Stop_L1_positive" ,test_l1_rmfAudioCapture_positive_RMF_AudioCapture_Stop );
 	UT_add_test( pSuite, "RMF_AudioCapture_Stop_L1_negative" ,test_l1_rmfAudioCapture_negative_RMF_AudioCapture_Stop );
 
+
+	UT_add_test( pSuite, "RMF_AudioCapture_Close_L1_positive_complex" ,test_l1_rmfAudioCapture_positive_RMF_AudioCapture_Close_complex );
+	UT_add_test( pSuite, "RMF_AudioCapture_Close_L1_negative_complex" ,test_l1_rmfAudioCapture_negative_RMF_AudioCapture_Close_complex );
 
 	UT_add_test( pSuite, "RMF_AudioCapture_GetDefaultSettings_L1_positive_complex" ,test_l1_rmfAudioCapture_positive_RMF_AudioCapture_GetDefaultSettings_complex );
 	UT_add_test( pSuite, "RMF_AudioCapture_GetDefaultSettings_L1_negative_complex" ,test_l1_rmfAudioCapture_negative_RMF_AudioCapture_GetDefaultSettings_complex );
