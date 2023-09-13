@@ -1058,7 +1058,7 @@ void test_l1_rmfAudioCapture_positive_RMF_AudioCapture_Stop (void)
 * | 03 | Call `RMF_AudioCapture_Stop()` to test API response when not in STARTED state | current handle | RMF_INVALID_STATE | Should pass |
 * | 04 | Call `RMF_AudioCapture_GetDefaultSettings()` to get default settings | valid settings | return RMF_SUCCESS | Should pass |
 * | 05 | Call `RMF_AudioCapture_Start()` with default settings to start audio capture | current handle, settings=default settings, but dummy data callback, status callback NULL | RMF_SUCCESS | Should pass |
-* | 06 | Call `RMF_AudioCapture_Stop()` with invalid handle | handle=NULL | RMF_INVALID_PARM | Should pass |
+* | 06 | Call `RMF_AudioCapture_Stop()` with invalid handle | handle=NULL | RMF_INVALID_HANDLE | Should pass |
 * | 07 | Call `RMF_AudioCapture_Stop()` to stop audio capture | current handle | RMF_SUCCESS | Should pass |
 * | 08 | Call `RMF_AudioCapture_Stop()` repeatedly, violating state machine | current handle | RMF_INVALID_STATE | Should pass |
 * | 09 | Call `RMF_AudioCapture_Close()` to release resources | current handle | RMF_SUCCESS | Should pass |
