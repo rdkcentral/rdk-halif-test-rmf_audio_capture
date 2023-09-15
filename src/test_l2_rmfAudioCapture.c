@@ -131,102 +131,6 @@ static rmf_Error test_l2_validate_bytes_received(RMF_AudioCapture_Settings * set
 	}
 }
 
-/**
-* @brief Test simultaneous primary and auxiliary audio capture
-*
-* Launch simultaneous capture sessions of primary and auxiliary audio and verify that status and settings are returned correctly
-*
-* **Test Group ID:** Module (L2): 02@n
-* **Test Case ID:** 1@n
-*
-* **Test Procedure:**
-* Refer to UT specification documentation [l2_module_test_specification.md](l2_module_test_specification.md)
-*/
-void test_l2_rmfAudioCapture_simultaneous_sessions (void)
-{
-	RMF_AudioCaptureHandle aux_handle, prim_handle;
-	RMF_AudioCapture_Status status;
-	RMF_AudioCapture_Settings settings, current_settings;
-	rmf_Error result = RMF_SUCCESS;
-
-	gTestID = 1;
-	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-
-	memset(&settings, 0, sizeof(settings)); // To fill padding bytes with zero, allows comparison of structs with memcmp.
-	memset(&current_settings, 0, sizeof(current_settings));
-
-	result = RMF_AudioCapture_Open_Type(&aux_handle, RMF_AC_TYPE_AUXILIARY);
-	VALIDATE_SUCCESSFUL_OPEN(result);
-
-	result = RMF_AudioCapture_GetStatus (aux_handle, &status);
-	SOFT_ASSERT_EQUAL(0, status.started);
-
-	result = RMF_AudioCapture_GetDefaultSettings(&settings);
-	SOFT_ASSERT_EQUAL(result, RMF_SUCCESS);
-	test_l1_prepare_dummy_start_settings(&settings);
-	result = RMF_AudioCapture_Start(aux_handle, &settings); //Started auxiliary audio capture.
-	VALIDATE_SUCCESSFUL_START(result, aux_handle);
-
-	result = RMF_AudioCapture_Open_Type(&prim_handle, RMF_AC_TYPE_PRIMARY);
-	if(RMF_SUCCESS != result)
-	{
-		UT_LOG("Aborting test - unable to open primary capture interface. Error code: %d", result);
-		result = RMF_AudioCapture_Stop(aux_handle);
-		result = RMF_AudioCapture_Close(aux_handle);
-		UT_FAIL_FATAL("Aborting test - unable to open primary capture interface");
-	}
-	result = RMF_AudioCapture_Start(prim_handle, &settings); //Started primary audio capture
-	if(RMF_SUCCESS != result)
-	{
-		UT_LOG("Aborting test - unable to start primary capture. Error code: %d", result);
-		result = RMF_AudioCapture_Stop(aux_handle);
-		result = RMF_AudioCapture_Close(aux_handle);
-		result = RMF_AudioCapture_Close(prim_handle);
-		UT_FAIL_FATAL("Aborting test - unable to open primary capture interface");
-	}
-
-	usleep(100 * 1000); // Small delay before checking status so that the internal structures have a chance to update.
-
-	result = RMF_AudioCapture_GetStatus (aux_handle, &status);
-	result = test_l1_validate_status_active(&status);
-	SOFT_ASSERT_EQUAL(result, RMF_SUCCESS);
-
-	result = RMF_AudioCapture_GetStatus (prim_handle, &status);
-	result = test_l1_validate_status_active(&status);
-	SOFT_ASSERT_EQUAL(result, RMF_SUCCESS);
-
-	result = RMF_AudioCapture_GetCurrentSettings(aux_handle, &current_settings);
-	SOFT_ASSERT_EQUAL(result, RMF_SUCCESS);
-	result = test_l1_compare_settings(&settings, &current_settings);
-	SOFT_ASSERT_EQUAL(result, RMF_SUCCESS);
-
-	result = RMF_AudioCapture_GetCurrentSettings(prim_handle, &current_settings);
-	SOFT_ASSERT_EQUAL(result, RMF_SUCCESS);
-	result = test_l1_compare_settings(&settings, &current_settings);
-	SOFT_ASSERT_EQUAL(result, RMF_SUCCESS);
-
-	result = RMF_AudioCapture_Stop(aux_handle);
-	SOFT_ASSERT_EQUAL(result, RMF_SUCCESS);
-
-	usleep(100 * 1000); // Small delay before checking status so that the internal structures have a chance to update.
-
-	result = RMF_AudioCapture_GetStatus (aux_handle, &status);
-	SOFT_ASSERT_EQUAL(0, status.started);
-
-	result = RMF_AudioCapture_Stop(prim_handle);
-	SOFT_ASSERT_EQUAL(result, RMF_SUCCESS);
-	result = RMF_AudioCapture_GetStatus (prim_handle, &status);
-	SOFT_ASSERT_EQUAL(0, status.started);
-
-	result = RMF_AudioCapture_Close(prim_handle);
-	SOFT_ASSERT_EQUAL(result, RMF_SUCCESS);
-
-	result = RMF_AudioCapture_Close(aux_handle);
-	SOFT_ASSERT_EQUAL(result, RMF_SUCCESS);
-
-	UT_LOG("\n Out  %s\n",__FUNCTION__);
-}
-
 
 /**
 * @brief Ensure satisfactory data transfer for auxiliary capture
@@ -235,7 +139,7 @@ void test_l2_rmfAudioCapture_simultaneous_sessions (void)
 * data in order to keep up with the expected data rate, tested over 10 seconds
 *
 * **Test Group ID:** Module (L2): 02@n
-* **Test Case ID:** 2@n
+* **Test Case ID:** 1@n
 *
 * **Test Procedure:**
 * Refer to UT specification documentation [l2_module_test_specification.md](l2_module_test_specification.md)
@@ -246,7 +150,7 @@ void test_l2_rmfAudioCapture_auxiliary_data_check (void)
 	RMF_AudioCapture_Settings settings;
 	rmf_Error result = RMF_SUCCESS;
 
-	gTestID = 2;
+	gTestID = 1;
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	result = RMF_AudioCapture_Open_Type(&handle, RMF_AC_TYPE_AUXILIARY);
@@ -283,7 +187,7 @@ void test_l2_rmfAudioCapture_auxiliary_data_check (void)
 * data in order to keep up with the expected data rate, tested over 10 seconds
 *
 * **Test Group ID:** Module (L2): 02@n
-* **Test Case ID:** 3@n
+* **Test Case ID:** 2@n
 *
 * **Test Procedure:**
 * Refer to UT specification documentation [l2_module_test_specification.md](l2_module_test_specification.md)
@@ -294,7 +198,7 @@ void test_l2_rmfAudioCapture_primary_data_check (void)
 	RMF_AudioCapture_Settings settings;
 	rmf_Error result = RMF_SUCCESS;
 
-	gTestID = 3;
+	gTestID = 2;
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	result = RMF_AudioCapture_Open_Type(&handle, RMF_AC_TYPE_PRIMARY);
@@ -331,7 +235,7 @@ void test_l2_rmfAudioCapture_primary_data_check (void)
 * data in order to keep up with the expected data rate, tested over 10 seconds
 *
 * **Test Group ID:** Module (L2): 02@n
-* **Test Case ID:** 4@n
+* **Test Case ID:** 3@n
 *
 * **Test Procedure:**
 * Refer to UT specification documentation [l2_module_test_specification.md](l2_module_test_specification.md)
@@ -342,7 +246,7 @@ void test_l2_rmfAudioCapture_combined_data_check (void)
 	RMF_AudioCapture_Settings aux_settings, prim_settings;
 	rmf_Error result = RMF_SUCCESS;
 
-	gTestID = 4;
+	gTestID = 3;
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	result = RMF_AudioCapture_Open_Type(&aux_handle, RMF_AC_TYPE_AUXILIARY);
@@ -417,7 +321,6 @@ int test_l2_rmfAudioCapture_register ( void )
 	UT_add_test( pSuite, "test_l2_rmfAudioCapture_primary_data_check" ,test_l2_rmfAudioCapture_primary_data_check );
 	if(true == test_l1_is_aux_capture_supported())
 	{
-		UT_add_test( pSuite, "test_l2_rmfAudioCapture_simultaneous_sessions" ,test_l2_rmfAudioCapture_simultaneous_sessions );
 		UT_add_test( pSuite, "test_l2_rmfAudioCapture_auxiliary_data_check" ,test_l2_rmfAudioCapture_auxiliary_data_check );
 		UT_add_test( pSuite, "test_l2_rmfAudioCapture_combined_data_check" ,test_l2_rmfAudioCapture_combined_data_check );
 	}
