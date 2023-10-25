@@ -48,8 +48,6 @@
 #include <ut.h>
 #include <ut_log.h>
 #include "rmfAudioCapture.h"
-#include "test_lx_rmfAudioCapture_helper.h"
-
 
 #define MEASUREMENT_WINDOW_SECONDS 10
 
@@ -154,26 +152,31 @@ void test_l2_rmfAudioCapture_auxiliary_data_check (void)
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	result = RMF_AudioCapture_Open_Type(&handle, RMF_AC_TYPE_AUXILIARY);
-	VALIDATE_SUCCESSFUL_OPEN(result);
+	if(RMF_SUCCESS != result)
+		UT_FAIL("Aborting test - unable to open capture.");
 
 	result = RMF_AudioCapture_GetDefaultSettings(&settings);
-	SOFT_ASSERT_EQUAL(result, RMF_SUCCESS);
+	UT_ASSERT_EQUAL_NOT_FATAL(result, RMF_SUCCESS);
 
 	uint64_t aux_bytes_received = 0;
 	test_l2_prepare_start_settings_for_data_tracking(&settings, (void *)&aux_bytes_received);
 	
 	result = RMF_AudioCapture_Start(handle, &settings);
-	VALIDATE_SUCCESSFUL_START(result, handle);
-
+	if(RMF_SUCCESS != result)
+	{
+		UT_LOG("Capture start failed with error code: %d", result);
+		result = RMF_AudioCapture_Close(handle);
+		UT_FAIL("Aborting test - unable to start capture.");
+	}
 	sleep(MEASUREMENT_WINDOW_SECONDS);
 	result = RMF_AudioCapture_Stop(handle);
-	SOFT_ASSERT_EQUAL(result, RMF_SUCCESS);
+	UT_ASSERT_EQUAL_NOT_FATAL(result, RMF_SUCCESS);
 
 	result = test_l2_validate_bytes_received(&settings, MEASUREMENT_WINDOW_SECONDS, aux_bytes_received);
-	SOFT_ASSERT_EQUAL(result, RMF_SUCCESS);
+	UT_ASSERT_EQUAL_NOT_FATAL(result, RMF_SUCCESS);
 
 	result = RMF_AudioCapture_Close(handle);
-	SOFT_ASSERT_EQUAL(result, RMF_SUCCESS);
+	UT_ASSERT_EQUAL_NOT_FATAL(result, RMF_SUCCESS);
 
 	UT_LOG("\n Out  %s\n",__FUNCTION__);
 }
@@ -202,26 +205,32 @@ void test_l2_rmfAudioCapture_primary_data_check (void)
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	result = RMF_AudioCapture_Open_Type(&handle, RMF_AC_TYPE_PRIMARY);
-	VALIDATE_SUCCESSFUL_OPEN(result);
+	if(RMF_SUCCESS != result)
+		UT_FAIL("Aborting test - unable to open capture.");
 
 	result = RMF_AudioCapture_GetDefaultSettings(&settings);
-	SOFT_ASSERT_EQUAL(result, RMF_SUCCESS);
+	UT_ASSERT_EQUAL_NOT_FATAL(result, RMF_SUCCESS);
 
 	uint64_t prim_bytes_received = 0;
 	test_l2_prepare_start_settings_for_data_tracking(&settings, (void *)&prim_bytes_received);
 	
 	result = RMF_AudioCapture_Start(handle, &settings);
-	VALIDATE_SUCCESSFUL_START(result, handle);
+	if(RMF_SUCCESS != result)
+	{
+		UT_LOG("Capture start failed with error code: %d", result);
+		result = RMF_AudioCapture_Close(handle);
+		UT_FAIL("Aborting test - unable to start capture.");
+	}
 	
 	sleep(MEASUREMENT_WINDOW_SECONDS);
 	result = RMF_AudioCapture_Stop(handle);
-	SOFT_ASSERT_EQUAL(result, RMF_SUCCESS);
+	UT_ASSERT_EQUAL_NOT_FATAL(result, RMF_SUCCESS);
 
 	result = test_l2_validate_bytes_received(&settings, MEASUREMENT_WINDOW_SECONDS, prim_bytes_received);
-	SOFT_ASSERT_EQUAL(result, RMF_SUCCESS);
+	UT_ASSERT_EQUAL_NOT_FATAL(result, RMF_SUCCESS);
 
 	result = RMF_AudioCapture_Close(handle);
-	SOFT_ASSERT_EQUAL(result, RMF_SUCCESS);
+	UT_ASSERT_EQUAL_NOT_FATAL(result, RMF_SUCCESS);
 
 	UT_LOG("\n Out  %s\n",__FUNCTION__);
 }
@@ -250,10 +259,11 @@ void test_l2_rmfAudioCapture_combined_data_check (void)
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	result = RMF_AudioCapture_Open_Type(&aux_handle, RMF_AC_TYPE_AUXILIARY);
-	VALIDATE_SUCCESSFUL_OPEN(result);
+	if(RMF_SUCCESS != result)
+		UT_FAIL("Aborting test - unable to open capture.");
 
 	result = RMF_AudioCapture_GetDefaultSettings(&aux_settings);
-	SOFT_ASSERT_EQUAL(result, RMF_SUCCESS);
+	UT_ASSERT_EQUAL_NOT_FATAL(result, RMF_SUCCESS);
 
 	uint64_t aux_bytes_received = 0;
 	uint64_t prim_bytes_received = 0;
@@ -262,7 +272,12 @@ void test_l2_rmfAudioCapture_combined_data_check (void)
 	test_l2_prepare_start_settings_for_data_tracking(&prim_settings, (void *)&prim_bytes_received);
 	
 	result = RMF_AudioCapture_Start(aux_handle, &aux_settings); //Started auxiliary capture
-	VALIDATE_SUCCESSFUL_START(result, aux_handle);
+	if(RMF_SUCCESS != result)
+	{
+		UT_LOG("Capture start failed with error code: %d", result);
+		result = RMF_AudioCapture_Close(aux_handle);
+		UT_FAIL("Aborting test - unable to start capture.");
+	}
 
 	result = RMF_AudioCapture_Open_Type(&prim_handle, RMF_AC_TYPE_PRIMARY);
 	if(RMF_SUCCESS != result)
@@ -270,7 +285,7 @@ void test_l2_rmfAudioCapture_combined_data_check (void)
 		UT_LOG("Aborting test - unable to open primary capture interface. Error code: %d", result);
 		result = RMF_AudioCapture_Stop(aux_handle);
 		result = RMF_AudioCapture_Close(aux_handle);
-		UT_FAIL_FATAL("Aborting test - unable to open primary capture interface.");
+		UT_FAIL("Aborting test - unable to open primary capture interface.");
 	}
 	result = RMF_AudioCapture_Start(prim_handle, &prim_settings); //Started primary capture
 	if(RMF_SUCCESS != result)
@@ -279,24 +294,24 @@ void test_l2_rmfAudioCapture_combined_data_check (void)
 		result = RMF_AudioCapture_Stop(aux_handle);
 		result = RMF_AudioCapture_Close(aux_handle);
 		result = RMF_AudioCapture_Close(prim_handle);
-		UT_FAIL_FATAL("Aborting test - unable to start primary capture.");
+		UT_FAIL("Aborting test - unable to start primary capture.");
 	}
 	sleep(MEASUREMENT_WINDOW_SECONDS);
 
 	result = RMF_AudioCapture_Stop(prim_handle);
-	SOFT_ASSERT_EQUAL(result, RMF_SUCCESS);
+	UT_ASSERT_EQUAL_NOT_FATAL(result, RMF_SUCCESS);
 	result = RMF_AudioCapture_Stop(aux_handle);
-	SOFT_ASSERT_EQUAL(result, RMF_SUCCESS);
+	UT_ASSERT_EQUAL_NOT_FATAL(result, RMF_SUCCESS);
 
 	result = test_l2_validate_bytes_received(&aux_settings, MEASUREMENT_WINDOW_SECONDS, aux_bytes_received);
-	SOFT_ASSERT_EQUAL(result, RMF_SUCCESS);
+	UT_ASSERT_EQUAL_NOT_FATAL(result, RMF_SUCCESS);
 	result = test_l2_validate_bytes_received(&prim_settings, MEASUREMENT_WINDOW_SECONDS, prim_bytes_received);
-	SOFT_ASSERT_EQUAL(result, RMF_SUCCESS);
+	UT_ASSERT_EQUAL_NOT_FATAL(result, RMF_SUCCESS);
 
 	result = RMF_AudioCapture_Close(prim_handle);
-	SOFT_ASSERT_EQUAL(result, RMF_SUCCESS);
+	UT_ASSERT_EQUAL_NOT_FATAL(result, RMF_SUCCESS);
 	result = RMF_AudioCapture_Close(aux_handle);
-	SOFT_ASSERT_EQUAL(result, RMF_SUCCESS);
+	UT_ASSERT_EQUAL_NOT_FATAL(result, RMF_SUCCESS);
 
 	UT_LOG("\n Out  %s\n",__FUNCTION__);
 }
