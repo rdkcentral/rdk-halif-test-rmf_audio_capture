@@ -1184,7 +1184,7 @@ void test_l1_rmfAudioCapture_positive_RMF_AudioCapture_GetStatus (void)
 	result = RMF_AudioCapture_Start(handle, &settings);
 	UT_ASSERT_EQUAL_NOT_FATAL(result, RMF_SUCCESS);
 	result = RMF_AudioCapture_GetStatus (handle, &status);
-	UT_ASSERT_EQUAL_NOT_FATAL(0, status.started);
+	UT_ASSERT_EQUAL_NOT_FATAL(1, status.started);
 	result = test_l1_validate_status_active(&status);
 	UT_ASSERT_EQUAL_NOT_FATAL(result, RMF_SUCCESS);
 
