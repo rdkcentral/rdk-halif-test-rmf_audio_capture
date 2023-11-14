@@ -82,10 +82,6 @@ rmf_Error test_l1_dummy_data_cb(void *cbBufferReadyParm, void *AudioCaptureBuffe
 {
 	return RMF_SUCCESS;
 }
-static rmf_Error test_l1_dummy_status_change_cb(void *cbStatusParm)
-{
-	return RMF_SUCCESS;
-}
 
 void test_l1_prepare_dummy_start_settings(RMF_AudioCapture_Settings * settings)
 {
