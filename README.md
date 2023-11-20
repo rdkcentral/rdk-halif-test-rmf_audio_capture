@@ -1,21 +1,27 @@
+# Unit Testing Suite For RMF Audio Capture `HAL`
 
-<!--
-If not stated otherwise in this file or this component's LICENSE file the following copyright and licenses apply.
+## Table of Contents
 
-Copyright 2023 RDK Management
+- [Acronyms, Terms and Abbreviations](#acronyms-terms-and-abbreviations)
+- [Description](#description)
+- [Reference Documents](#reference-documents)
 
-Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at
+## Acronyms, Terms and Abbreviations
 
- http://www.apache.org/licenses/LICENSE-2.0
+- `L1` - Functional Tests
+- `L2` - Module (Functional) Tests
+- `HAL`- Hardware Abstraction Layer
 
-Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+## Description
 
-See the License for the specific language governing permissions and limitations under the License.
--->
+This repository contains the Unit Test Suites (L1 and L2) for RMF Audio Capture `HAL`.
 
-# Unit Testing Suite For RMF Audio Capture CEC HAL
+## Reference Documents
 
-The following documents should be references to provide specific information on the tests required for this module.
-
-[Documentation can be found under "docs/pages" in this repository](./docs/pages)
-
+<!-- Need to update links to rdkcentral and point to branch main-->
+|SNo|Document Name|Document Description|Document Link|
+|---|-------------|--------------------|-------------|
+|1|`HAL` Specification Document|This document provides specific information on the APIs for which tests are written in this module|[halSpec.md](https://github.com/comcast-sky/rdk-components-hal-rmfaudiocapture/blob/master/docs/pages/halSpec.md "halSpec.md")|
+|2|`L2` Test Specification Document|This document provides information on the `L2` tests required for this module|[L2_TestSpecification.md](https://github.com/comcast-sky/rdk-components-haltest-rmfaudiocapture/blob/master/docs/pages/L2_TestSpecification.md "L2_TestSpecification.md")|
+|3|`L1` Tests |`L1` Test Case File for this module |[test_l1_rmfAudioCapture.c](https://github.com/comcast-sky/rdk-components-haltest-rmfaudiocapture/blob/master/src/test_l1_rmfAudioCapture.c "test_l1_rmfAudioCapture.c")|
+|4|`L2` Tests |`L2` Test Case File for this module|[test_l2_rmfAudioCapture.c](https://github.com/comcast-sky/rdk-components-haltest-rmfaudiocapture/blob/master/src/test_l2_rmfAudioCapture.c "test_l2_rmfAudioCapture.c")|
