@@ -18,27 +18,45 @@
 */
 
 /**
- * @addtogroup RMF_AudioCapture RDK-V RMF AudioCapture
+ * @addtogroup HPK Hardware Porting Kit
  * @{
+ *
  */
 
 /**
- * @addtogroup RDK-V RMF AudioCapture Tests
- * @ingroup RMF_AudioCapture RDK-V RMF AudioCapture
+ * @addtogroup RMF_AudioCapture RMF AudioCapture
  * @{
+ *
  */
 
+/**
+ * @addtogroup RMF_AudioCapture_HALTESTS RMF Audio Capture HAL Tests
+ * @{
+ * @par
+ * Unit Testing Suite for RMF Audio Capture HAL
+ */
+
+/**
+ * @defgroup RMF_AudioCapture_HALTESTS_Register RMF Audio Capture HAL Tests Register File
+ * @{
+ * @parblock
+ *
+ * ### Registration of tests for RMF Audio Capture HAL :
+ *
+ * Registration of tests for Audio Capture HAL.
+ * This is to ensure that the API meets the operational requirements of the module across all vendors.
+ *
+ * **Pre-Conditions:**  None@n
+ * **Dependencies:** None@n
+ *
+ * Refer to API Definition specification documentation : [halSpec.md](../../docs/pages/halSpec.md)
+ *
+ * @endparblock
+ *
+ */
 /**
 * @file test_register.c
 *
-* ## Module's Role
-* Registration of tests for AudioCapture HAL
-* This is to ensure that the API meets the operational requirements of the module across all vendors.
-*
-* **Pre-Conditions:**  Launch video playback before commencing tests.@n
-* **Dependencies:** None@n
-*
-* Ref to API Definition specification documentation : [halSpec.md](../../../docs/halSpec.md)
 */
 
 #include <ut.h>
@@ -74,4 +92,7 @@ int UT_register_APIDEF_l2_tests( void )
 	return registerFailed;
 }
 
-/** @} */ // End of RMF_AudioCapture RDK-V RMF AudioCapture
+/** @} */ // End of RMF Audio Capture HAL Tests Register File
+/** @} */ // End of RMF Audio Capture HAL Tests
+/** @} */ // End of RMF Audio Capture Module
+/** @} */ // End of HPK

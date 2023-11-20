@@ -18,27 +18,46 @@
 */
 
 /**
- * @addtogroup RMF_AudioCapture RDK-V RMF AudioCapture
+ * @addtogroup HPK Hardware Porting Kit
  * @{
+ *
  */
 
 /**
- * @addtogroup RDK-V RMF AudioCapture Tests
- * @ingroup RMF_AudioCapture RDK-V RMF AudioCapture
+ * @addtogroup RMF_AudioCapture RMF AudioCapture
  * @{
+ *
  */
+
+/**
+ * @addtogroup RMF_AudioCapture_HALTESTS RMF Audio Capture HAL Tests
+ * @{
+ * @par
+ * Unit Testing Suite for RMF Audio Capture HAL
+ */
+
+/**
+ * @defgroup RMF_AudioCapture_HALTESTS_L1 RMF Audio Capture HAL Tests L1 File
+ * @{
+ * @parblock
+ *
+ * ### L1 Tests for RMF Audio Capture HAL :
+ *
+ * Level 1 unit test cases for all APIs of Audio Capture HAL
+ *
+ * **Pre-Conditions:**  None@n
+ * **Dependencies:** None@n
+ *
+ * Refer to API Definition specification documentation : [halSpec.md](../../docs/pages/halSpec.md)
+ *
+ * @endparblock
+ *
+ */
+
 
 /**
 * @file test_l1_rmfAudioCapture.c
 *
-* ## Module's Role
-* Level 1 unit test cases for all APIs of AudioCapture HAL
-* This is to ensure that the API meets the operational requirements of the module across all vendors.
-*
-* **Pre-Conditions:**  None@n
-* **Dependencies:** None@n
-*
-* Ref to API Definition specification documentation : [halSpec.md](../../../docs/halSpec.md)
 */
 
 
@@ -1886,4 +1905,7 @@ int test_l1_rmfAudioCapture_register ( void )
 	return 0;
 } 
 
-/** @} */ // End of RMF_AudioCapture RDK-V RMF AudioCapture
+/** @} */ // End of RMF Audio Capture HAL Tests L1 File
+/** @} */ // End of RMF Audio Capture HAL Tests
+/** @} */ // End of RMF Audio Capture Module
+/** @} */ // End of HPK
