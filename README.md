@@ -1,4 +1,4 @@
-# Unit Testing Suite For RMF Audio Capture `HAL`
+# Unit Testing Suite For RMF Audio Capture HAL
 
 ## Table of Contents
 

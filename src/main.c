@@ -18,7 +18,7 @@
 */
 
 /**
- * @addtogroup HPK HPK
+ * @addtogroup HPK Hardware Porting Kit
  * @{
  *
  */
@@ -30,24 +30,33 @@
  */
 
 /**
- * @defgroup RMF Audio Capture Tests
+ * @defgroup RMF_AudioCapture_HALTESTS RMF Audio Capture HAL Tests
  * @{
  * @par
  * Unit Testing Suite for RMF Audio Capture HAL
  */
 
 /**
+ * @defgroup RMF_AudioCapture_HALTESTS_Main RMF Audio Capture HAL Tests Main File
+ * @{
+ * @parblock
+ *
+ * ### Tests for RMF Audio Capture HAL :
+ *
+ * This is to ensure that the API meets the operational requirements of the module across all vendors.
+ *
+ * **Pre-Conditions:**  Launch video playback before commencing tests.@n
+ * **Dependencies:** None@n
+ *
+ * Refer to API Definition specification documentation : [halSpec.md](../../docs/pages/halSpec.md)
+ *
+ * @endparblock
+ *
+ */
+
+/**
 * @file main.c
-* @mainpage
 *
-* ## Module's Role
-* Tests for AudioCapture HAL
-* This is to ensure that the API meets the operational requirements of the module across all vendors.
-*
-* **Pre-Conditions:**  Launch video playback before commencing tests.@n
-* **Dependencies:** None@n
-*
-* Ref to API Definition specification documentation : [halSpec.md](../../../docs/halSpec.md)
 */
 
 #include <ut.h>
@@ -84,6 +93,8 @@ int main(int argc, char** argv)
 	return 0;
 
 }
-/** @} */ // End of RMF AudioCapture Tests
-/** @} */ // End of RMF_AudioCapture RMF AudioCapture
+
+/** @} */ // End of RMF Audio Capture HAL Tests Main File
+/** @} */ // End of RMF Audio Capture HAL Tests
+/** @} */ // End of RMF Audio Capture Module
 /** @} */ // End of HPK

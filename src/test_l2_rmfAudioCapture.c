@@ -18,7 +18,7 @@
 */
 
 /**
- * @addtogroup HPK HPK
+ * @addtogroup HPK Hardware Porting Kit
  * @{
  *
  */
@@ -30,22 +30,35 @@
  */
 
 /**
- * @addtogroup RMF Audio Capture Tests
+ * @addtogroup RMF_AudioCapture_HALTESTS RMF Audio Capture HAL Tests
  * @{
+ * @par
+ * Unit Testing Suite for RMF Audio Capture HAL
+ */
+
+/**
+ * @defgroup RMF_AudioCapture_HALTESTS_L2 RMF Audio Capture HAL Tests L2 File
+ * @{
+ * @parblock
+ *
+ * ### L2 Tests for RMF Audio Capture HAL :
+ *
+ * Level 2 module tests will perform module level testing by exercising the full set of APIs to validate various use cases.
+ * This is to ensure that the API meets the operational requirements of the module across all vendors.
+ *
+ * **Pre-Conditions:**  None@n
+ * **Dependencies:** None@n
+ *
+ * Refer to API Definition specification documentation : [halSpec.md](../../docs/pages/halSpec.md)
+ *
+ * @endparblock
  *
  */
+
 
 /**
 * @file test_l2_rmfAudioCapture.c
 *
-* ## Module's Role
-* Level 2 module tests will perform module level testing by exercising the full set of APIs to validate
-* various use cases. This is to ensure that the API meets the operational requirements of the module across all vendors.
-*
-* **Pre-Conditions:**  Launch video playback before commencing tests.@n
-* **Dependencies:** None@n
-*
-* Ref to API Definition specification documentation : [halSpec.md](../../../docs/halSpec.md)
 */
 
 #include <string.h>
@@ -74,6 +87,8 @@ int test_l2_rmfAudioCapture_register ( void )
 	return 0;
 } 
 
-/** @} */ // End of RMF AudioCapture Tests
-/** @} */ // End of RMF_AudioCapture RMF AudioCapture
+/** @} */ // End of RMF Audio Capture HAL Tests L2 File
+/** @} */ // End of RMF Audio Capture HAL Tests
+/** @} */ // End of RMF Audio Capture Module
 /** @} */ // End of HPK
+
