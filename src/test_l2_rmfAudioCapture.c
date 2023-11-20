@@ -1,5 +1,5 @@
 /**
-*  If not stated otherwise in this file or this component's Licenses.txt
+*  If not stated otherwise in this file or this component's LICENSE
 *  file the following copyright and licenses apply:
 *
 *  Copyright 2022 RDK Management
@@ -18,7 +18,7 @@
 */
 
 /**
- * @addtogroup HPK HPK
+ * @addtogroup HPK Hardware Porting Kit
  * @{
  *
  */
@@ -30,45 +30,44 @@
  */
 
 /**
- * @addtogroup RMF Audio Capture Tests
+ * @addtogroup RMF_AudioCapture_HALTESTS RMF Audio Capture HAL Tests
  * @{
+ * @par
+ * Unit Testing Suite for RMF Audio Capture HAL
+ */
+
+/**
+ * @defgroup RMF_AudioCapture_HALTESTS_L2 RMF Audio Capture HAL Tests L2 File
+ * @{
+ * @parblock
+ *
+ * ### L2 Tests for RMF Audio Capture HAL :
+ *
+ * Level 2 module tests will perform module level testing by exercising the full set of APIs to validate various use cases.
+ * This is to ensure that the API meets the operational requirements of the module across all vendors.
+ *
+ * **Pre-Conditions:**  None@n
+ * **Dependencies:** None@n
+ *
+ * Refer to API Definition specification documentation : [halSpec.md](../../docs/pages/halSpec.md)
+ *
+ * @endparblock
  *
  */
+
 
 /**
 * @file test_l2_rmfAudioCapture.c
 *
-* ## Module's Role
-* Level 2 module tests will perform module level testing by exercising the full set of APIs to validate
-* various use cases. This is to ensure that the API meets the operational requirements of the module across all vendors.
-*
-* **Pre-Conditions:**  Launch video playback before commencing tests.@n
-* **Dependencies:** None@n
-*
-* Ref to API Definition specification documentation : [halSpec.md](../../../docs/halSpec.md)
 */
 
 #include <string.h>
 #include <stdlib.h>
+#include <unistd.h>
 
 #include <ut.h>
 #include <ut_log.h>
-
-/**
-* @brief TODO: Describe the object of the test
-*
-* TODO: Add the description of what is tested and why in this test
-*
-* **Test Group ID:** TODO: Add the group this test belongs to - Basic (for L1): 01 / Module (L2): 02 / Stress (L2): 03)@n
-* **Test Case ID:** TODO: Add the ID of the test case so that it can be logically tracked in the logs@n
-*
-* **Test Procedure:**
-* Refer to UT specification documentation [l2_module_test_specification.md](l2_module_test_specification.md)
-*/
-void test_l2_rmfAudioCapture (void)
-{
-	UT_FAIL(This function needs to be implemented!); 
-}
+#include "rmfAudioCapture.h"
 
 static UT_test_suite_t * pSuite = NULL;
 
@@ -85,13 +84,11 @@ int test_l2_rmfAudioCapture_register ( void )
 	{
 		return -1;
 	}	
-
-	
-	UT_add_test( pSuite, "test_l2_rmfAudioCapture" ,test_l2_rmfAudioCapture );
-
 	return 0;
 } 
 
-/** @} */ // End of RMF AudioCapture Tests
-/** @} */ // End of RMF_AudioCapture RMF AudioCapture
+/** @} */ // End of RMF Audio Capture HAL Tests L2 File
+/** @} */ // End of RMF Audio Capture HAL Tests
+/** @} */ // End of RMF Audio Capture Module
 /** @} */ // End of HPK
+
