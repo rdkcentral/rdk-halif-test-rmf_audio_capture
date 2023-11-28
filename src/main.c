@@ -48,7 +48,7 @@
  * **Pre-Conditions:**  Launch video playback before commencing tests.@n
  * **Dependencies:** None@n
  *
- * Refer to API Definition specification documentation : [halSpec.md](../../docs/pages/halSpec.md)
+ * Refer to API Definition specification documentation : [rmf-audio-capture_halSpec.md](../../docs/pages/rmf-audio-capture_halSpec.md)
  *
  * @endparblock
  *
