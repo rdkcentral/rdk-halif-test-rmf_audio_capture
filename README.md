@@ -22,7 +22,7 @@ This repository contains the Unit Test Suites (L1) for RMF Audio Capture `HAL`.
 |SNo|Document Name|Document Description|Document Link|
 |---|-------------|--------------------|-------------|
 |1|`HAL` Specification Document|This document provides specific information on the APIs for which tests are written in this module|[rmf-audio-capture_halSpec.md -v1.0.4](https://github.com/rdkcentral/rdk-halif-rmf_audio_capture/blob/1.0.4/docs/pages/rmf-audio-capture_halSpec.md "rmf-audio-capture_halSpec.md")|
-|2|`L1` Tests |`L1` Test Case File for this module |[test_l1_rmfAudioCapture.c -v1.0.2](https://github.com/rdkcentral/rdk-halif-test-rmf_audio_capture/blob/1.0.2/src/test_l1_rmfAudioCapture.c "test_l1_rmfAudioCapture.c")|
+|2|`L1` Tests |`L1` Test Case File for this module |[test_l1_rmfAudioCapture.c -v1.0.4](https://github.com/rdkcentral/rdk-halif-test-rmf_audio_capture/blob/1.0.4/src/test_l1_rmfAudioCapture.c "test_l1_rmfAudioCapture.c")|
 
 ## Notes
 
