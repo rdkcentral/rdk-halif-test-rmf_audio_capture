@@ -3,17 +3,15 @@
 ## Table of Contents
 
   - [Overview](#overview)
-    - [Acronyms, Terms and Abbreviations](#acronyms-terms-and-abbreviations)
-    - [Definitions](#definitions)
-    - [References](#references)
+  - [Acronyms, Terms and Abbreviations](#acronyms-terms-and-abbreviations)
   - [Level 2 Test Procedure](#level-2-test-procedure)
-    - [Ensure satisfactory data transfer for primary audio capture](#ensure-satisfactory-data-transfer-for-primary-audio-capture)
-    - [Ensure satisfactory data transfer for auxiliary audio capture](#ensure-satisfactory-data-transfer-for-auxiliary-audio-capture)
-    - [Ensure satisfactory data transfer with simultaneous primary and auxiliary capture](#ensure-satisfactory-data-transfer-with-simultaneous-primary-and-auxiliary-capture)
+  - [Ensure satisfactory data transfer for primary audio capture](#ensure-satisfactory-data-transfer-for-primary-audio-capture)
+  - [Ensure satisfactory data transfer for auxiliary audio capture](#ensure-satisfactory-data-transfer-for-auxiliary-audio-capture)
+  - [Ensure satisfactory data transfer with simultaneous primary and auxiliary capture](#ensure-satisfactory-data-transfer-with-simultaneous-primary-and-auxiliary-capture)
 
 ## Overview
 
-This document describes the level 2 testing suite for the RMF_AudioCapture module.
+This document describes the level 2 testing Procedure for the RMF_AudioCapture module.
 
 ### Acronyms, Terms and Abbreviations
 
@@ -25,25 +23,6 @@ This document describes the level 2 testing suite for the RMF_AudioCapture modul
 - `UT`  \- Unit Test(s)
 - `OEM`  \- Original Equipment Manufacture (Sky is also an OEM)
 - `SoC`  \- System on a Chip
-
-### Definitions
-
-- `Broadcom` \- `SoC` manufacturer <https://www.broadcom.com/>
-- `Amlogic` \- `SoC` manufacturer <https://en.wikipedia.org/wiki/Amlogic>
-- `Realtek` \- `SoC` manufacturer <https://en.wikipedia.org/wiki/Realtek>
-- `Soc Vendor` \- Definition to encompass multiple vendors
-- `Unit Tests` \- C Function tests that run on the target hardware
-- `Common Testing Framework` \- Off the shelf 3rd Party Testing Framework, or framework that does not require infrastructure to control it. That's not to say it cannot be controlled via infrastructure if required. Examples of which are.
-  - `GTest` \- Google Test Suit <https://google.github.io/googletest>
-  - `CUnit` \- C Testing Suit <http://cunit.sourceforge.net/>
-  - `Unity` \- C Embedded Testing Suit <http://www.throwtheswitch.org/unity>
-  - `ut-core` \- Common Testing Framework <https://github.com/comcast-sky/rdk-components-ut-core>, which wraps a open-source framework that can be expanded to the requirements for future comcast-sky framework.
-
-### References
-
-- `Feedback Loops` \- <https://www.softwaretestingnews.co.uk/4-methods-to-improve-your-feedback-loops-and-supercharge-your-testing-process/>
-- `Doxygen` \- SourceCode documentation tool - <https://www.doxygen.nl/index.html>
-- `Black Box Testing` \- <https://en.wikipedia.org/wiki/Black-box_testing>
 
 ## Level 2 Test Procedure
 
@@ -60,7 +39,7 @@ The following functions are expecting to test the module operates correctly :
 |Priority| high |
 
 **Pre-Conditions :**
-Launch video in the background before starting test.
+Launch audio in the background before starting test.
 
 **Dependencies :** None
 
@@ -91,7 +70,7 @@ Launch video in the background before starting test.
 |Priority| high |
 
 **Pre-Conditions :**
-Device must support auxiliary audio. Launch video in the background before starting test.
+Device must support auxiliary audio. Launch audio in the background before starting test.
 
 **Dependencies :** None
 
@@ -122,7 +101,7 @@ Device must support auxiliary audio. Launch video in the background before start
 |Priority| high |
 
 **Pre-Conditions :**
-Device must support auxiliary audio. Launch video in the background before starting test.
+Device must support auxiliary audio. Launch audio in the background before starting test.
 
 **Dependencies :** None
 

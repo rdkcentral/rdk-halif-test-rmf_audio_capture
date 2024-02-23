@@ -2,17 +2,16 @@
 ## Table of Contents
 
   - [Overview](#overview)
-    - [Acronyms, Terms and Abbreviations](#acronyms-terms-and-abbreviations)
-    - [Definitions](#definitions)
-    - [References](#references)
+  - [Acronyms, Terms and Abbreviations](#acronyms-terms-and-abbreviations)
   - [Level 3 Test Procedure](#level-3-test-procedure)
-    - [UT-Core functions to be added](#ut-core-functions-to-be-added)
+    - [Requirements to support L3 from UT-Core](#requirements-to-support-l3-from-ut-core)
     - [Raft L3 Testing Requirements](#raft-l3-testing-requirements)
+    - [Internal CaptureCheckData](#internal-capturecheckdata)
     - [Input Stream Requirements](#input-stream-requirements)
 
 ## Overview
 
-This document describes the level 3 testing suite for the RMF_AudioCapture module.
+This document describes the level 3 testing Procedure for the RMF_AudioCapture module.
 
 ### Acronyms, Terms and Abbreviations
 
@@ -25,122 +24,87 @@ This document describes the level 3 testing suite for the RMF_AudioCapture modul
 - `OEM`  \- Original Equipment Manufacture (Sky is also an OEM)
 - `SoC`  \- System on a Chip
 
-### Definitions
-
-- `Broadcom` \- `SoC` manufacturer <https://www.broadcom.com/>
-- `Amlogic` \- `SoC` manufacturer <https://en.wikipedia.org/wiki/Amlogic>
-- `Realtek` \- `SoC` manufacturer <https://en.wikipedia.org/wiki/Realtek>
-- `Soc Vendor` \- Definition to encompass multiple vendors
-- `Unit Tests` \- C Function tests that run on the target hardware
-- `Common Testing Framework` \- Off the shelf 3rd Party Testing Framework, or framework that does not require infrastructure to control it. That's not to say it cannot be controlled via infrastructure if required. Examples of which are.
-  - `GTest` \- Google Test Suit <https://google.github.io/googletest>
-  - `CUnit` \- C Testing Suit <http://cunit.sourceforge.net/>
-  - `Unity` \- C Embedded Testing Suit <http://www.throwtheswitch.org/unity>
-  - `ut-core` \- Common Testing Framework <https://github.com/comcast-sky/rdk-components-ut-core>, which wraps a open-source framework that can be expanded to the requirements for future comcast-sky framework.
-
-### References
-
-- `Feedback Loops` \- <https://www.softwaretestingnews.co.uk/4-methods-to-improve-your-feedback-loops-and-supercharge-your-testing-process/>
-- `Doxygen` \- SourceCode documentation tool - <https://www.doxygen.nl/index.html>
-- `Black Box Testing` \- <https://en.wikipedia.org/wiki/Black-box_testing>
-
 ## Level 3 Test Procedure
 
-## UT-Core functions to be added
+### Requirements to support L3 from UT-Core
+The following functions require being implemented into the UT-Core module to support control of the interface from a higher level.
 
-- L3 - RMF_AudioCapture_Open - Depricated not being tested
-- L3 - RMF_AudioCapture_Open_Type(Primary)
-- L3 - RMF_AudioCapture_Open_Type(Auxiliary)
-- L3 - RMF_AudioCapture_GetStatus
-- L3 - RMF_AudioCapture_GetDefaultSettings
-- L3 - RMF_AudioCapture_GetCurrentSettings
-- L3 - RMF_AudioCapture_Start
-- L3 - RMF_AudioCapture_Stop
-- L3 - RMF_AudioCapture_Close
+|Test Name|Description|
+|--|--|
+|`RMF_AudioCapture_Open`|Open default configuration into a global variable and leave open|
+|`RMF_AudioCapture_Open_Type`|Open type primary/auxiliary  configuration into a global variable |
+|`RMF_AudioCapture_GetStatus`|get status information into a global variable |
+|`RMF_AudioCapture_GetDefaultSettings`|get Default Settings into a global variable|
+|`RMF_AudioCapture_GetCurrentSettings`|Open default configuration into a global variable |
+|`RMF_AudioCapture_Start`|start default configuration into a global variable |
+|`RMF_AudioCapture_Stop`|stop  |
+|`RMF_AudioCapture_Close`|close default configuration  |
 
-## Raft L3 Testing Requirements
+### Raft L3 Testing Requirements
 
 - use these ut-core functions to achieve requirements
 
-### Internal CheckAudioDecodingCorrectFormat( Type Stream Type )
+|Title|Details|
+|--|--|
+|Test Name|`CheckAudioDecodingCorrectFormat`|
+|Description| Initiate the capture of primary/auxiliary audio data using specified input streams, then verify that the audio decoding produces the correct format. Continuously loop through different known input streams|
+|Test Group| 03 |
+|Priority| high |
 
-- configuration YAML file contains all info on fixed streams and the format of each stream.
-- Set up the primary audio decoder, with a fixed stream.
-- Start the primary audio decoder
-- RMF_AudioCapture_Open_Type( PRIMARY / Auxiliary )
-- RMF_AudioCapture_GetStatus() - should not be running
-- RMF_AudioCapture_Start() - should now start
+**Pre-Conditions :**
+Launch audio in the background before starting test.
 
-- loop for x time
-- L3 - RMF_AudioCapture_GetStatus
+**Dependencies :** 
+Configuration YAML file contains all info on fixed streams and the format of each stream
 
-- Dump all these fields. and check for overflow/underflow.
-  - uint32_t overflows;     //!< Overflow count
-  - uint32_t underflows;    //!< Underflow count
-  - int8_t muted;           //!< Indicates whether capture is muted
-  - int8_t paused;          //!< Indicates whether capture is paused
-  - float volume;           //!< Current capture volume
+**User Interaction :** None
 
-- Check results against known data input from the fixed stream
-- end loop
 
-- RMF_AudioCapture_Stop()
-- RMF_AudioCapture_GetStatus() - should not be running
-- RMF_AudioCapture_Close() - should close
+| Variation / Steps | Description | Test Data | Expected Result | Notes|
+| -- | --------- | ---------- | -------------- | ----- |
+| 01 | Call `RMF_AudioCapture_Open_Type()` to open interface | handle must be a valid pointer; type is Primary/Auxiliary | RMF_SUCCESS | Should pass |
+| 02 | Call `RMF_AudioCapture_GetDefaultSettings()` to get default settings | valid settings | RMF_SUCCESS | Should pass |
+| 03 | Call `RMF_AudioCapture_Start()` to start audio capture | settings=default settings from previous step, data callback will increment a static byte counter every time it runs | RMF_SUCCESS | Should pass |
+| 04 | Call `RMF_AudioCapture_GetStatus()` to get status | verify the status params with input stream | RMF_SUCCESS | Should pass |
+| 05 | Call `RMF_AudioCapture_Stop()` to stop capture | valid handle | RMF_SUCCESS | Should pass |
+| 06 | Call `RMF_AudioCapture_Close()` to release resources | current handle | RMF_SUCCESS | Should pass |
+| 07 | Call ` loop through `  | loop through different known input streams | NA | Should pass |
 
-### Internal CaptureCheckData(type)
+### Internal CaptureCheckData
 
-- capture the data to roofs.
-- run CCheckAudioDecodingCorrectFormat(Primary)
-- Copy captured data to the workspace
-- Using host tools extract validate PCM data is correctly formatted
-- Decode each packet of the captured PCM data. e.g packages 100-200 have been captured
-- Compare against the packages of the same source data, Stream is 0-100000 packets, compare 100-200 is the same.
 
-### L3 - Check Audio Capture Primary
+|Title|Details|
+|--|--|
+|Test Name|`CaptureCheckData`|
+|Description| Validate Captured audio data|
+|Test Group| 03 |
+|Priority| high |
 
-- CaptureCheckData(Primary, Stream Type)
+**Pre-Conditions :**
+Launch audio in the background before starting test.
 
-### L3 - Check Audio Capture Auxiliary
+**Dependencies :** 
+Configuration YAML file contains all info on fixed streams and the format of each stream
 
-- CaptureCheckData(Auxiliary, Stream Type)
+**User Interaction :** None
 
-### L3 - Check Audio Capture Both Primary / Auxiliary
 
-- CaptureCheckData(Primary, Stream Type)
-- CaptureCheckData(Auxiliary, Stream Type)
+| Variation  | Description | Test Data |
+| -- | --------- | ---------- | 
+| 01 | Call `CheckAudioDecodingCorrectFormat` | Capture Audio with Primary/Auxiliary or both type| 
+| 02 | Capture `Audio data` to  workspace|  | returns 
+| 03 | Check `Underflow ` Start / Stop the audio feed | Needs to be big enough to avoid overflow (expected service time * byte rate) | 
+| 04 | Check `Overflow` | TBC: Run the audio data at a higher output rate. | 
+| 05 | Check `Fifo Level` | Change the fifo level and check that the callbacks operate correctly |
+| 06 | Check `delayCompensation_ms `  | Check the callbacks are delayed | 
+| 07 | Plot data `Capture data for a specific time` | TBC: Generate test plot ready for consumption, fifo level, overflow, underflow, etc | 
+| |  | Plot the callback rates, volume etc | |
+| |  | Do the callback rates adjust based on delay compensation? | |
+| |  | PyChart generate a plot of the data and output a png | |
+| |  | Check against pass/fail thresholds which are set in the test configuration `yaml` | |
+| |  | Compare data against the input source data | |
 
-### L3 - Underflow test
-
-- TBC: Start / Stop the audio feed
-- Needs to be big enough to avoid overflow (expected service time * byte rate)
-
-### L3 - Overflow test
-
-- TBC: Run the audio data at a higher output rate.
-
-### L3 - Fifo Level test
-
-- Change the fifo level and check that the callbacks operate correctly
-
-### L3 - Run test and plot data - Capture data for a specific time.
-
-- TBC: Generate test plot ready for consumption, fifo level, overflow, underflow, etc.
-- Plot the callback rates, volume etc.
-- Do the callback rates adjust based on delay compensation?
-- PyChart generate a plot of the data and output a png
-- Check against pass/fail thresholds which are set in the test configuration `yaml`.
-
-### L3 - delayCompensation_ms
-
-- TBC: Add delay into the output streams
-- Check the callbacks are delayed.
-
-### L3 - Volume
-
-- TBC: Perform volume 
-
-### Get Status function dump
+#### Get Status function dump
 
 - RMF_AudioCapture_GetStatus() - Log information on fifo & threshold to plot in graph
 - Fifo data output, to plot
@@ -150,21 +114,20 @@ This document describes the level 3 testing suite for the RMF_AudioCapture modul
 - samplingFreq
 - delayCompensation_ms
 
-## Input Stream Requirements
-
-- 6 * 6 streams requirement, to ensure testing of all the required formats = 36 streams.
-
-racFormat_e16BitStereo      Stereo, 16 bits per sample interleaved into a 32-bit word  <br>
-racFormat_e24BitStereo      Stereo, 24 bits per sample.  The data is aligned to 32-bits left-justified.  Left and right channels will interleave one sample per 32-bit word  <br>
-racFormat_e16BitMonoLeft   Mono, 16 bits per sample interleaved into a 32-bit word. Left channel samples only  <br>
-racFormat_e16BitMonoRight  Mono, 16 bits per sample interleaved into a 32-bit word. Right channel samples only   <br>
-racFormat_e16BitMono       Mono, 16 bits per sample interleaved into a 32-bit word. Left and Right channels mixed  <br>
-racFormat_e24Bit5_1        5.1 Multichannel, 24 bits per sample.  The data is aligned to 32-bits, left-justified. Channels will interleave one  <br>
-
-racFreq_e16000    16KHz <br>
-racFreq_e22050    22.05KHz  <br>
-racFreq_e24000    24KHz  <br>
-racFreq_e32000    32KHz  <br>
-racFreq_e44100    44.1KHz  <br>
-racFreq_e48000    48KHz  <br>
+### Input Stream Requirements
+6 * 6 streams requirement, to ensure testing of all the required formats = 36 streams
+| parameters   | Description |
+| ------- | --------- |
+| racFormat_e16BitStereo| Stereo, 16 bits per sample interleaved into a 32-bit word | 
+| racFormat_e24BitStereo| Stereo, 24 bits per sample.  The data is aligned to 32-bits left-justified.  Left and right channels will interleave one sample per 32-bit word | 
+| racFormat_e16BitMonoLeft| Mono, 16 bits per sample interleaved into a 32-bit word. Left channel samples only | 
+| racFormat_e16BitMonoRight| Mono, 16 bits per sample interleaved into a 32-bit word. Right channel samples only | 
+| racFormat_e16BitMono| Mono, 16 bits per sample interleaved into a 32-bit word. Left and Right channels mixed | 
+| racFormat_e24Bit5_1| 5.1 Multichannel, 24 bits per sample.  The data is aligned to 32-bits, left-justified. Channels will interleave one | 
+|racFreq_e16000 |  16KHz |
+|racFreq_e22050 |  22.05KHz |
+|racFreq_e24000 |  24KHz  |
+|racFreq_e32000 | 32KHz  |
+|racFreq_e44100 |  44.1KHz  |
+|racFreq_e48000 |   48KHz  |
 
