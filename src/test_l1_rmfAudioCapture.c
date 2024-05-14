@@ -70,9 +70,9 @@
 #include "rmfAudioCapture.h"
 
 // Need to remove this once the rmf_osal_error.h is included to original interface file file
-#define TEST_RMF_ERRBASE_OSAL              (0x0100)
-#define TEST_RMF_OSAL_EINVAL          	   (TEST_RMF_ERRBASE_OSAL+1)
-#define TEST_RMF_OSAL_EBUSY 			   (TEST_RMF_ERRBASE_OSAL+3)
+#define TEST_RMF_ERRBASE_OSAL				(0x0100)
+#define TEST_RMF_OSAL_EINVAL				(TEST_RMF_ERRBASE_OSAL+1)
+#define TEST_RMF_OSAL_EBUSY				(TEST_RMF_ERRBASE_OSAL+3)
 
 static int gTestGroup = 1;
 static int gTestID = 1;
@@ -248,7 +248,7 @@ void test_l1_rmfAudioCapture_negative_RMF_AudioCapture_Open_Type_primary (void)
 	}
 
 	result = RMF_AudioCapture_Open_Type(&handle, RMF_AC_TYPE_PRIMARY);
-    #ifdef ENABLE_ENHANCED_ERROR_CODE
+	#ifdef ENABLE_ENHANCED_ERROR_CODE
 	UT_ASSERT_EQUAL(result, RMF_INVALID_STATE);
 	if(RMF_INVALID_STATE != result){
 		UT_FAIL("Failed to reject a second primary capture request.");
@@ -544,11 +544,11 @@ void test_l1_rmfAudioCapture_negative_RMF_AudioCapture_Close (void)
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	result = RMF_AudioCapture_Close(NULL);
-    #ifdef ENABLE_ENHANCED_ERROR_CODE
+    	#ifdef ENABLE_ENHANCED_ERROR_CODE
 	UT_ASSERT_EQUAL(result, RMF_INVALID_HANDLE);
 	#else
 	UT_ASSERT_EQUAL(result, TEST_RMF_OSAL_EINVAL);
-    #endif
+    	#endif
 
 	result = RMF_AudioCapture_Open(&handle);
 	if(RMF_SUCCESS != result){
@@ -556,7 +556,7 @@ void test_l1_rmfAudioCapture_negative_RMF_AudioCapture_Close (void)
 	}
 
 	result = RMF_AudioCapture_Close(NULL);
-    #ifdef ENABLE_ENHANCED_ERROR_CODE
+    	#ifdef ENABLE_ENHANCED_ERROR_CODE
 	UT_ASSERT_EQUAL(result, RMF_INVALID_HANDLE);
 	#else
 	UT_ASSERT_EQUAL(result, TEST_RMF_OSAL_EINVAL);
@@ -566,7 +566,7 @@ void test_l1_rmfAudioCapture_negative_RMF_AudioCapture_Close (void)
 	UT_ASSERT_EQUAL(result, RMF_SUCCESS);
 
 	result = RMF_AudioCapture_Close(handle);
-    #ifdef ENABLE_ENHANCED_ERROR_CODE
+    	#ifdef ENABLE_ENHANCED_ERROR_CODE
 	UT_ASSERT_EQUAL(result, RMF_INVALID_HANDLE);
 	#else
 	UT_ASSERT_EQUAL(result, TEST_RMF_OSAL_EINVAL);
@@ -624,7 +624,7 @@ void test_l1_rmfAudioCapture_negative_RMF_AudioCapture_Close_complex (void)
 
 
 	result = RMF_AudioCapture_Close(handle);
-    #ifdef ENABLE_ENHANCED_ERROR_CODE
+    	#ifdef ENABLE_ENHANCED_ERROR_CODE
 	UT_ASSERT_EQUAL(result, RMF_INVALID_STATE);
 	#else
 	UT_ASSERT_EQUAL(result, TEST_RMF_OSAL_EINVAL);
@@ -794,7 +794,7 @@ void test_l1_rmfAudioCapture_negative_RMF_AudioCapture_GetDefaultSettings (void)
 	UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
 	result = RMF_AudioCapture_GetDefaultSettings(&settings);
-    #ifdef ENABLE_ENHANCED_ERROR_CODE
+    	#ifdef ENABLE_ENHANCED_ERROR_CODE
 	UT_ASSERT_EQUAL(result, RMF_INVALID_STATE);
 	#else
 	UT_ASSERT_EQUAL(result, RMF_SUCCESS);
@@ -812,7 +812,7 @@ void test_l1_rmfAudioCapture_negative_RMF_AudioCapture_GetDefaultSettings (void)
 	UT_ASSERT_EQUAL(result, RMF_SUCCESS);
 
 	result = RMF_AudioCapture_GetDefaultSettings(&settings);
-    #ifdef ENABLE_ENHANCED_ERROR_CODE
+	#ifdef ENABLE_ENHANCED_ERROR_CODE
 	UT_ASSERT_EQUAL(result, RMF_INVALID_STATE);
 	#else
 	UT_ASSERT_EQUAL(result, RMF_SUCCESS);
@@ -1206,7 +1206,7 @@ void test_l1_rmfAudioCapture_negative_RMF_AudioCapture_Stop (void)
 	}
 
 	result = RMF_AudioCapture_Stop(handle);
-    #ifdef ENABLE_ENHANCED_ERROR_CODE
+    	#ifdef ENABLE_ENHANCED_ERROR_CODE
 	UT_ASSERT_EQUAL(result, RMF_INVALID_STATE);
 	#else
 	UT_ASSERT_EQUAL(result, TEST_RMF_OSAL_EINVAL);
@@ -1529,7 +1529,7 @@ void test_l1_rmfAudioCapture_negative_RMF_AudioCapture_GetCurrentSettings (void)
 	}
 
 	result = RMF_AudioCapture_GetCurrentSettings(handle, &current_settings);
-    #ifdef ENABLE_ENHANCED_ERROR_CODE
+    	#ifdef ENABLE_ENHANCED_ERROR_CODE
 	UT_ASSERT_EQUAL(result, RMF_INVALID_STATE);
 	#else
 	UT_ASSERT_EQUAL(result, RMF_SUCCESS);
@@ -1659,7 +1659,7 @@ void test_l1_rmfAudioCapture_negative_RMF_AudioCapture_Open_Type_auxiliary (void
 	}
 
 	result = RMF_AudioCapture_Open_Type(&handle, RMF_AC_TYPE_AUXILIARY);
-    #ifdef ENABLE_ENHANCED_ERROR_CODE
+    	#ifdef ENABLE_ENHANCED_ERROR_CODE
 	UT_ASSERT_EQUAL(result, RMF_INVALID_STATE);
 	#else
 	UT_ASSERT_EQUAL(result, TEST_RMF_OSAL_EBUSY);
@@ -1773,7 +1773,7 @@ void test_l1_rmfAudioCapture_negative_RMF_AudioCapture_Open_Type_mixed (void)
 		UT_FAIL_FATAL("Aborting test - unable to open capture.");
 	}
 
-    #ifdef ENABLE_ENHANCED_ERROR_CODE
+	#ifdef ENABLE_ENHANCED_ERROR_CODE
 	result = RMF_AudioCapture_Open_Type(&aux_handle, RMF_AC_TYPE_AUXILIARY);
 	UT_ASSERT_EQUAL(result, RMF_INVALID_STATE);
 	#else
