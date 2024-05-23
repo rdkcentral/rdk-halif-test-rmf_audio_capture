@@ -67,6 +67,7 @@
 
 #include <ut.h>
 #include <ut_log.h>
+#include <ut_kvp_profile.h>
 #include "rmfAudioCapture.h"
 
 // Need to remove this once the rmf_osal_error.h is included to original interface file file
@@ -1952,6 +1953,7 @@ int test_l1_rmfAudioCapture_register ( void )
 		test_l1_rmfAudioCapture_register_positive_only_suite();
 	}
 
+	extendedEnumsSupported = ut_kvp_getBoolField( ut_kvp_profile_getInstance(), "rmfAudioCapture/features/extendedEnumsSupported" );
 	return 0;
 }
 
