@@ -2,56 +2,106 @@
 
 ## Table of Contents
 
-- [Overview](#overview)
 - [Acronyms, Terms and Abbreviations](#acronyms-terms-and-abbreviations)
-- [Definitions](#definitions)
-- [References](#references)
-- [Acronyms, Terms and Abbreviations](#acronyms-terms-and-abbreviations)
-- [Module Description](#module-description)
-- [Test Functionality](#test-functionality)
-- [Test Procedure](#test-procedure)
+- [Introduction](#introduction)
+- [Test Scenarios](#test-scenarios)
+  - [Check primary audio capture](#check-primary-audio-capture)
+  - [Check auxiliary audio capture](#check-auxiliary-audio-capture)
+  - [Check concurrent audio capture](#check-concurrent-audio-capture)
 
-## Overview
-
-This document provides an overview of the testing requirements for the RMF audio capture module. It outlines the scope of testing, objectives, testing levels and approaches, specific test requirements, and expected deliverables.
 
 ### Acronyms, Terms and Abbreviations
 
-- `HAL` \- Hardware Abstraction Layer, may include some common components
-- `UT`  \- Unit Test(s)
-- `OEM`  \- Original Equipment Manufacture (Sky is also an OEM)
-- `SoC`  \- System on a Chip
+- `HAL` - Hardware Abstraction Layer, may include some common components
+- `UT` - Unit Test(s)
+- `SoC` - System on a Chip
+- `HAL` - Hardware Abstraction Layer
+- `API` - Application Programming Interface
+- `L2` - Level2 Testing
+- `L3` - Level3 Testing
+- `NA` - Not Applicable
+- `Y` - Yes
 
-### Definitions
 
-- `Unit Tests` \- C Function tests that run on the target hardware
-- `Common Testing Framework` \- Off the shelf 3rd Party Testing Framework, or framework that does not require infrastructure to control it. That's not to say it cannot be controlled via infrastructure if required. Examples of which are.
-  - `GTest` \- Google Test Suit <https://google.github.io/googletest>
-  - `CUnit` \- C Testing Suit <http://cunit.sourceforge.net/>
-  - `Unity` \- C Embedded Testing Suit <http://www.throwtheswitch.org/unity>
-  - `ut-core` \- Common Testing Framework <https://github.com/comcast-sky/rdk-components-ut-core>, which wraps a open-source framework that can be expanded to the requirements for future comcast-sky framework.
+## Introduction
 
-### References
+This document provides an overview of the testing requirements for the RMF audio capture module. It outlines the scope of testing, objectives, testing levels and approaches, specific test requirements, and expected deliverables.
 
-- RMF Audio Capture `HAL` Specification Document \- <https://github.com/rdkcentral/rdk-halif-rmf_audio_capture/blob/main/docs/pages/rmf-audio-capture_halSpec.md>
-- RMF Audio Capture `HAL` Interface file \- <https://github.com/rdkcentral/rdk-halif-rmf_audio_capture/blob/main/include/rmfAudioCapture.h>
+- RMF Audio Capture `HAL` specification Document \- <https://github.com/rdkcentral/rdk-halif-rmf_audio_capture/blob/main/docs/pages/rmf-audio-capture_halSpec.md>
+- RMF Audio Capture `HAL` interface file \- <https://github.com/rdkcentral/rdk-halif-rmf_audio_capture/blob/main/include/rmfAudioCapture.h>
 
-## Module Description
 
-The purpose of audio capture is to tap the final mix of the decoded audio. The audio data delivered via this interface must closely track the audio being rendered by the device at any given point in time, aiming for minimal latency. The RMF audio capture functionality must be capable of capturing primary audio and, optionally, auxiliary audio (such as alternate language tracks). When auxiliary audio is supported, the `HAL` must be able to handle concurrent capture sessions for both primary and auxiliary audio.For more details please check the [References](#references)
 
-![RMF_AudioCapture data flow](images/RMF_AudioCapture_HAL_audio_flow.png)
+## Test Scenarios
 
-## Test Functionality
+|#|Test Functionality|Description|
+|-|------------------|-----------|
+|1|[Check primary audio capture](#check-primary-audio-capture)|Run a capture of primary audio for a while and verify delivery of data|
+|2|[Check auxiliary audio capture](#check-auxiliary-audio-capture)|Run a capture of auxiliary audio (on supported devices only) for a while and verify delivery of data|
+|1|[Check concurrent audio capture](#check-concurrent-audio-capture)|Run parallel captures of primary and auxiliary audio (on supported devices only) and verify delivery of data|
 
-|#|Test Functionality|Description|Level2|Level3|
-|-|------------------|-----------|------|------|
-|1 |Start RMF Audio capture module |Start the module with no data feed to check for errors |Y|N|
-|2 |Capture audio data with known input streams |Validate captured audio data |N|Y|
-|3 |Captured audio data |Control the module and captured audio data |N|Y|
+### Check primary audio capture
 
-## Test Procedure
+|Description|HAL APIs|L2|L3|Control plane requirements|
+|-----------|--------|--|--|--------------------------|
+|Run primary audio capture for 10 seconds and verify receipt of commensurate amount of audio samples |RMF_AudioCapture_Open, RMF_AudioCapture_Start|`Y`|`NA`|`NA`|
+|Run primary audio capture for 10 seconds with known source material and verify byte-for-byte match of captured audio samples|RMF_AudioCapture_Open, RMF_AudioCapture_Start|`NA`|`Y`|`Y`|
 
-Level2 Test Specification and Procedure can be found [here](./rmf-audio-capture_L2_TestSpec_Procedure.md)
+#### Test Startup Requirement - Check primary audio capture
 
-Level3 Test Specification and Procedure can be found [here](./rmf-audio-capture_L3_TestSpec_Procedure.md)
+ - Ensure audio is playing in the background before starting test.
+
+#### Emulator Requirements - Check primary audio capture
+
+- Emulator to implement RMF_AudioCapture HAL that is able to deliver a known 10-second audio clip (from wav or raw PCM file) when triggered by control plane.
+
+#### Control Plane Requirements - Check primary audio capture
+
+- Control plane must be able to trigger emulator HAL to deliver a known 10-second audio clip.
+
+
+
+### Check auxiliary audio capture
+
+Applicable only on devices that support auxiliary capture.
+
+
+|Description|HAL APIs|L2|L3|Control plane requirements|
+|-----------|--------|--|--|--------------------------|
+|Run auxiliary audio capture for 10 seconds and verify receipt of commensurate amount of audio samples |RMF_AudioCapture_Open_Type, RMF_AudioCapture_Start|`Y`|`NA`|`NA`|
+|Run auxiliary audio capture for 10 seconds with known source material and verify byte-for-byte match of captured audio samples|RMF_AudioCapture_Open_Type, RMF_AudioCapture_Start|`NA`|`Y`|`Y`|
+
+#### Test Startup Requirement - Check auxiliary audio capture
+
+ - Ensure audio is playing in the background before starting test. Test content must have auxiliary audio track.
+
+#### Emulator Requirements - Check auxiliary audio capture
+
+- Emulator to implement RMF_AudioCapture HAL that is able to deliver a known 10-second audio clip (from wav or raw PCM file) when triggered by control plane.
+
+#### Control Plane Requirements - Check auxiliary audio capture
+
+- Control plane must be able to trigger emulator HAL to deliver a known 10-second audio clip.
+
+
+### Check concurrent audio capture
+
+Applicable only on devices that support auxiliary capture.
+
+
+|Description|HAL APIs|L2|L3|Control plane requirements|
+|-----------|--------|--|--|--------------------------|
+|Run auxiliary+primary audio capture for 10 seconds and verify receipt of commensurate amount of audio samples |RMF_AudioCapture_Open_Type, RMF_AudioCapture_Start|`Y`|`NA`|`NA`|
+|Run auxiliary+primary audio capture for 10 seconds with known source material and verify byte-for-byte match of captured audio samples|RMF_AudioCapture_Open_Type, RMF_AudioCapture_Start|`NA`|`Y`|`Y`|
+
+#### Test Startup Requirement - Check concurrent audio capture
+
+ - Ensure audio is playing in the background before starting test. Test content must have primary as well as auxiliary audio tracks.
+
+#### Emulator Requirements - Check concurrent audio capture
+
+- Emulator to implement RMF_AudioCapture HAL that is able to deliver two distinct 10-second audio clips (from wav or raw PCM file) to each capture interface when triggered by control plane. It must be able to drive primary and auxiliary captures concurrently.
+
+#### Control Plane Requirements - Check concurrent audio capture
+
+- Control plane must be able to trigger emulator HAL to deliver a known 10-second audio clip.
