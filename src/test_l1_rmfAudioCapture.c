@@ -842,13 +842,16 @@ void test_l1_rmfAudioCapture_negative_RMF_AudioCapture_GetDefaultSettings_comple
 * | 06 | Call `RMF_AudioCapture_Start()` with caller-modified settings derived from above | settings - increase delayCompensation_ms by 2000, dummy data callback, empty status callback | RMF_SUCCESS | Should pass |
 * | 07 | Call `RMF_AudioCapture_GetCurrentSettings()` to confirm that passed parameters were set | valid handle | return RMF_SUCCESS, settings parameter must match what was set in previous start call | Should pass |
 * | 08 | Call `RMF_AudioCapture_Stop()` to stop audio capture | valid handle | RMF_SUCCESS | Should pass |
-* | 09 | Call `RMF_AudioCapture_Close()` to release resources | current handle | RMF_SUCCESS | Should pass |
-* | 10 | Call `RMF_AudioCapture_Open()` to open interface | handle must be a valid pointer | RMF_SUCCESS | Should pass |
-* | 11 | Call `RMF_AudioCapture_GetDefaultSettings()` to get default settings | valid settings | return RMF_SUCCESS | Should pass |
-* | 12 | Call `RMF_AudioCapture_Start()` with default settings to check start after stop->close->open | settings=default settings from previous step, dummy data callback, status callback NULL | RMF_SUCCESS | Should pass |
-* | 13 | Call `RMF_AudioCapture_Stop()` to stop audio capture | current handle | RMF_SUCCESS | Should pass |
-* | 14 | Call `RMF_AudioCapture_Close()` to release resources | current handle | RMF_SUCCESS | Should pass |
+* | 09 | Call `RMF_AudioCapture_Start()` with 16-bit PCM stereo format, 44.1kHz or 44kHz sampling rate | settings=default settings, format = racFormat_e16BitStereo, sampling rate = racFreq_e44100 and racFreq_e48000, dummy data callback, status callback NULL | At least one of the sampling rates should yield RMF_SUCCESS | Should pass |
+* | 10 | Call `RMF_AudioCapture_Close()` to release resources | current handle | RMF_SUCCESS | Should pass |
+* | 11 | Call `RMF_AudioCapture_Open()` to open interface | handle must be a valid pointer | RMF_SUCCESS | Should pass |
+* | 12 | Call `RMF_AudioCapture_GetDefaultSettings()` to get default settings | valid settings | return RMF_SUCCESS | Should pass |
+* | 13 | Call `RMF_AudioCapture_Start()` with default settings to check start after stop->close->open | settings=default settings from previous step, dummy data callback, status callback NULL | RMF_SUCCESS | Should pass |
+* | 14 | Call `RMF_AudioCapture_Stop()` to stop audio capture | current handle | RMF_SUCCESS | Should pass |
+* | 15 | Call `RMF_AudioCapture_Close()` to release resources | current handle | RMF_SUCCESS | Should pass |
 */
+//Note: test case 9 is currently unimplemented.
+
 void test_l1_rmfAudioCapture_positive_RMF_AudioCapture_Start (void)
 {
 	RMF_AudioCaptureHandle handle;
@@ -946,7 +949,10 @@ void test_l1_rmfAudioCapture_positive_RMF_AudioCapture_Start (void)
 * | 12 | Call `RMF_AudioCapture_Stop()` to stop audio capture | current handle | RMF_SUCCESS | Should pass |
 * | 13 | Call `RMF_AudioCapture_Close()` to release resources | current handle | RMF_SUCCESS | Should pass |
 * | 14 | Call `RMF_AudioCapture_Start()` with outdated handle | handle obtained in last open call, settings=default settings, but dummy data callback, status callback NULL | RMF_INVALID_HANDLE | Should pass |
+* | 15 | Call `RMF_AudioCapture_Start()` with unsupported format | current handle, settings = default settings, but format = unsupported format | RMF_INVALID_PARM | Should pass |
 */
+
+//Note: Test case 15 is not implemented yet as it requires reading from profile.
 void test_l1_rmfAudioCapture_negative_RMF_AudioCapture_Start (void)
 {
 	RMF_AudioCaptureHandle handle;

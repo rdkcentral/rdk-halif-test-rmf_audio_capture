@@ -1,5 +1,5 @@
 rmfaudiocapture:
   features:
     auxsupport: true
-  audioformat: 16BitStereo
-  samplerate: 44100
+  supportedformats: [racFormat_e16BitStereo]
+  supportedsamplerates: [48000]
