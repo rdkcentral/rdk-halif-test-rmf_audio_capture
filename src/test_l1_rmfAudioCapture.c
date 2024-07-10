@@ -94,11 +94,8 @@ static bool extendedEnumsSupported=false; //Default to not supported
 
 bool test_l1_is_aux_capture_supported()
 {
-	const char * config = getenv("AC_AUX_CAPTURE_SUPPORTED");
-	if((NULL != config) && (0 == strncasecmp(config, "TRUE", 4)))
-		return true;
-	else
-		return false;
+    bool aux_capture_supported = ut_kvp_getBoolField(ut_kvp_profile_getInstance(), "rmfaudiocapture/features/auxsupport");
+    return aux_capture_supported;
 }
 
 static bool test_l1_create_suite_of_positive_tests()
@@ -1895,7 +1892,6 @@ int test_l1_rmfAudioCapture_register ( void )
 		test_l1_rmfAudioCapture_register_positive_only_suite();
 	}
 
-	extendedEnumsSupported = ut_kvp_getBoolField( ut_kvp_profile_getInstance(), "rmfAudioCapture/features/extendedEnumsSupported" );
 	return 0;
 }
 
