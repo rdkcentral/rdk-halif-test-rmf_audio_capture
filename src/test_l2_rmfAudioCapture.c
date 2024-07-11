@@ -34,30 +34,109 @@
 #include <ut_cunit.h>
 #include <ut_kvp_profile.h>
 #include <unistd.h>
+#include <stdatomic.h>
 #include "rmfAudioCapture.h"
+
+
+#define MEASUREMENT_WINDOW_SECONDS 10
 
 static int gTestGroup = 2;
 static int gTestID = 1;
 
-int cbCounter_primary;
-int cbCounter_aux;
-
-rmf_Error test_l2_dummy_data_cb_primary(void *cbBufferReadyParm, void *AudioCaptureBuffer, unsigned int AudioCaptureBufferSize)
+typedef struct
 {
-    cbCounter_primary++;
-	UT_LOG_DEBUG("Data callback called %dth time for primary audio capture",cbCounter_primary);
+    uint64_t bytes_received;
+    atomic_int cookie;
+} capture_session_context_t;
+
+static bool g_aux_capture_supported = false;
+
+static rmf_Error test_l2_counting_data_cb(void *context_blob, void *AudioCaptureBuffer, unsigned int AudioCaptureBufferSize)
+{
+    capture_session_context_t *ctx = (capture_session_context_t *)context_blob;
+
     UT_ASSERT_PTR_NOT_NULL(AudioCaptureBuffer);
-    UT_ASSERT_TRUE(AudioCaptureBufferSize>0);
+    UT_ASSERT_PTR_NOT_NULL_FATAL(context_blob);
+    UT_ASSERT_TRUE(AudioCaptureBufferSize > 0);
+
+    ctx->bytes_received += AudioCaptureBufferSize;
+    ctx->cookie = 1;
     return RMF_SUCCESS;
 }
 
-rmf_Error test_l2_dummy_data_cb_auxillary(void *cbBufferReadyParm, void *AudioCaptureBuffer, unsigned int AudioCaptureBufferSize)
+static void test_l2_prepare_start_settings_for_data_tracking(RMF_AudioCapture_Settings *settings, void *context_blob)
 {
-    cbCounter_aux++;
-	UT_LOG_DEBUG("Data callback called %dth time for auxillary audio capture",cbCounter_aux);
-    UT_ASSERT_PTR_NOT_NULL(AudioCaptureBuffer);
-    UT_ASSERT_TRUE(AudioCaptureBufferSize>0);
-    return RMF_SUCCESS;
+    settings->cbBufferReady = test_l2_counting_data_cb;
+    settings->cbStatusChange = NULL;
+    settings->cbBufferReadyParm = context_blob;
+}
+
+static rmf_Error test_l2_validate_bytes_received(RMF_AudioCapture_Settings *settings, uint32_t seconds, uint64_t bytes_received)
+{
+    uint8_t num_channels = 0;
+    uint32_t sampling_rate = 0;
+    uint8_t bits_per_sample = 0;
+    switch (settings->format)
+    {
+    case racFormat_e16BitStereo:
+        bits_per_sample = 16;
+        num_channels = 2;
+        break;
+    case racFormat_e24BitStereo:
+        bits_per_sample = 24;
+        num_channels = 2;
+        break;
+    case racFormat_e16BitMonoLeft:  // fall through
+    case racFormat_e16BitMonoRight: // fall through
+    case racFormat_e16BitMono:
+        bits_per_sample = 16;
+        num_channels = 1;
+        break;
+    case racFormat_e24Bit5_1:
+        bits_per_sample = 24;
+        num_channels = 6;
+        break;
+    default: // Unsupported format
+        UT_LOG_DEBUG("Error: Invalid format detected.\n");
+        return RMF_ERROR;
+    }
+
+    switch (settings->samplingFreq)
+    {
+    case racFreq_e16000:
+        sampling_rate = 16000;
+        break;
+    case racFreq_e22050:
+        sampling_rate = 22050;
+        break;
+    case racFreq_e24000:
+        sampling_rate = 24000;
+        break;
+    case racFreq_e32000:
+        sampling_rate = 32000;
+        break;
+    case racFreq_e44100:
+        sampling_rate = 44100;
+        break;
+    case racFreq_e48000:
+        sampling_rate = 48000;
+        break;
+    default: // unsupported sampling rate
+        UT_LOG_DEBUG("Error: Invalid samping rate detected.\n");
+        return RMF_ERROR;
+    }
+
+    uint64_t computed_bytes_received = seconds * num_channels * sampling_rate * bits_per_sample / 8;
+    double percentage_received = (double)bytes_received / (double)computed_bytes_received * 100;
+    UT_LOG_DEBUG("Actual bytes received: %" PRIu64 ", Expected bytes received: %" PRIu64 ", Computed percentage: %f\n",
+                 bytes_received, computed_bytes_received, percentage_received);
+    if ((90.0 <= percentage_received) && (110.0 >= percentage_received))
+        return RMF_SUCCESS;
+    else
+    {
+        UT_LOG_DEBUG("Error: data delivery does not meet tolerance!");
+        return RMF_ERROR;
+    }
 }
 
 /**
@@ -74,99 +153,46 @@ rmf_Error test_l2_dummy_data_cb_auxillary(void *cbBufferReadyParm, void *AudioCa
 * **Test Procedure:**
 * Refer to UT specification documentation [rmfAudioCapture_L2_Low-Level_TestSpecification.md](../../docs/pages/rmfAudioCapture_L2_Low-Level_TestSpecification.md)
 */
-
-void test_l2_rmfAudioCapture_RunPrimaryAudioCapture(void)
+void test_l2_rmfAudioCapture_primary_data_check(void)
 {
-    gTestID = 1;
-    UT_LOG_INFO("In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-
     RMF_AudioCaptureHandle handle;
     RMF_AudioCapture_Settings settings;
-    rmf_Error ret;
-    int current_cbCounter = 0;
+    rmf_Error result = RMF_SUCCESS;
 
-    // Step 1: Call RMF_AudioCapture_Open
-    UT_LOG_DEBUG("Invoking RMF_AudioCapture_Open with valid handle");
-    ret = RMF_AudioCapture_Open(&handle);
-    UT_LOG_DEBUG("handle: %p, return status: %d", handle, ret);
-    UT_ASSERT_EQUAL_FATAL(ret, RMF_SUCCESS);
+    gTestID = 2;
+    UT_LOG_INFO("In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
-    // Step 2: Call RMF_AudioCapture_GetDefaultSettings
-    UT_LOG_DEBUG("Invoking RMF_AudioCapture_GetDefaultSettings with valid settings");
-    ret = RMF_AudioCapture_GetDefaultSettings(&settings);
-    UT_LOG_DEBUG("settings: {cbBufferReady: %p, cbBufferReadyParm: %p, cbStatusChange: %p, cbStatusParm: %p, fifoSize: %zu, threshold: %zu, format: %d, samplingFreq: %d, delayCompensation_ms: %u}, return status: %d",
-                 settings.cbBufferReady, settings.cbBufferReadyParm, settings.cbStatusChange, settings.cbStatusParm, settings.fifoSize, settings.threshold, settings.format, settings.samplingFreq, settings.delayCompensation_ms, ret);
-    UT_ASSERT_EQUAL(ret, RMF_SUCCESS);
-    if (ret != RMF_SUCCESS)
+    result = RMF_AudioCapture_Open_Type(&handle, RMF_AC_TYPE_PRIMARY);
+    if (RMF_SUCCESS != result)
+        UT_FAIL_FATAL("Aborting test - unable to open capture.");
+
+    result = RMF_AudioCapture_GetDefaultSettings(&settings);
+    UT_ASSERT_EQUAL(result, RMF_SUCCESS);
+
+    capture_session_context_t ctx = {0, 0};
+    test_l2_prepare_start_settings_for_data_tracking(&settings, (void *)&ctx);
+
+    result = RMF_AudioCapture_Start(handle, &settings);
+    if (RMF_SUCCESS != result)
     {
-        UT_LOG_DEBUG("Invoking RMF_AudioCapture_Close due to failure of RMF_AudioCapture_GetDefaultSettings");
-        cbCounter_primary = 0;
-        RMF_AudioCapture_Close(handle);
-        return;
+        UT_LOG_DEBUG("Capture start failed with error code: %d", result);
+        result = RMF_AudioCapture_Close(handle);
+        UT_FAIL_FATAL("Aborting test - unable to start capture.");
     }
 
-    // Step 3: Modify settings
-    settings.cbBufferReady = test_l2_dummy_data_cb_primary;
-    settings.cbBufferReadyParm = NULL;
+    sleep(MEASUREMENT_WINDOW_SECONDS);
+    result = RMF_AudioCapture_Stop(handle);
+    ctx.cookie = 0; // Note: Doesn't account for all possible race conditions
+    UT_ASSERT_EQUAL(result, RMF_SUCCESS);
 
-    // Step 4: Call RMF_AudioCapture_Start
-    UT_LOG_DEBUG("Invoking RMF_AudioCapture_Start with handle: %p and modified settings", handle);
-    ret = RMF_AudioCapture_Start(handle, &settings);
-    UT_LOG_DEBUG("return status: %d", ret);
-    UT_ASSERT_EQUAL(ret, RMF_SUCCESS);
-    if (ret != RMF_SUCCESS)
-    {
-        UT_LOG_DEBUG("Invoking RMF_AudioCapture_Close due to failure of RMF_AudioCapture_Start");
-        cbCounter_primary = 0;
-        RMF_AudioCapture_Close(handle);
-        return;
-    }
+    sleep(1); // Wait for the last callback to be processed
+    UT_ASSERT_EQUAL(ctx.cookie, 0);
 
-    // Step 5: Capture audio for 10 seconds
-    sleep(10);
+    result = test_l2_validate_bytes_received(&settings, MEASUREMENT_WINDOW_SECONDS, ctx.bytes_received);
+    UT_ASSERT_EQUAL(result, RMF_SUCCESS);
 
-    // Step 6: Verify callback invocation and audio samples received
-    // This step is typically verified through the callback function itself
-
-    // Step 7: Call RMF_AudioCapture_Stop
-    UT_LOG_DEBUG("Invoking RMF_AudioCapture_Stop with handle: %p", handle);
-    ret = RMF_AudioCapture_Stop(handle);
-    current_cbCounter = cbCounter_primary;
-    UT_LOG_DEBUG("return status: %d", ret);
-    UT_ASSERT_EQUAL(ret, RMF_SUCCESS);
-    if (ret != RMF_SUCCESS)
-    {
-        UT_LOG_DEBUG("Invoking RMF_AudioCapture_Close due to failure of RMF_AudioCapture_Stop");
-        cbCounter_primary = 0;
-        RMF_AudioCapture_Close(handle);
-        return;
-    }
-
-    //Wait for sometime after RMF_AudioCapture_Stop
-    sleep(1);
-
-    // Step 8: Verify no more callbacks after stop
-    // This step is typically verified through the callback function itself
-    UT_LOG_DEBUG("Check if no more callbacks after stop by comparing the callback counter value");
-    UT_ASSERT_EQUAL(current_cbCounter,cbCounter_primary);
-    UT_LOG_DEBUG("Callback counter immediately after stop : %d and the counter value sometime after stop : %d", current_cbCounter, cbCounter_primary);
-    if (current_cbCounter == cbCounter_primary)
-    {
-        UT_LOG_DEBUG("No more callbacks after stop");
-        UT_PASS("Callback counter immediately after stop matches with the counter value sometime after stop ");
-    }
-    else
-    {
-        UT_LOG_DEBUG("Callbacks happened after stop");
-        UT_FAIL("Callback counter immediately after stop mismatches with the counter value sometime after stop ");
-    }
-
-    // Step 9: Call RMF_AudioCapture_Close
-    UT_LOG_DEBUG("Invoking RMF_AudioCapture_Close with handle: %p", handle);
-    cbCounter_primary = 0;
-    ret = RMF_AudioCapture_Close(handle);
-    UT_LOG_DEBUG("return status: %d", ret);
-    UT_ASSERT_EQUAL_FATAL(ret, RMF_SUCCESS);
+    result = RMF_AudioCapture_Close(handle);
+    UT_ASSERT_EQUAL(result, RMF_SUCCESS);
 
     UT_LOG_INFO("Out %s\n", __FUNCTION__);
 }
@@ -184,97 +210,45 @@ void test_l2_rmfAudioCapture_RunPrimaryAudioCapture(void)
 * **Test Procedure:**
 * Refer to UT specification documentation [rmfAudioCapture_L2_Low-Level_TestSpecification.md](../../docs/pages/rmfAudioCapture_L2_Low-Level_TestSpecification.md)
 */
-
-void test_l2_rmfAudioCapture_RunAuxiliaryAudioCapture(void)
+void test_l2_rmfAudioCapture_auxiliary_data_check(void)
 {
-    gTestID = 2;
+    RMF_AudioCaptureHandle handle;
+    RMF_AudioCapture_Settings settings;
+    rmf_Error result = RMF_SUCCESS;
+
+    gTestID = 1;
     UT_LOG_INFO("In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
-    RMF_AudioCaptureHandle handle = NULL;
-    RMF_AudioCapture_Settings settings;
-    rmf_Error ret;
-    int current_cbCounter = 0;
+    result = RMF_AudioCapture_Open_Type(&handle, RMF_AC_TYPE_AUXILIARY);
+    if (RMF_SUCCESS != result)
+        UT_FAIL_FATAL("Aborting test - unable to open capture.");
 
-    // Step 1: Call RMF_AudioCapture_Open_Type
-    UT_LOG_DEBUG("Invoking RMF_AudioCapture_Open_Type with valid handle and auxiliary type");
-    ret = RMF_AudioCapture_Open_Type(&handle, "auxiliary");
-    UT_LOG_DEBUG("Handle: %p, Return status: %d", handle, ret);
-    UT_ASSERT_EQUAL_FATAL(ret, RMF_SUCCESS);
+    result = RMF_AudioCapture_GetDefaultSettings(&settings);
+    UT_ASSERT_EQUAL(result, RMF_SUCCESS);
 
-    // Step 2: Call RMF_AudioCapture_GetDefaultSettings
-    UT_LOG_DEBUG("Invoking RMF_AudioCapture_GetDefaultSettings with valid settings pointer");
-    ret = RMF_AudioCapture_GetDefaultSettings(&settings);
-    UT_LOG_DEBUG("Settings: {cbBufferReady: %p, cbBufferReadyParm: %p, cbStatusChange: %p, cbStatusParm: %p, fifoSize: %zu, threshold: %zu, format: %d, samplingFreq: %d, delayCompensation_ms: %u}, Return status: %d",
-                 settings.cbBufferReady, settings.cbBufferReadyParm, settings.cbStatusChange, settings.cbStatusParm, settings.fifoSize, settings.threshold, settings.format, settings.samplingFreq, settings.delayCompensation_ms, ret);
-    UT_ASSERT_EQUAL(ret, RMF_SUCCESS);
-    if (ret != RMF_SUCCESS)
+    capture_session_context_t ctx = {0, 0};
+    test_l2_prepare_start_settings_for_data_tracking(&settings, (void *)&ctx);
+
+    result = RMF_AudioCapture_Start(handle, &settings);
+    if (RMF_SUCCESS != result)
     {
-        UT_LOG_DEBUG("Invoking RMF_AudioCapture_Close due to failure of RMF_AudioCapture_GetDefaultSettings");
-        cbCounter_aux = 0;
-        RMF_AudioCapture_Close(handle);
-        return;
+        UT_LOG_DEBUG("Capture start failed with error code: %d", result);
+        result = RMF_AudioCapture_Close(handle);
+        UT_FAIL_FATAL("Aborting test - unable to start capture.");
     }
+    sleep(MEASUREMENT_WINDOW_SECONDS);
+    result = RMF_AudioCapture_Stop(handle);
+    ctx.cookie = 0; // Note: Doesn't account for all possible race conditions
+    UT_ASSERT_EQUAL(result, RMF_SUCCESS);
 
-    // Step 3: Modify RMF_AudioCapture_Settings
-    settings.cbBufferReady = test_l2_dummy_data_cb_auxillary;
-    settings.cbBufferReadyParm = NULL; // Optional parameter
+    sleep(1); // Wait for the last callback to be processed
+    UT_ASSERT_EQUAL(ctx.cookie, 0);
 
-    // Step 4: Call RMF_AudioCapture_Start
-    UT_LOG_DEBUG("Invoking RMF_AudioCapture_Start with valid handle and modified settings");
-    ret = RMF_AudioCapture_Start(handle, &settings);
-    UT_LOG_DEBUG("Return status: %d", ret);
-    UT_ASSERT_EQUAL(ret, RMF_SUCCESS);
-    if (ret != RMF_SUCCESS)
-    {
-        UT_LOG_DEBUG("Invoking RMF_AudioCapture_Close due to failure of RMF_AudioCapture_Start");
-        cbCounter_aux = 0;
-        RMF_AudioCapture_Close(handle);
-        return;
-    }
+    result = test_l2_validate_bytes_received(&settings, MEASUREMENT_WINDOW_SECONDS, ctx.bytes_received);
+    UT_ASSERT_EQUAL(result, RMF_SUCCESS);
 
-    // Step 5: Capture audio for 10 seconds and verify callback
-    sleep(10); // Simulate 10 seconds of audio capture
-    // Verification of callback invocation would be done in the callback function itself
-
-    // Step 6: Call RMF_AudioCapture_Stop
-    UT_LOG_DEBUG("Invoking RMF_AudioCapture_Stop with valid handle");
-    ret = RMF_AudioCapture_Stop(handle);
-    current_cbCounter = cbCounter_aux;
-    UT_LOG_DEBUG("Return status: %d", ret);
-    UT_ASSERT_EQUAL(ret, RMF_SUCCESS);
-    if (ret != RMF_SUCCESS)
-    {
-        UT_LOG_DEBUG("Invoking RMF_AudioCapture_Close due to failure of RMF_AudioCapture_Stop");
-        cbCounter_aux = 0;
-        RMF_AudioCapture_Close(handle);
-        return;
-    }
-
-    //Wait for sometime after RMF_AudioCapture_Stop
-    sleep(1);
-
-    // Step 7: Verify no more callbacks after stop
-    // This would be verified in the callback function itself
-    UT_LOG_DEBUG("Check if no more callbacks after stop by comparing the callback counter value");
-    UT_ASSERT_EQUAL(current_cbCounter,cbCounter_aux);
-    UT_LOG_DEBUG("Callback counter immediately after stop : %d and the counter value sometime after stop : %d", current_cbCounter, cbCounter_aux);
-    if (current_cbCounter == cbCounter_aux)
-    {
-        UT_LOG_DEBUG("No more callbacks after stop");
-        UT_PASS("Callback counter immediately after stop matches with thecounter value sometime after stop");
-    }
-    else
-    {
-        UT_LOG_DEBUG("Callbacks happened after stop");
-        UT_FAIL("Callback counter immediately after stop mismatches with the counter value sometime after stop");
-    }
-
-    // Step 8: Call RMF_AudioCapture_Close
-    UT_LOG_DEBUG("Invoking RMF_AudioCapture_Close with valid handle");
-    cbCounter_aux = 0;
-    ret = RMF_AudioCapture_Close(handle);
-    UT_LOG_DEBUG("Return status: %d", ret);
-    UT_ASSERT_EQUAL_FATAL(ret, RMF_SUCCESS);
+    result = RMF_AudioCapture_Close(handle);
+    UT_ASSERT_EQUAL(result, RMF_SUCCESS);
 
     UT_LOG_INFO("Out %s\n", __FUNCTION__);
 }
@@ -290,170 +264,75 @@ void test_l2_rmfAudioCapture_RunAuxiliaryAudioCapture(void)
 * **Test Procedure:**
 * Refer to UT specification documentation [rmfAudioCapture_L2_Low-Level_TestSpecification.md](../../docs/pages/rmfAudioCapture_L2_Low-Level_TestSpecification.md)
 */
-
-void test_l2_rmfAudioCapture_RunAuxiliaryPrimaryAudioCapture(void)
+void test_l2_rmfAudioCapture_combined_data_check(void)
 {
+    RMF_AudioCaptureHandle aux_handle, prim_handle;
+    RMF_AudioCapture_Settings aux_settings, prim_settings;
+    rmf_Error result = RMF_SUCCESS;
+
     gTestID = 3;
     UT_LOG_INFO("In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
-    RMF_AudioCaptureHandle primaryHandle = NULL;
-    RMF_AudioCaptureHandle auxiliaryHandle = NULL;
-    RMF_AudioCapture_Settings settings;
-    RMF_AudioCapture_Settings settings_aux ={0};
-    rmf_Error ret;
-    int current_cbCounter_primary = 0;
-    int current_cbCounter_aux = 0;
+    result = RMF_AudioCapture_Open_Type(&aux_handle, RMF_AC_TYPE_AUXILIARY);
+    if (RMF_SUCCESS != result)
+        UT_FAIL_FATAL("Aborting test - unable to open capture.");
 
-    // Step 1: Call RMF_AudioCapture_Open_Type to open the primary audio capture interface
-    UT_LOG_DEBUG("Invoking RMF_AudioCapture_Open_Type with valid handle and primary type");
-    ret = RMF_AudioCapture_Open_Type(&primaryHandle, "primary");
-    UT_LOG_DEBUG("primaryHandle: %p, return status: %d", primaryHandle, ret);
-    UT_ASSERT_EQUAL_FATAL(ret, RMF_SUCCESS);
+    result = RMF_AudioCapture_GetDefaultSettings(&aux_settings);
+    UT_ASSERT_EQUAL(result, RMF_SUCCESS);
 
-    // Step 2: Call RMF_AudioCapture_Open_Type to open the auxiliary audio capture interface
-    UT_LOG_DEBUG("Invoking RMF_AudioCapture_Open_Type with valid handle and auxiliary type");
-    ret = RMF_AudioCapture_Open_Type(&auxiliaryHandle, "auxiliary");
-    UT_LOG_DEBUG("auxiliaryHandle: %p, return status: %d", auxiliaryHandle, ret);
-    UT_ASSERT_EQUAL_FATAL(ret, RMF_SUCCESS);
+    prim_settings = aux_settings;
+    capture_session_context_t prim_ctx = {0, 0};
+    capture_session_context_t aux_ctx = {0, 0};
+    test_l2_prepare_start_settings_for_data_tracking(&aux_settings, (void *)&aux_ctx);
+    test_l2_prepare_start_settings_for_data_tracking(&prim_settings, (void *)&prim_ctx);
 
-    // Step 3: Call RMF_AudioCapture_GetDefaultSettings to get the default settings for audio capture
-    UT_LOG_DEBUG("Invoking RMF_AudioCapture_GetDefaultSettings with valid settings");
-    ret = RMF_AudioCapture_GetDefaultSettings(&settings);
-    UT_LOG_DEBUG("settings: {cbBufferReady: %p, cbBufferReadyParm: %p, cbStatusChange: %p, cbStatusParm: %p, fifoSize: %zu, threshold: %zu, format: %d, samplingFreq: %d, delayCompensation_ms: %u}, return status: %d",
-                 settings.cbBufferReady, settings.cbBufferReadyParm, settings.cbStatusChange, settings.cbStatusParm, settings.fifoSize, settings.threshold, settings.format, settings.samplingFreq, settings.delayCompensation_ms, ret);
-    UT_ASSERT_EQUAL(ret, RMF_SUCCESS);
-    if (ret != RMF_SUCCESS)
+    result = RMF_AudioCapture_Start(aux_handle, &aux_settings); // Started auxiliary capture
+    if (RMF_SUCCESS != result)
     {
-        UT_LOG_DEBUG("Invoking RMF_AudioCapture_Close due to failure of RMF_AudioCapture_GetDefaultSettings");
-        cbCounter_primary = 0;
-        cbCounter_aux = 0;
-        RMF_AudioCapture_Close(primaryHandle);
-        RMF_AudioCapture_Close(auxiliaryHandle);
-        return;
+        UT_LOG_DEBUG("Capture start failed with error code: %d", result);
+        result = RMF_AudioCapture_Close(aux_handle);
+        UT_FAIL_FATAL("Aborting test - unable to start capture.");
     }
 
-    //Take a copy for settings for auxillary audio
-    settings = settings_aux;
-
-    // Step 4: Modify the settings as needed, ensuring cbBufferReady is set to a valid callback function
-    settings.cbBufferReady = test_l2_dummy_data_cb_primary;
-    settings.cbBufferReadyParm = NULL; // Optional parameter
-
-    settings_aux.cbBufferReady = test_l2_dummy_data_cb_auxillary;
-    settings_aux.cbBufferReadyParm = NULL; // Optional parameter
-
-    // Step 5: Call RMF_AudioCapture_Start with the primary audio capture handle and modified settings
-    UT_LOG_DEBUG("Invoking RMF_AudioCapture_Start with primaryHandle and modified settings");
-    ret = RMF_AudioCapture_Start(primaryHandle, &settings);
-    UT_LOG_DEBUG("return status: %d", ret);
-    UT_ASSERT_EQUAL(ret, RMF_SUCCESS);
-    if (ret != RMF_SUCCESS)
+    result = RMF_AudioCapture_Open_Type(&prim_handle, RMF_AC_TYPE_PRIMARY);
+    if (RMF_SUCCESS != result)
     {
-        UT_LOG_DEBUG("Invoking RMF_AudioCapture_Close due to failure of RMF_AudioCapture_Start");
-        cbCounter_primary = 0;
-        cbCounter_aux = 0;
-        RMF_AudioCapture_Close(primaryHandle);
-        RMF_AudioCapture_Close(auxiliaryHandle);
-        return;
+        UT_LOG_DEBUG("Aborting test - unable to open primary capture interface. Error code: %d", result);
+        result = RMF_AudioCapture_Stop(aux_handle);
+        result = RMF_AudioCapture_Close(aux_handle);
+        UT_FAIL_FATAL("Aborting test - unable to open primary capture interface.");
     }
-
-    // Step 6: Call RMF_AudioCapture_Start with the auxiliary audio capture handle and modified settings
-    UT_LOG_DEBUG("Invoking RMF_AudioCapture_Start with auxiliaryHandle and modified settings");
-    ret = RMF_AudioCapture_Start(auxiliaryHandle, &settings_aux);
-    UT_LOG_DEBUG("return status: %d", ret);
-    UT_ASSERT_EQUAL(ret, RMF_SUCCESS);
-    if (ret != RMF_SUCCESS)
+    result = RMF_AudioCapture_Start(prim_handle, &prim_settings); // Started primary capture
+    if (RMF_SUCCESS != result)
     {
-        UT_LOG_DEBUG("Invoking RMF_AudioCapture_Close due to failure of RMF_AudioCapture_Start");
-        cbCounter_primary = 0;
-        cbCounter_aux = 0;
-        RMF_AudioCapture_Close(primaryHandle);
-        RMF_AudioCapture_Close(auxiliaryHandle);
-        return;
+        UT_LOG_DEBUG("Aborting test - unable to start primary capture. Error code: %d", result);
+        result = RMF_AudioCapture_Stop(aux_handle);
+        result = RMF_AudioCapture_Close(aux_handle);
+        result = RMF_AudioCapture_Close(prim_handle);
+        UT_FAIL_FATAL("Aborting test - unable to start primary capture.");
     }
+    sleep(MEASUREMENT_WINDOW_SECONDS);
 
-    // Step 7: Capture audio for 10 seconds
-    sleep(10);
+    result = RMF_AudioCapture_Stop(prim_handle);
+    prim_ctx.cookie = 0;
+    UT_ASSERT_EQUAL(result, RMF_SUCCESS);
+    result = RMF_AudioCapture_Stop(aux_handle);
+    aux_ctx.cookie = 0;
+    UT_ASSERT_EQUAL(result, RMF_SUCCESS);
 
-    // Step 8: Verify the receipt of the commensurate amount of audio samples through the cbBufferReady callback
+    sleep(1); // Wait for the last callback to be processed
+    UT_ASSERT_EQUAL(prim_ctx.cookie, 0);
+    UT_ASSERT_EQUAL(aux_ctx.cookie, 0);
 
-    // Step 9: Call RMF_AudioCapture_Stop for the primary audio capture handle
-    UT_LOG_DEBUG("Invoking RMF_AudioCapture_Stop with primaryHandle");
-    ret = RMF_AudioCapture_Stop(primaryHandle);
-    current_cbCounter_primary = cbCounter_primary;
-    UT_LOG_DEBUG("return status: %d", ret);
-    UT_ASSERT_EQUAL(ret, RMF_SUCCESS);
-    if (ret != RMF_SUCCESS)
-    {
-        UT_LOG_DEBUG("Invoking RMF_AudioCapture_Close due to failure of RMF_AudioCapture_Stop");
-        cbCounter_primary = 0;
-        cbCounter_aux = 0;
-        RMF_AudioCapture_Close(primaryHandle);
-        RMF_AudioCapture_Close(auxiliaryHandle);
-        return;
-    }
+    result = test_l2_validate_bytes_received(&aux_settings, MEASUREMENT_WINDOW_SECONDS, aux_ctx.bytes_received);
+    UT_ASSERT_EQUAL(result, RMF_SUCCESS);
+    result = test_l2_validate_bytes_received(&prim_settings, MEASUREMENT_WINDOW_SECONDS, prim_ctx.bytes_received);
+    UT_ASSERT_EQUAL(result, RMF_SUCCESS);
 
-    // Step 10: Call RMF_AudioCapture_Stop for the auxiliary audio capture handle
-    UT_LOG_DEBUG("Invoking RMF_AudioCapture_Stop with auxiliaryHandle");
-    ret = RMF_AudioCapture_Stop(auxiliaryHandle);
-    current_cbCounter_aux = cbCounter_aux;
-    UT_LOG_DEBUG("return status: %d", ret);
-    UT_ASSERT_EQUAL(ret, RMF_SUCCESS);
-    if (ret != RMF_SUCCESS)
-    {
-        UT_LOG_DEBUG("Invoking RMF_AudioCapture_Close due to failure of RMF_AudioCapture_Stop");
-        cbCounter_primary = 0;
-        cbCounter_aux = 0;
-        RMF_AudioCapture_Close(primaryHandle);
-        RMF_AudioCapture_Close(auxiliaryHandle);
-        return;
-    }
-
-    //Wait for sometime after RMF_AudioCapture_Stop
-    sleep(1);
-
-    // Step 11: Verify that no more data-ready callbacks are issued after RMF_AudioCapture_Stop returns
-    UT_LOG_DEBUG("Check if no more callbacks after stop by comparing the callback counter value for primary and auxillary audio captures");
-    UT_ASSERT_EQUAL(current_cbCounter_primary,cbCounter_primary);
-    UT_LOG_DEBUG("Callback counter immediately after stop : %d and the counter value sometime after stop : %d", current_cbCounter_primary, cbCounter_primary);
-    if (current_cbCounter_primary == cbCounter_primary)
-    {
-        UT_LOG_DEBUG("No more callbacks after stop for primary audio capture");
-        UT_PASS("Callback counter immediately after stop matches with thecounter value sometime after stop");
-    }
-    else
-    {
-        UT_LOG_DEBUG("Callbacks happened after stop");
-        UT_FAIL("Callback counter immediately after stop mismatches with the counter value sometime after stop");
-    }
-
-    UT_ASSERT_EQUAL(current_cbCounter_aux,cbCounter_aux);
-    UT_LOG_DEBUG("Callback counter immediately after stop : %d and the counter value sometime after stop : %d", current_cbCounter_aux, cbCounter_aux);
-    if (current_cbCounter_aux == cbCounter_aux)
-    {
-        UT_LOG_DEBUG("No more callbacks after stop for auxillary audio capture");
-        UT_PASS("Callback counter immediately after stop matches with thecounter value sometime after stop ");
-    }
-    else
-    {
-        UT_LOG_DEBUG("Callbacks happened after stop for auxillary audio capture");
-        UT_FAIL("Callback counter immediately after stop mismatches with the counter value sometime after stop");
-    }
-
-    cbCounter_primary = 0;
-    cbCounter_aux = 0;
-
-    // Step 12: Call RMF_AudioCapture_Close for the primary audio capture handle
-    UT_LOG_DEBUG("Invoking RMF_AudioCapture_Close with primaryHandle");
-    ret = RMF_AudioCapture_Close(primaryHandle);
-    UT_LOG_DEBUG("return status: %d", ret);
-    UT_ASSERT_EQUAL(ret, RMF_SUCCESS);
-
-    // Step 13: Call RMF_AudioCapture_Close for the auxiliary audio capture handle
-    UT_LOG_DEBUG("Invoking RMF_AudioCapture_Close with auxiliaryHandle");
-    ret = RMF_AudioCapture_Close(auxiliaryHandle);
-    UT_LOG_DEBUG("return status: %d", ret);
-    UT_ASSERT_EQUAL_FATAL(ret, RMF_SUCCESS);
+    result = RMF_AudioCapture_Close(prim_handle);
+    UT_ASSERT_EQUAL(result, RMF_SUCCESS);
+    result = RMF_AudioCapture_Close(aux_handle);
+    UT_ASSERT_EQUAL(result, RMF_SUCCESS);
 
     UT_LOG_INFO("Out %s\n", __FUNCTION__);
 }
@@ -475,10 +354,13 @@ int test_rmfAudioCapture_l2_register(void)
         return -1;
     }
     // List of test function names and strings
-
-    UT_add_test( pSuite, "l2_rmfAudioCapture_RunPrimaryAudioCapture", test_l2_rmfAudioCapture_RunPrimaryAudioCapture);
-    UT_add_test( pSuite, "l2_rmfAudioCapture_RunAuxiliaryAudioCapture", test_l2_rmfAudioCapture_RunAuxiliaryAudioCapture);
-    UT_add_test( pSuite, "l2_rmfAudioCapture_RunAuxiliaryPrimaryAudioCapture", test_l2_rmfAudioCapture_RunAuxiliaryPrimaryAudioCapture);
+    UT_add_test(pSuite, "test_l2_rmfAudioCapture_primary_data_check", test_l2_rmfAudioCapture_primary_data_check);
+    g_aux_capture_supported = ut_kvp_getBoolField(ut_kvp_profile_getInstance(), "rmfaudiocapture/features/auxsupport");
+    if (true == g_aux_capture_supported)
+    {
+        UT_add_test(pSuite, "test_l2_rmfAudioCapture_auxiliary_data_check", test_l2_rmfAudioCapture_auxiliary_data_check);
+        UT_add_test(pSuite, "test_l2_rmfAudioCapture_combined_data_check", test_l2_rmfAudioCapture_combined_data_check);
+    }
 
     return 0;
 }
