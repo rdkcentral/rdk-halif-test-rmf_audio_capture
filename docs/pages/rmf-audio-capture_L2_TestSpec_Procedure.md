@@ -31,7 +31,7 @@ This document describes the Level 2 Test Specification and Procedure for the RMF
   - `ut-core` \- Common Testing Framework <https://github.com/rdkcentral/ut-core>, which wraps an open-source framework that can be expanded to the requirements for future frameworks.
 
 ### References
-- `High Level Test Specification` - [rmf-audio-capture_TestSpec.md](rmf-audio-capture_TestSpec.md)
+- `High Level Test Specification` - [rmf-audio-capture_High-Level_TestSpec.md](rmf-audio-capture_High-Level_TestSpec.md)
 - `HAL Interface file` -  [RMF_AudioCapture HAL header](https://github.com/rdkcentral/rdk-halif-rmf_audio_capture/blob/main/include/rmfAudioCapture.h)
 
 ## Level 2 test procedure  

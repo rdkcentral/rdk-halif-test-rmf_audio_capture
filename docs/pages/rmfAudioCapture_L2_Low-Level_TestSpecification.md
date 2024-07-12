@@ -100,7 +100,7 @@ flowchart TD
 | Priority | High |
 
 **Pre-Conditions :**
-None
+Device must support auxiliary audio capture.
 
 **Dependencies :**
 None
@@ -155,7 +155,7 @@ flowchart TD
 | Priority | High |
 
 **Pre-Conditions :**
-None
+Device must support auxiliary audio capture.
 
 **Dependencies :**
 None

@@ -16,19 +16,58 @@
 * limitations under the License.
 */
 
+
+/**
+ * @addtogroup HPK Hardware Porting Kit
+ * @{
+ * @par The Hardware Porting Kit
+ * HPK is the next evolution of the well-defined Hardware Abstraction Layer
+ * (HAL), but augmented with more comprehensive documentation and test suites
+ * that OEM or SOC vendors can use to self-certify their ports before taking
+ * them to RDKM for validation or to an operator for final integration and
+ * deployment. The Hardware Porting Kit effectively enables an OEM and/or SOC
+ * vendor to self-certify their own Video Accelerator devices, with minimal RDKM
+ * assistance.
+ */
+
+/**
+ * @addtogroup RMF_AudioCapture RMF Audio Capture
+ * @{
+ *
+ */
+
+/**
+ * @addtogroup RMF_AudioCapture_HALTESTS RMF Audio Capture HAL Tests
+ * @{
+ * @par
+ * Unit Testing Suite for RMF Audio Capture HAL
+ */
+
+/**
+ * @defgroup RMF_AudioCapture_HALTESTS_L2 RMF Audio Capture HAL Tests L2 File
+ * @{
+ * @parblock
+ *
+ * ### L2 Tests for RMF Audio Capture HAL :
+ *
+ * Level 2 module tests will perform module level testing by exercising the full set of APIs to validate various use cases.
+ * This is to ensure that the API meets the operational requirements of the module across all vendors.
+ *
+ * **Pre-Conditions:**  None@n
+ * **Dependencies:** None@n
+ * 
+ * Refer to API Definition specification documentation : [rmf-audio-capture_halSpec.md](../../docs/pages/rmf-audio-capture_halSpec.md)
+ *
+ * @endparblock
+ *
+ */
+
+
 /**
 * @file test_l2_rmfAudioCapture.c
-* @page rmfAudioCapture Level 2 Tests
 *
-* ## Module's Role
-* This module includes Level 2 functional tests (success and failure scenarios).
-* This is to ensure that the rmfAudioCapture APIs meet the requirements across all vendors.
-*
-* **Pre-Conditions:**  None@n
-* **Dependencies:** None@n
-*
-* Ref to API Definition specification documentation : [rmf-audio-capture_halSpec.md](../../docs/pages/rmf-audio-capture_halSpec.md)
 */
+
 
 #include <ut.h>
 #include <ut_cunit.h>
@@ -159,7 +198,7 @@ void test_l2_rmfAudioCapture_primary_data_check(void)
     RMF_AudioCapture_Settings settings;
     rmf_Error result = RMF_SUCCESS;
 
-    gTestID = 2;
+    gTestID = 1;
     UT_LOG_INFO("In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
     result = RMF_AudioCapture_Open(&handle);
@@ -219,7 +258,7 @@ void test_l2_rmfAudioCapture_auxiliary_data_check(void)
     RMF_AudioCapture_Settings settings;
     rmf_Error result = RMF_SUCCESS;
 
-    gTestID = 1;
+    gTestID = 2;
     UT_LOG_INFO("In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
     result = RMF_AudioCapture_Open_Type(&handle, RMF_AC_TYPE_AUXILIARY);
@@ -371,3 +410,8 @@ int test_rmfAudioCapture_l2_register(void)
 
     return 0;
 }
+
+/** @} */ // End of RMF Audio Capture HAL Tests L2 File
+/** @} */ // End of RMF Audio Capture HAL Tests
+/** @} */ // End of RMF Audio Capture Module
+/** @} */ // End of HPK
