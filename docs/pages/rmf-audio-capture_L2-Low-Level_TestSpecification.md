@@ -9,7 +9,7 @@
 
 ## Overview
 
-This document describes the level 2 testing suite for the RMFAUDIOCAPTURE module.
+This document describes the level 2 testing suite for the RMF AUDIO CAPTURE module.
 
 ### Acronyms, Terms and Abbreviations
 

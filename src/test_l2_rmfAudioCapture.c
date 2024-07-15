@@ -55,7 +55,7 @@
  *
  * **Pre-Conditions:**  None@n
  * **Dependencies:** None@n
- * 
+ *
  * Refer to API Definition specification documentation : [rmf-audio-capture_halSpec.md](../../docs/pages/rmf-audio-capture_halSpec.md)
  *
  * @endparblock
@@ -190,7 +190,7 @@ static rmf_Error test_l2_validate_bytes_received(RMF_AudioCapture_Settings *sett
 * **Test Case ID:** 001@n
 *
 * **Test Procedure:**
-* Refer to UT specification documentation [rmfAudioCapture_L2_Low-Level_TestSpecification.md](../docs/pages/rmfAudioCapture_L2_Low-Level_TestSpecification.md)
+* Refer to UT specification documentation [rmf-audio-capture_L2-Low-Level_TestSpecification.md](../docs/pages/rmf-audio-capture_L2-Low-Level_TestSpecification.md)
 */
 void test_l2_rmfAudioCapture_primary_data_check(void)
 {
@@ -250,7 +250,7 @@ void test_l2_rmfAudioCapture_primary_data_check(void)
 * **Test Case ID:** 002@n
 *
 * **Test Procedure:**
-* Refer to UT specification documentation [rmfAudioCapture_L2_Low-Level_TestSpecification.md](../../docs/pages/rmfAudioCapture_L2_Low-Level_TestSpecification.md)
+* Refer to UT specification documentation [rmf-audio-capture_L2-Low-Level_TestSpecification.md](../docs/pages/rmf-audio-capture_L2-Low-Level_TestSpecification.md)
 */
 void test_l2_rmfAudioCapture_auxiliary_data_check(void)
 {
@@ -306,7 +306,7 @@ void test_l2_rmfAudioCapture_auxiliary_data_check(void)
 * **Test Case ID:** 003@n
 *
 * **Test Procedure:**
-* Refer to UT specification documentation [rmfAudioCapture_L2_Low-Level_TestSpecification.md](../../docs/pages/rmfAudioCapture_L2_Low-Level_TestSpecification.md)
+* Refer to UT specification documentation [rmf-audio-capture_L2-Low-Level_TestSpecification.md](../docs/pages/rmf-audio-capture_L2-Low-Level_TestSpecification.md)
 */
 void test_l2_rmfAudioCapture_combined_data_check(void)
 {
