@@ -190,7 +190,7 @@ static rmf_Error test_l2_validate_bytes_received(RMF_AudioCapture_Settings *sett
 * **Test Case ID:** 001@n
 *
 * **Test Procedure:**
-* Refer to UT specification documentation [rmfAudioCapture_L2_Low-Level_TestSpecification.md](../../docs/pages/rmfAudioCapture_L2_Low-Level_TestSpecification.md)
+* Refer to UT specification documentation [rmfAudioCapture_L2_Low-Level_TestSpecification.md](../docs/pages/rmfAudioCapture_L2_Low-Level_TestSpecification.md)
 */
 void test_l2_rmfAudioCapture_primary_data_check(void)
 {
