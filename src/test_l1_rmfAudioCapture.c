@@ -1155,6 +1155,7 @@ void test_l1_rmfAudioCapture_negative_RMF_AudioCapture_Stop (void)
 * @brief Test positive scenarios for RMF_AudioCapture_GetStatus()
 *
 * Probe various input scenarios for RMF_AudioCapture_GetStatus() and verify that it executes in accordance with the specification.
+* @note Few params(muted, paused, volume) of RMF_AudioCapture_Status is deprecated
 *
 * **Test Group ID:** Basic 01@n
 * **Test Case ID:** 017@n
@@ -1671,6 +1672,7 @@ void test_l1_rmfAudioCapture_negative_RMF_AudioCapture_Open_Type_mixed (void)
 * @brief Test simultaneous primary and auxiliary audio capture
 *
 * Launch simultaneous capture sessions of primary and auxiliary audio and verify that status and settings are returned correctly
+* @note Few params(muted, paused, volume) of RMF_AudioCapture_Status is deprecated
 *
 * **Test Group ID:** Basic 01@n
 * **Test Case ID:** 025@n
