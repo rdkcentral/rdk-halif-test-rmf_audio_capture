@@ -25,7 +25,7 @@ This repository contains the Unit Test Suites for RMF Audio Capture `HAL`.
 |---|-------------|--------------------|-------------|
 |1|`HAL` Specification Document|This document provides specific information on the APIs for which tests are written in this module|[rmf-audio-capture_halSpec.md](https://github.com/rdkcentral/rdk-halif-rmf_audio_capture/blob/main/docs/pages/rmf-audio-capture_halSpec.md "rmf-audio-capture_halSpec.md")|
 |2|High Level Test Specification Document|High Level Test Specification Documentation this module|[rmf-audio-capture_High-Level_TestSpec.md](docs/pages/rmf-audio-capture_High-Level_TestSpec.md)|
-|3|`L2` Low Level Test Specification Document|`L2`Low Level Test Specification Documentation this module|[rmfAudioCapture_L2_Low-Level_TestSpecification.md](docs/pages/rmfAudioCapture_L2_Low-Level_TestSpecification.md)|
+|3|`L2` Low Level Test Specification Document|`L2`Low Level Test Specification Documentation this module|[rmf-audio-capture_L2-Low-Level_TestSpecification.md](docs/pages/rmf-audio-capture_L2-Low-Level_TestSpecification.md)|
 |4|`L1` Tests |`L1` Test Case File for this module |[test_l1_rmfAudioCapture.c](src/test_l1_rmfAudioCapture.c "test_l1_rmfAudioCapture.c")|
 |5|`L2` Tests |`L2` Test Case File for this module |[test_l2_rmfAudioCapture.c](src/test_l2_rmfAudioCapture.c "test_l2_rmfAudioCapture.c")|
 
