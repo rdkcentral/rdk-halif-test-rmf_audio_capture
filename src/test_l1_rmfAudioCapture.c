@@ -94,7 +94,7 @@ static bool extendedEnumsSupported=false; //Default to not supported
 
 bool test_l1_is_aux_capture_supported()
 {
-    bool aux_capture_supported = ut_kvp_getBoolField(ut_kvp_profile_getInstance(), "rmfaudiocapture/features/auxsupport");
+    bool aux_capture_supported = UT_KVP_PROFILE_GET_BOOL("rmfaudiocapture/features/auxsupport");
     return aux_capture_supported;
 }
 
