@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 
+#* ******************************************************************************
 # *
 # * If not stated otherwise in this file or this component's LICENSE file the
 # * following copyright and licenses apply:
@@ -18,6 +19,7 @@
 # * See the License for the specific language governing permissions and
 # * limitations under the License.
 # *
+#* ******************************************************************************
 
 RED="\e[0;31m"
 YELLOW="\e[1;33m"
@@ -60,7 +62,7 @@ else
     check_next_revision
     cd ./ut-core
     git checkout ${UT_CORE_PROJECT_VERSION}
-    ./build.sh
+    ./build.sh $@
     cd ..
     ./${0} $@
 fi
