@@ -98,15 +98,6 @@ bool test_l1_is_aux_capture_supported()
     return aux_capture_supported;
 }
 
-static bool test_l1_create_suite_of_positive_tests()
-{
-    const char * config = getenv("AC_GENERATE_POSITIVE_ONLY_SUITE");
-    if((NULL != config) && (0 == strncasecmp(config, "TRUE", 4)))
-        return true;
-    else
-        return false;
-}
-
 rmf_Error test_l1_dummy_data_cb(void *cbBufferReadyParm, void *AudioCaptureBuffer, unsigned int AudioCaptureBufferSize)
 {
     return RMF_SUCCESS;
@@ -1411,45 +1402,6 @@ void test_l1_rmfAudioCapture_negative_RMF_AudioCapture_Open_Type_auxiliary (void
 static UT_test_suite_t * pSuite = NULL;
 
 /**
- * @brief Create a special test suite with only positive test cases.
- *
- * This test suite will come in handy to exercise some of the major test cases in situations where the HAL is prone to crashing when subjected to
- * the rigors of negative testing. Defining the environment variable AC_GENERATE_POSITIVE_ONLY_SUITE=TRUE will create a positive-only L1 test suite
- *
- * @return int - 0 on success, otherwise failure
- */
-int test_l1_rmfAudioCapture_register_positive_only_suite ( void )
-{
-    /* add a suite to the registry */
-    pSuite = UT_add_suite( "[L1 rmfAudioCapture positive-only]", NULL, NULL );
-    if ( NULL == pSuite )
-    {
-        return -1;
-    }
-
-    UT_add_test( pSuite, "RMF_AudioCapture_Open_Type_primary_L1_positive" ,test_l1_rmfAudioCapture_positive_RMF_AudioCapture_Open_Type_primary );
-    UT_add_test( pSuite, "RMF_AudioCapture_Open_L1_positive" ,test_l1_rmfAudioCapture_positive_RMF_AudioCapture_Open );
-    UT_add_test( pSuite, "RMF_AudioCapture_Close_L1_positive" ,test_l1_rmfAudioCapture_positive_RMF_AudioCapture_Close );
-
-    UT_add_test( pSuite, "RMF_AudioCapture_GetDefaultSettings_L1_positive" ,test_l1_rmfAudioCapture_positive_RMF_AudioCapture_GetDefaultSettings );
-
-    UT_add_test( pSuite, "RMF_AudioCapture_Start_L1_positive" ,test_l1_rmfAudioCapture_positive_RMF_AudioCapture_Start );
-    UT_add_test( pSuite, "RMF_AudioCapture_Stop_L1_positive" ,test_l1_rmfAudioCapture_positive_RMF_AudioCapture_Stop );
-
-    UT_add_test( pSuite, "RMF_AudioCapture_GetStatus_L1_positive" ,test_l1_rmfAudioCapture_positive_RMF_AudioCapture_GetStatus );
-
-    UT_add_test( pSuite, "RMF_AudioCapture_GetCurrentSettings_L1_positive" ,test_l1_rmfAudioCapture_positive_RMF_AudioCapture_GetCurrentSettings );
-
-    if(true == test_l1_is_aux_capture_supported())
-    {
-        UT_add_test( pSuite, "RMF_AudioCapture_Open_Type_auxiliary_L1_positive" ,test_l1_rmfAudioCapture_positive_RMF_AudioCapture_Open_Type_auxiliary );
-    }
-    return 0;
-}
-
-
-
-/**
  * @brief Register the main test(s) for this module
  *
  * @return int - 0 on success, otherwise failure
@@ -1463,37 +1415,32 @@ int test_l1_rmfAudioCapture_register ( void )
         return -1;
     }
 
-    UT_add_test( pSuite, "RMF_AudioCapture_Open_Type_primary_L1_positive" ,test_l1_rmfAudioCapture_positive_RMF_AudioCapture_Open_Type_primary );
-    UT_add_test( pSuite, "RMF_AudioCapture_Open_Type_primary_L1_negative" ,test_l1_rmfAudioCapture_negative_RMF_AudioCapture_Open_Type_primary );
-    UT_add_test( pSuite, "RMF_AudioCapture_Open_L1_positive" ,test_l1_rmfAudioCapture_positive_RMF_AudioCapture_Open );
-    UT_add_test( pSuite, "RMF_AudioCapture_Open_L1_negative" ,test_l1_rmfAudioCapture_negative_RMF_AudioCapture_Open );
-    UT_add_test( pSuite, "RMF_AudioCapture_Close_L1_positive" ,test_l1_rmfAudioCapture_positive_RMF_AudioCapture_Close );
-    UT_add_test( pSuite, "RMF_AudioCapture_Close_L1_negative" ,test_l1_rmfAudioCapture_negative_RMF_AudioCapture_Close );
+    UT_add_test( pSuite, "RMF_Open_Type_primary_L1_positive" ,test_l1_rmfAudioCapture_positive_RMF_AudioCapture_Open_Type_primary );
+    UT_add_test( pSuite, "RMF_Open_Type_primary_L1_negative" ,test_l1_rmfAudioCapture_negative_RMF_AudioCapture_Open_Type_primary );
+    UT_add_test( pSuite, "RMF_Open_L1_positive" ,test_l1_rmfAudioCapture_positive_RMF_AudioCapture_Open );
+    UT_add_test( pSuite, "RMF_Open_L1_negative" ,test_l1_rmfAudioCapture_negative_RMF_AudioCapture_Open );
+    UT_add_test( pSuite, "RMF_Close_L1_positive" ,test_l1_rmfAudioCapture_positive_RMF_AudioCapture_Close );
+    UT_add_test( pSuite, "RMF_Close_L1_negative" ,test_l1_rmfAudioCapture_negative_RMF_AudioCapture_Close );
 
-    UT_add_test( pSuite, "RMF_AudioCapture_GetDefaultSettings_L1_positive" ,test_l1_rmfAudioCapture_positive_RMF_AudioCapture_GetDefaultSettings );
-    UT_add_test( pSuite, "RMF_AudioCapture_GetDefaultSettings_L1_negative" ,test_l1_rmfAudioCapture_negative_RMF_AudioCapture_GetDefaultSettings );
+    UT_add_test( pSuite, "RMF_GetDefaultSettings_L1_positive" ,test_l1_rmfAudioCapture_positive_RMF_AudioCapture_GetDefaultSettings );
+    UT_add_test( pSuite, "RMF_GetDefaultSettings_L1_negative" ,test_l1_rmfAudioCapture_negative_RMF_AudioCapture_GetDefaultSettings );
 
 
-    UT_add_test( pSuite, "RMF_AudioCapture_Start_L1_positive" ,test_l1_rmfAudioCapture_positive_RMF_AudioCapture_Start );
-    UT_add_test( pSuite, "RMF_AudioCapture_Start_L1_negative" ,test_l1_rmfAudioCapture_negative_RMF_AudioCapture_Start );
-    UT_add_test( pSuite, "RMF_AudioCapture_Stop_L1_positive" ,test_l1_rmfAudioCapture_positive_RMF_AudioCapture_Stop );
-    UT_add_test( pSuite, "RMF_AudioCapture_Stop_L1_negative" ,test_l1_rmfAudioCapture_negative_RMF_AudioCapture_Stop );
+    UT_add_test( pSuite, "RMF_Start_L1_positive" ,test_l1_rmfAudioCapture_positive_RMF_AudioCapture_Start );
+    UT_add_test( pSuite, "RMF_Start_L1_negative" ,test_l1_rmfAudioCapture_negative_RMF_AudioCapture_Start );
+    UT_add_test( pSuite, "RMF_Stop_L1_positive" ,test_l1_rmfAudioCapture_positive_RMF_AudioCapture_Stop );
+    UT_add_test( pSuite, "RMF_Stop_L1_negative" ,test_l1_rmfAudioCapture_negative_RMF_AudioCapture_Stop );
 
-    UT_add_test( pSuite, "RMF_AudioCapture_GetStatus_L1_positive" ,test_l1_rmfAudioCapture_positive_RMF_AudioCapture_GetStatus );
-    UT_add_test( pSuite, "RMF_AudioCapture_GetStatus_L1_negative" ,test_l1_rmfAudioCapture_negative_RMF_AudioCapture_GetStatus );
+    UT_add_test( pSuite, "RMF_GetStatus_L1_positive" ,test_l1_rmfAudioCapture_positive_RMF_AudioCapture_GetStatus );
+    UT_add_test( pSuite, "RMF_GetStatus_L1_negative" ,test_l1_rmfAudioCapture_negative_RMF_AudioCapture_GetStatus );
 
-    UT_add_test( pSuite, "RMF_AudioCapture_GetCurrentSettings_L1_positive" ,test_l1_rmfAudioCapture_positive_RMF_AudioCapture_GetCurrentSettings );
-    UT_add_test( pSuite, "RMF_AudioCapture_GetCurrentSettings_L1_negative" ,test_l1_rmfAudioCapture_negative_RMF_AudioCapture_GetCurrentSettings );
+    UT_add_test( pSuite, "RMF_GetCurrentSettings_L1_positive" ,test_l1_rmfAudioCapture_positive_RMF_AudioCapture_GetCurrentSettings );
+    UT_add_test( pSuite, "RMF_GetCurrentSettings_L1_negative" ,test_l1_rmfAudioCapture_negative_RMF_AudioCapture_GetCurrentSettings );
 
     if(true == test_l1_is_aux_capture_supported())
     {
-        UT_add_test( pSuite, "RMF_AudioCapture_Open_Type_auxiliary_L1_positive" ,test_l1_rmfAudioCapture_positive_RMF_AudioCapture_Open_Type_auxiliary );
-        UT_add_test( pSuite, "RMF_AudioCapture_Open_Type_auxiliary_L1_negative" ,test_l1_rmfAudioCapture_negative_RMF_AudioCapture_Open_Type_auxiliary );
-    }
-
-    if(true == test_l1_create_suite_of_positive_tests())
-    {
-        test_l1_rmfAudioCapture_register_positive_only_suite();
+        UT_add_test( pSuite, "RMF_Open_Type_auxiliary_L1_positive" ,test_l1_rmfAudioCapture_positive_RMF_AudioCapture_Open_Type_auxiliary );
+        UT_add_test( pSuite, "RMF_Open_Type_auxiliary_L1_negative" ,test_l1_rmfAudioCapture_negative_RMF_AudioCapture_Open_Type_auxiliary );
     }
 
     return 0;
