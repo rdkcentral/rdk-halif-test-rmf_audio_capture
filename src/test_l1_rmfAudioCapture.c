@@ -442,7 +442,7 @@ void test_l1_rmfAudioCapture_positive_RMF_AudioCapture_Close (void)
 * Force various edge/error scenarios for RMF_AudioCapture_Close() and verify that it executes in accordance with the specification.
 *
 * **Test Group ID:** Basic 01@n
-* **Test Case ID:** 007@n
+* **Test Case ID:** 006@n
 * @n
 * **Pre-Conditions:** AudioCapture interface is not open already.@n
 * **Dependencies:** None@n
@@ -462,7 +462,7 @@ void test_l1_rmfAudioCapture_negative_RMF_AudioCapture_Close (void)
     RMF_AudioCaptureHandle handle = NULL;
     rmf_Error result = RMF_SUCCESS;
 
-    gTestID = 7;
+    gTestID = 6;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
     //Step01: Close interface with invalid handle
@@ -493,7 +493,7 @@ void test_l1_rmfAudioCapture_negative_RMF_AudioCapture_Close (void)
 * Probe various input scenarios for RMF_AudioCapture_GetDefaultSettings() and verify that it executes in accordance with the specification.
 *
 * **Test Group ID:** Basic 01@n
-* **Test Case ID:** 009@n
+* **Test Case ID:** 007@n
 * @n
 * **Pre-Conditions:** AudioCapture interface is not open already.@n
 * **Dependencies:** None@n
@@ -513,7 +513,7 @@ void test_l1_rmfAudioCapture_positive_RMF_AudioCapture_GetDefaultSettings (void)
     rmf_Error result = RMF_SUCCESS;
     RMF_AudioCapture_Settings settings;
 
-    gTestID = 9;
+    gTestID = 7;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
     //Step01: Open interface
@@ -544,7 +544,7 @@ void test_l1_rmfAudioCapture_positive_RMF_AudioCapture_GetDefaultSettings (void)
 * Force various edge/error scenarios for RMF_AudioCapture_GetDefaultSettings() and verify that it executes in accordance with the specification.
 *
 * **Test Group ID:** Basic 01@n
-* **Test Case ID:** 011@n
+* **Test Case ID:** 008@n
 * @n
 * **Pre-Conditions:** AudioCapture interface is not open already.@n
 * **Dependencies:** None@n
@@ -565,7 +565,7 @@ void test_l1_rmfAudioCapture_negative_RMF_AudioCapture_GetDefaultSettings (void)
     rmf_Error result = RMF_SUCCESS;
     RMF_AudioCapture_Settings settings;
 
-    gTestID = 11;
+    gTestID = 8;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
     //Step01: Get default settings before open
@@ -596,7 +596,7 @@ void test_l1_rmfAudioCapture_negative_RMF_AudioCapture_GetDefaultSettings (void)
 * Probe various input scenarios for RMF_AudioCapture_Start() and verify that it executes in accordance with the specification.
 *
 * **Test Group ID:** Basic 01@n
-* **Test Case ID:** 013@n
+* **Test Case ID:** 009@n
 * @n
 * **Pre-Conditions:** AudioCapture interface is not open already.@n
 * **Dependencies:** None@n
@@ -630,7 +630,7 @@ void test_l1_rmfAudioCapture_positive_RMF_AudioCapture_Start (void)
     memset(&settings, 0, sizeof(settings)); // To fill padding bytes with zero, allows comparison of structs with memcmp.
     memset(&current_settings, 0, sizeof(current_settings));
 
-    gTestID = 13;
+    gTestID = 9;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
     //Step01: Open interface
@@ -717,7 +717,7 @@ void test_l1_rmfAudioCapture_positive_RMF_AudioCapture_Start (void)
 * Force various edge/error scenarios for RMF_AudioCapture_Start() and verify that it executes in accordance with the specification.
 *
 * **Test Group ID:** Basic 01@n
-* **Test Case ID:** 014@n
+* **Test Case ID:** 010@n
 * @n
 * **Pre-Conditions:** AudioCapture interface is not open already.@n
 * **Dependencies:** None@n
@@ -750,7 +750,7 @@ void test_l1_rmfAudioCapture_negative_RMF_AudioCapture_Start (void)
     rmf_Error result = RMF_SUCCESS;
     RMF_AudioCapture_Settings settings, bad_settings;
 
-    gTestID = 14;
+    gTestID = 10;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
     //Step01: audiocapture start befor open
@@ -824,7 +824,7 @@ void test_l1_rmfAudioCapture_negative_RMF_AudioCapture_Start (void)
 * Probe various input scenarios for RMF_AudioCapture_Stop() and verify that it executes in accordance with the specification.
 *
 * **Test Group ID:** Basic 01@n
-* **Test Case ID:** 015@n
+* **Test Case ID:** 011@n
 * @n
 * **Pre-Conditions:** AudioCapture interface is not open already.@n
 * **Dependencies:** None@n
@@ -852,7 +852,7 @@ void test_l1_rmfAudioCapture_positive_RMF_AudioCapture_Stop (void)
     rmf_Error result = RMF_SUCCESS;
     RMF_AudioCapture_Settings settings;
 
-    gTestID = 15;
+    gTestID = 11;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
     //Step01: Open interface
@@ -906,7 +906,7 @@ void test_l1_rmfAudioCapture_positive_RMF_AudioCapture_Stop (void)
 * Force various edge/error scenarios for RMF_AudioCapture_Stop() and verify that it executes in accordance with the specification.
 *
 * **Test Group ID:** Basic 01@n
-* **Test Case ID:** 016@n
+* **Test Case ID:** 012@n
 * @n
 * **Pre-Conditions:** AudioCapture interface is not open already.@n
 * **Dependencies:** None@n
@@ -932,7 +932,7 @@ void test_l1_rmfAudioCapture_negative_RMF_AudioCapture_Stop (void)
     rmf_Error result = RMF_SUCCESS;
     RMF_AudioCapture_Settings settings;
 
-    gTestID = 16;
+    gTestID = 12;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
     //Step01: Audiocapture stop before open
@@ -982,7 +982,7 @@ void test_l1_rmfAudioCapture_negative_RMF_AudioCapture_Stop (void)
 * @note Few params(muted, paused, volume) of RMF_AudioCapture_Status is deprecated
 *
 * **Test Group ID:** Basic 01@n
-* **Test Case ID:** 017@n
+* **Test Case ID:** 013@n
 * @n
 * **Pre-Conditions:** AudioCapture interface is not open already.@n
 * **Dependencies:** None@n
@@ -1007,7 +1007,7 @@ void test_l1_rmfAudioCapture_positive_RMF_AudioCapture_GetStatus (void)
     RMF_AudioCapture_Settings settings;
     RMF_AudioCapture_Status status;
 
-    gTestID = 17;
+    gTestID = 13;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
     //Step01: Open interface
@@ -1050,7 +1050,7 @@ void test_l1_rmfAudioCapture_positive_RMF_AudioCapture_GetStatus (void)
 * Force various edge/error scenarios for RMF_AudioCapture_GetStatus() and verify that it executes in accordance with the specification.
 *
 * **Test Group ID:** Basic 01@n
-* **Test Case ID:** 018@n
+* **Test Case ID:** 014@n
 * @n
 * **Pre-Conditions:** AudioCapture interface is not open already.@n
 * **Dependencies:** None@n
@@ -1081,7 +1081,7 @@ void test_l1_rmfAudioCapture_negative_RMF_AudioCapture_GetStatus (void)
     RMF_AudioCapture_Settings settings;
     RMF_AudioCapture_Status status;
 
-    gTestID = 18;
+    gTestID = 14;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
     //Step01: Get status with invalid handle
@@ -1142,7 +1142,7 @@ void test_l1_rmfAudioCapture_negative_RMF_AudioCapture_GetStatus (void)
 * Probe various input scenarios for RMF_AudioCapture_GetCurrentSettings() and verify that it executes in accordance with the specification.
 *
 * **Test Group ID:** Basic 01@n
-* **Test Case ID:** 019@n
+* **Test Case ID:** 015@n
 * @n
 * **Pre-Conditions:** AudioCapture interface is not open already.@n
 * **Dependencies:** None@n
@@ -1168,7 +1168,7 @@ void test_l1_rmfAudioCapture_positive_RMF_AudioCapture_GetCurrentSettings (void)
     rmf_Error result = RMF_SUCCESS;
     RMF_AudioCapture_Settings settings, current_settings;
 
-    gTestID = 19;
+    gTestID = 15;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
     memset(&settings, 0, sizeof(settings)); // To fill padding bytes with zero, allows comparison of structs with memcmp.
@@ -1233,7 +1233,7 @@ void test_l1_rmfAudioCapture_positive_RMF_AudioCapture_GetCurrentSettings (void)
 * Force various edge/error scenarios for RMF_AudioCapture_GetCurrentSettings() and verify that it executes in accordance with the specification.
 *
 * **Test Group ID:** Basic 01@n
-* **Test Case ID:** 020@n
+* **Test Case ID:** 016@n
 * @n
 * **Pre-Conditions:** AudioCapture interface is not open already.@n
 * **Dependencies:** None@n
@@ -1262,7 +1262,7 @@ void test_l1_rmfAudioCapture_negative_RMF_AudioCapture_GetCurrentSettings (void)
     rmf_Error result = RMF_SUCCESS;
     RMF_AudioCapture_Settings settings, current_settings;
 
-    gTestID = 20;
+    gTestID = 16;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
     //Step01: Get current settings with invalid handle
@@ -1322,7 +1322,7 @@ void test_l1_rmfAudioCapture_negative_RMF_AudioCapture_GetCurrentSettings (void)
 * Probe various input scenarios for RMF_AudioCapture_Open_Type() and verify that it executes in accordance with the specification.
 *
 * **Test Group ID:** Basic 01@n
-* **Test Case ID:** 021@n
+* **Test Case ID:** 017@n
 * @n
 * **Pre-Conditions:** AudioCapture interface is not open already.@n
 * **Dependencies:** None@n
@@ -1341,7 +1341,7 @@ void test_l1_rmfAudioCapture_positive_RMF_AudioCapture_Open_Type_auxiliary (void
     RMF_AudioCaptureHandle handle;
     rmf_Error result = RMF_SUCCESS;
 
-    gTestID = 21;
+    gTestID = 17;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
     //Step01: Open interface with auxilary type
@@ -1368,7 +1368,7 @@ void test_l1_rmfAudioCapture_positive_RMF_AudioCapture_Open_Type_auxiliary (void
 * Force various edge/error scenarios for RMF_AudioCapture_Open_Type() and verify that it executes in accordance with the specification.
 *
 * **Test Group ID:** Basic 01@n
-* **Test Case ID:** 022@n
+* **Test Case ID:** 018@n
 * @n
 * **Pre-Conditions:** AudioCapture interface is not open already.@n
 * **Dependencies:** None@n
@@ -1387,7 +1387,7 @@ void test_l1_rmfAudioCapture_negative_RMF_AudioCapture_Open_Type_auxiliary (void
     RMF_AudioCaptureHandle handle;
     rmf_Error result = RMF_SUCCESS;
 
-    gTestID = 22;
+    gTestID = 18;
     UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
     //Step01: Open interface with invalid handle
@@ -1404,143 +1404,6 @@ void test_l1_rmfAudioCapture_negative_RMF_AudioCapture_Open_Type_auxiliary (void
 
     //Step04: Close interface
     result = RMF_AudioCapture_Close(handle);
-    UT_ASSERT_EQUAL_FATAL(result, RMF_SUCCESS);
-    UT_LOG("\n Out  %s\n",__FUNCTION__);
-}
-
-
-
-/**
-* @brief Test positive scenarios with primary and auxiliary audio for RMF_AudioCapture_Open_Type()
-*
-* Probe various input scenarios for RMF_AudioCapture_Open_Type() and verify that it executes in accordance with the specification.
-*
-* **Test Group ID:** Basic 01@n
-* **Test Case ID:** 023@n
-* @n
-* **Pre-Conditions:** AudioCapture interface is not open already.@n
-* **Dependencies:** None@n
-* **User Interaction:** None@n
-
-* **Test Procedure:**@n
-* | Variation / Step | Description | Test Data | Expected Result | Notes |
-* | :-------: | ------------- | --------- | --------------- | ----- |
-* | 01 | Call `RMF_AudioCapture_Open_Type()` to open aux interface | handle must be a valid pointer, type is auxiliary | RMF_SUCCESS | Should pass |
-* | 02 | Call `RMF_AudioCapture_Open_Type()` to open primary interface while aux is open | handle must be a valid pointer, type is primary | RMF_SUCCESS | Should pass |
-* | 03 | Call `RMF_AudioCapture_Close()` to close primary interface | current primary audio handle | RMF_SUCCESS | Should pass |
-* | 04 | Call `RMF_AudioCapture_Open()` to check interchangeability of Open and OpenType for primary audio | handle must be a valid pointer | RMF_SUCCESS | Should pass |
-* | 05 | Call `RMF_AudioCapture_Close()` to close aux interface | current aux audio handle | RMF_SUCCESS | Should pass |
-* | 06 | Call `RMF_AudioCapture_Open_Type()` to open aux interface while primary is open | handle must be a valid pointer, type is auxiliary | RMF_SUCCESS | Should pass |
-* | 07 | Call `RMF_AudioCapture_Close()` to close aux interface | current aux audio handle | RMF_SUCCESS | Should pass |
-* | 08 | Call `RMF_AudioCapture_Close()` to close primary interface | current primary audio handle | RMF_SUCCESS | Should pass |
-*/
-void test_l1_rmfAudioCapture_positive_RMF_AudioCapture_Open_Type_mixed (void)
-{
-    RMF_AudioCaptureHandle aux_handle, prim_handle;
-    rmf_Error result = RMF_SUCCESS;
-
-    gTestID = 23;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-
-    //Step01: open interface with auxilary type
-    result = RMF_AudioCapture_Open_Type(&aux_handle, RMF_AC_TYPE_AUXILIARY);
-    UT_ASSERT_EQUAL_FATAL(result, RMF_SUCCESS);
-
-    //Step02: Open interface with primary type
-    result = RMF_AudioCapture_Open_Type(&prim_handle, RMF_AC_TYPE_PRIMARY);
-    if(RMF_SUCCESS != result)
-    {
-        UT_LOG("Aborting test - unable to open primary capture interface. Error code: %d", result);
-        result = RMF_AudioCapture_Close(aux_handle);
-        UT_FAIL_FATAL("Aborting test - unable to open capture.");
-    }
-
-    //Step03: Close interface
-    result = RMF_AudioCapture_Close(prim_handle);
-    UT_ASSERT_EQUAL_FATAL(result, RMF_SUCCESS);
-
-    //Step04: open interface for primary handle
-    result = RMF_AudioCapture_Open(&prim_handle);
-    UT_ASSERT_EQUAL_FATAL(result, RMF_SUCCESS);
-
-    //Step05: Close interface for primary handle
-    result = RMF_AudioCapture_Close(aux_handle);
-    UT_ASSERT_EQUAL_FATAL(result, RMF_SUCCESS);
-
-    //Step06: Open interface for auxilary type
-    result = RMF_AudioCapture_Open_Type(&aux_handle, RMF_AC_TYPE_AUXILIARY);
-    UT_ASSERT_EQUAL_FATAL(result, RMF_SUCCESS);
-
-    //Step07: Close interface
-    result = RMF_AudioCapture_Close(aux_handle);
-    UT_ASSERT_EQUAL_FATAL(result, RMF_SUCCESS);
-
-    //Step08: Close Interface
-    result = RMF_AudioCapture_Close(prim_handle);
-    UT_ASSERT_EQUAL_FATAL(result, RMF_SUCCESS);
-    UT_LOG("\n Out  %s\n",__FUNCTION__);
-}
-
-/**
-* @brief Test negative scenarios with primary and auxiliary audio for RMF_AudioCapture_Open_Type()
-*
-* Force various edge/error scenarios for RMF_AudioCapture_Open_Type() and verify that it executes in accordance with the specification.
-*
-* **Test Group ID:** Basic 01@n
-* **Test Case ID:** 024@n
-* @n
-* **Pre-Conditions:** AudioCapture interface is not open already.@n
-* **Dependencies:** None@n
-* **User Interaction:** None@n
-
-* **Test Procedure:**@n
-* | Variation / Step | Description | Test Data | Expected Result | Notes |
-* | :-------: | ------------- | --------- | --------------- | ----- |
-* | 01 | Call `RMF_AudioCapture_Open_Type()` to open aux interface | handle must be a valid pointer, type is auxiliary | RMF_SUCCESS | Should pass |
-* | 02 | Call `RMF_AudioCapture_Open_Type()` to open aux interface while aux is already open | handle must be a valid pointer, type is auxiliary | RMF_INVALID_STATE | Should pass |
-* | 03 | Call `RMF_AudioCapture_Open_Type()` to open primary interface | handle must be a valid pointer, type is primary | RMF_SUCCESS | Should pass |
-* | 04 | Call `RMF_AudioCapture_Open_Type()` to open primary interface when primary is already open | handle must be a valid pointer, type is primary | RMF_INVALID_STATE | Should pass |
-* | 05 | Call `RMF_AudioCapture_Open()` to open primary interface when primary is already open | handle must be a valid pointer | RMF_INVALID_STATE | Should pass |
-* | 06 | Call `RMF_AudioCapture_Close()` to close primary interface | current primary audio handle | RMF_SUCCESS | Should pass |
-* | 07 | Call `RMF_AudioCapture_Close()` to close aux interface | current aux audio handle | RMF_SUCCESS | Should pass |
-*/
-void test_l1_rmfAudioCapture_negative_RMF_AudioCapture_Open_Type_mixed (void)
-{
-    RMF_AudioCaptureHandle aux_handle, prim_handle;
-    rmf_Error result = RMF_SUCCESS;
-
-    gTestID = 24;
-    UT_LOG("\n In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
-
-    //Step01: Open nterface for auxilary type
-    result = RMF_AudioCapture_Open_Type(&aux_handle, RMF_AC_TYPE_AUXILIARY);
-    UT_ASSERT_EQUAL_FATAL(result, RMF_SUCCESS);
-
-    //Step02: Open interface for auxilary type
-    result = RMF_AudioCapture_Open_Type(&aux_handle, RMF_AC_TYPE_AUXILIARY);
-    CHECK_FOR_EXTENDED_ERROR_CODE(result, RMF_INVALID_STATE, TEST_RMF_OSAL_EBUSY);
-
-    //Step03: Open interface for primary type
-    result = RMF_AudioCapture_Open_Type(&prim_handle, RMF_AC_TYPE_PRIMARY);
-    if(RMF_SUCCESS != result)
-    {
-        UT_LOG("Aborting test - unable to start primary capture. Error code: %d", result);
-        result = RMF_AudioCapture_Close(aux_handle);
-        UT_FAIL_FATAL("Aborting test - unable to start primary capture.");
-    }
-
-    //Step04: Open interface for primary type
-    result = RMF_AudioCapture_Open_Type(&prim_handle, RMF_AC_TYPE_PRIMARY);
-    CHECK_FOR_EXTENDED_ERROR_CODE(result, RMF_INVALID_STATE, TEST_RMF_OSAL_EBUSY);
-    //Step05: Open interface for primary handle
-    result = RMF_AudioCapture_Open(&prim_handle);
-    CHECK_FOR_EXTENDED_ERROR_CODE(result, RMF_INVALID_STATE, TEST_RMF_OSAL_EBUSY);
-
-    //Step06: Close interface for primary handle
-    result = RMF_AudioCapture_Close(prim_handle);
-    UT_ASSERT_EQUAL_FATAL(result, RMF_SUCCESS);
-    //Step07: Close interface for auxilary handle
-    result = RMF_AudioCapture_Close(aux_handle);
     UT_ASSERT_EQUAL_FATAL(result, RMF_SUCCESS);
     UT_LOG("\n Out  %s\n",__FUNCTION__);
 }
@@ -1580,7 +1443,6 @@ int test_l1_rmfAudioCapture_register_positive_only_suite ( void )
     if(true == test_l1_is_aux_capture_supported())
     {
         UT_add_test( pSuite, "RMF_AudioCapture_Open_Type_auxiliary_L1_positive" ,test_l1_rmfAudioCapture_positive_RMF_AudioCapture_Open_Type_auxiliary );
-        UT_add_test( pSuite, "RMF_AudioCapture_Open_Type_mixed_L1_positive" ,test_l1_rmfAudioCapture_positive_RMF_AudioCapture_Open_Type_mixed );
     }
     return 0;
 }
@@ -1627,10 +1489,6 @@ int test_l1_rmfAudioCapture_register ( void )
     {
         UT_add_test( pSuite, "RMF_AudioCapture_Open_Type_auxiliary_L1_positive" ,test_l1_rmfAudioCapture_positive_RMF_AudioCapture_Open_Type_auxiliary );
         UT_add_test( pSuite, "RMF_AudioCapture_Open_Type_auxiliary_L1_negative" ,test_l1_rmfAudioCapture_negative_RMF_AudioCapture_Open_Type_auxiliary );
-
-        UT_add_test( pSuite, "RMF_AudioCapture_Open_Type_mixed_L1_positive" ,test_l1_rmfAudioCapture_positive_RMF_AudioCapture_Open_Type_mixed );
-        UT_add_test( pSuite, "RMF_AudioCapture_Open_Type_mixed_L1_negative" ,test_l1_rmfAudioCapture_negative_RMF_AudioCapture_Open_Type_mixed );
-
     }
 
     if(true == test_l1_create_suite_of_positive_tests())
