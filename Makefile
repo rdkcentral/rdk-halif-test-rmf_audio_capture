@@ -24,34 +24,38 @@
 #*   ** @date        : 20/05/2022
 #*   **
 #*   ** @brief : Makefile for UT
-#*   ** 
+#*   **
 #*
 #* ******************************************************************************
+
 ROOT_DIR:=$(shell dirname $(realpath $(firstword $(MAKEFILE_LIST))))
 BIN_DIR := $(ROOT_DIR)/bin
 TOP_DIR := $(ROOT_DIR)
 
 SRC_DIRS = $(ROOT_DIR)/src
 INC_DIRS := $(ROOT_DIR)/../include
+HAL_LIB := rmfAudioCapture
+SKELETON_SRCS := $(ROOT_DIR)/skeletons/src/*
 
 ifeq ($(TARGET),)
 $(info TARGET NOT SET )
 $(info TARGET FORCED TO Linux)
 TARGET=linux
-CFLAGS = -DBUILD_LINUX
 SRC_DIRS += $(ROOT_DIR)/skeletons/src
 endif
 
 $(info TARGET [$(TARGET)])
 
-HAL_LIB_DIR := $(ROOT_DIR)/libs
 ifeq ($(TARGET),arm)
-YLDFLAGS = -Wl,-rpath,$(HAL_LIB_DIR) -L$(HAL_LIB_DIR) -lrmfAudioCapture
+HAL_LIB_DIR := $(ROOT_DIR)/libs
+YLDFLAGS = -Wl,-rpath,$(HAL_LIB_DIR) -L$(HAL_LIB_DIR) -l$(HAL_LIB)
+ifeq ("$(wildcard $(HAL_LIB_DIR)/lib$(HAL_LIB).so)","")
+SETUP_SKELETON_LIBS := skeleton
+endif
 endif
 
 .PHONY: clean list all
 
-# Here is a list of exports from this makefile to the next
 export YLDFLAGS
 export BIN_DIR
 export SRC_DIRS
@@ -63,14 +67,22 @@ export CFLAGS
 
 .PHONY: clean list build
 
-build:
+build: $(SETUP_SKELETON_LIBS)
 	@echo UT [$@]
-	make -C ./ut-core
+	make -C ./ut-core framework
+	make -C ./ut-core test
 
+#Build against the real library leads to the SOC library dependency also.SOC lib dependency cannot be specified in the ut Makefile, since it is supposed to be common across may platforms. So in order to over come this situation, creating a template SKELETON library with empty templates so that the template library wont have any other Soc dependency. And in the real platform mount copy bind with the actual library will work fine.
+skeleton:
+	echo $(CC)
+	mkdir -p $(HAL_LIB_DIR)
+	$(CC) -fPIC -shared -I$(ROOT_DIR)/../include $(SKELETON_SRCS) -o $(HAL_LIB_DIR)/lib$(HAL_LIB).so
 list:
 	@echo UT [$@]
 	make -C ./ut-core list
 
 clean:
 	@echo UT [$@]
-	make -C ./ut-core clean
+	make -C ./ut-core cleanall
+	rm -rf $(BIN_DIR)/lib$(HAL_LIB).so
+	rm -rf $(ROOT_DIR)/libs/lib$(HAL_LIB).so
