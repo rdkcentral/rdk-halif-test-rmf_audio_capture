@@ -17,7 +17,7 @@
 *  limitations under the License.
 */
 
-
+#include <ut.h>
 #include <string.h>
 #include <stdlib.h>
 #include <setjmp.h>
@@ -104,7 +104,7 @@ size_t readRawAudio(const char *filename, char **buffer) {
     FILE *file = fopen(filename, "rb");
     if (!file) 
     {
-        perror("Failed to open input wav file");
+        UT_LOG_ERROR("Failed to open input wav file");
         return 0;
     }
 
@@ -112,7 +112,7 @@ size_t readRawAudio(const char *filename, char **buffer) {
 
     if (headerSize < 44) 
     {
-        fprintf(stderr, "Could not read the complete WAV header.\n");
+        UT_LOG_ERROR ("Could not read the complete WAV header");
         fclose(file);
         return 0;
     }
@@ -121,7 +121,7 @@ size_t readRawAudio(const char *filename, char **buffer) {
     if (wavHeader[0] != 'R' || wavHeader[1] != 'I' || 
         wavHeader[2] != 'F' || wavHeader[3] != 'F') 
     {
-        fprintf(stderr, "Not a valid WAV file.\n");
+        UT_LOG_ERROR("Not a valid input WAV file");
         fclose(file);
         return 0;
     }
@@ -131,7 +131,7 @@ size_t readRawAudio(const char *filename, char **buffer) {
     *buffer = (char *)malloc(dataSize);
     if (*buffer == NULL) 
     {
-        perror("Failed to allocate memory to read from wav file");
+        UT_LOG_ERROR("Failed to allocate memory to read from wav file");
         fclose(file);
         return 0;
     }
@@ -165,14 +165,14 @@ void* sendAudioData(void* handle)
 
     if (filePath == NULL) 
     {
-        fprintf(stderr, "Environment variable for file path not set\n");
-        printf("Not setting environment variable for input files when running with mock might result in incorrect test results !\n");
+        UT_LOG_ERROR("Environment variable for file path not set, Set INPUT_PRIMARY and/or INPUT_AUXILIARY as required.");
+        UT_LOG_ERROR("Not setting environment variable for input files when running with mock might result in incorrect test results !");
         return NULL;
     }
     
     if (access(filePath, F_OK) != 0 ) 
     {
-        fprintf(stderr, "File does not exist\n");
+        UT_LOG_ERROR("File does not exist");
         return NULL;
     }
     
@@ -186,7 +186,7 @@ void* sendAudioData(void* handle)
     dataSize = readRawAudio(filePath, &rawDataBuffer);
     if (dataSize == 0) 
     {
-        fprintf(stderr, "Failed to read audio data or file is empty\n");
+        UT_LOG_ERROR("Failed to read audio data or file is empty");
         free(rawDataBuffer);
         return NULL;
     }
@@ -257,7 +257,7 @@ rmf_Error RMF_AudioCapture_Start(RMF_AudioCaptureHandle handle, RMF_AudioCapture
       // Create the thread to simulate sending audio data
       if (pthread_create(&thread, NULL, sendAudioData, (void *)handle) != 0) 
       {
-          perror("Failed to create thread to send audio data");
+          UT_LOG_ERROR("Failed to create thread to send audio data");
           result = RMF_INVALID_PARM;
       } else 
       {
