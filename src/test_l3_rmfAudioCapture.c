@@ -307,7 +307,8 @@ static rmf_Error test_l3_write_wav_file(RMF_AudioCapture_Settings *settings, voi
     /* Validate if acceptable level of bytes received first */
     if (RMF_SUCCESS != validateBytesReceived(settings, (void *)context_blob, MEASUREMENT_WINDOW_SECONDS) )
     {
-        UT_LOG_ERROR ("Bytes received is not in acceptable levels");
+        UT_LOG_ERROR ("Bytes received is not in acceptable levels. Output file will not be created !");
+        return RMF_ERROR;
     }
 
     if (RMF_SUCCESS != getValuesFromSettings(settings, &num_channels, &sampling_rate, &bits_per_sample) )
@@ -325,7 +326,7 @@ static rmf_Error test_l3_write_wav_file(RMF_AudioCapture_Settings *settings, voi
     FILE *file = fopen(filename, "wb");
     if (file == NULL) 
     {
-        perror("Error with fopen for output wav file");
+        UT_LOG_ERROR("Error with fopen for output wav file");
         if(ctx->data_buffer) 
         {
             free(ctx->data_buffer);
@@ -364,7 +365,7 @@ static rmf_Error test_l3_write_wav_file(RMF_AudioCapture_Settings *settings, voi
         free(ctx->data_buffer);
         ctx->data_buffer = NULL;
     }
-
+    UT_LOG_INFO("test_l3_write_wav_file created output file : %s", filename);
     return RMF_SUCCESS;
 }
 
@@ -381,6 +382,11 @@ static void* monitorBufferCount(void* context_blob)
     uint32_t difference_in_bytes = 0;
     time_t start_time = time(NULL);
     time_t end_time = start_time + MEASUREMENT_WINDOW_2MINUTES;
+    rmf_Error *result = malloc (sizeof(rmf_Error));
+    if (result == NULL)
+    {
+        UT_LOG_ERROR ("malloc for storing rmf_Error failed, refer prints to confirm if jitter test passed");
+    }
 
     while ((ctx->cookie == 1) && (time(NULL) < end_time))
     {
@@ -389,12 +395,15 @@ static void* monitorBufferCount(void* context_blob)
         {
             UT_LOG_INFO ("Bytes received in last iteration : %d. This is less than threshold level of %d bytes.\n", difference_in_bytes, THRESHOLD);
             UT_LOG_ERROR ("Jitter detected !");
-            return (rmf_Error *)RMF_ERROR;
+            *result = RMF_ERROR;
+            return (void *)result;
         }
         bytes_received = ctx->bytes_received;
         usleep (MONITOR_JITTER_MICROSECONDS); //100ms
     }
-    return (rmf_Error *)RMF_SUCCESS;
+    UT_LOG_INFO("No jitter detected");
+    *result = RMF_SUCCESS;
+    return (void *)result;
 }
 
 /**
@@ -463,7 +472,7 @@ void test_l3_rmfAudioCapture_primary_data_check(void)
     sleep(1); // Wait for the last callback to be processed
     UT_ASSERT_EQUAL(ctx.cookie, 0);
 
-    result = test_l3_write_wav_file(&settings, (void *)&ctx, "output_primary.wav");
+    result = test_l3_write_wav_file(&settings, (void *)&ctx, "/tmp/output_primary.wav");
     UT_ASSERT_EQUAL(result, RMF_SUCCESS);
 
     UT_LOG_INFO("Calling RMF_AudioCapture_Close(IN:handle:[0x%0X])", &handle);
@@ -539,7 +548,16 @@ void test_l3_rmfAudioCapture_primary_jitter_check(void)
     {
         UT_LOG_INFO("Error joining monitor thread");
     }
-    UT_ASSERT_EQUAL((rmf_Error *)ret_value, RMF_SUCCESS);
+    if (ret_value != NULL) 
+    {
+        result = *(rmf_Error *)ret_value;
+        UT_ASSERT_EQUAL(result, RMF_SUCCESS);
+    
+        free(ret_value);
+    } else 
+    {
+        UT_LOG_INFO("Thread ret_value NULL, unable to assert for jitter check. Refer prints to confirm if test passed");
+    }
 
     /* Validate if acceptable level of bytes received */
     result = validateBytesReceived(&settings, (void *)&ctx, MEASUREMENT_WINDOW_2MINUTES);
@@ -627,7 +645,7 @@ void test_l3_rmfAudioCapture_auxiliary_data_check(void)
     sleep(1); // Wait for the last callback to be processed
     UT_ASSERT_EQUAL(ctx.cookie, 0);
 
-    result = test_l3_write_wav_file(&settings, (void *)&ctx, "output_auxiliary.wav");
+    result = test_l3_write_wav_file(&settings, (void *)&ctx, "/tmp/output_auxiliary.wav");
     UT_ASSERT_EQUAL(result, RMF_SUCCESS);
 
     UT_LOG_INFO("Calling RMF_AudioCapture_Close(IN:handle:[0x%0X])", &handle);
@@ -704,7 +722,16 @@ void test_l3_rmfAudioCapture_auxiliary_jitter_check(void)
         UT_LOG_INFO("Error joining monitor thread");
     }
     // Check return value to determine if the thread failed
-    UT_ASSERT_EQUAL((rmf_Error *)ret_value, RMF_SUCCESS);
+    if (ret_value != NULL) 
+    {
+        result = *(rmf_Error *)ret_value;
+        UT_ASSERT_EQUAL(result, RMF_SUCCESS);
+    
+        free(ret_value);
+    } else 
+    {
+        UT_LOG_INFO("Thread ret_value NULL, unable to assert for jitter check. Refer prints to confirm if test passed");
+    }
 
     /* Validate if acceptable level of bytes received */
     result = validateBytesReceived(&settings, (void *)&ctx, MEASUREMENT_WINDOW_2MINUTES);
@@ -849,9 +876,9 @@ void test_l3_rmfAudioCapture_combined_data_check(void)
     UT_ASSERT_EQUAL(prim_ctx.cookie, 0);
     UT_ASSERT_EQUAL(aux_ctx.cookie, 0);
 
-    result = test_l3_write_wav_file(&aux_settings, (void *)&aux_ctx, "output_combined_auxiliary.wav");
+    result = test_l3_write_wav_file(&aux_settings, (void *)&aux_ctx, "/tmp/output_combined_auxiliary.wav");
     UT_ASSERT_EQUAL(result, RMF_SUCCESS);
-    result = test_l3_write_wav_file(&prim_settings, (void *)&prim_ctx, "output_combined_primary.wav");
+    result = test_l3_write_wav_file(&prim_settings, (void *)&prim_ctx, "/tmp/output_combined_primary.wav");
     UT_ASSERT_EQUAL(result, RMF_SUCCESS);
 
     UT_LOG_INFO("Calling RMF_AudioCapture_Close(IN:prim_handle:[0x%0X])", &prim_handle);
@@ -956,7 +983,7 @@ void test_l3_rmfAudioCapture_independent_data_check(void)
     UT_ASSERT_EQUAL(result, RMF_SUCCESS);
 
     sleep(1); // Wait for the last callback to be processed
-    UT_LOG_INFO("Primary stopped, auxiliary running. Verify if bytes received for auxiliary has increased.\n");
+    UT_LOG_INFO("Primary stopped, auxiliary running. Verifying if bytes received for auxiliary has increased.\n");
     if ((prim_ctx.bytes_received != primary_bytes_received) && (aux_ctx.bytes_received < auxiliary_bytes_received))
     {
         result = RMF_ERROR;
@@ -1010,7 +1037,7 @@ void test_l3_rmfAudioCapture_independent_data_check(void)
     UT_ASSERT_EQUAL(result, RMF_SUCCESS);
 
     sleep(1); // Wait for the last callback to be processed
-    UT_LOG_INFO("Primary running, auxiliary stopped. Verify if bytes received for primary has increased.\n");
+    UT_LOG_INFO("Primary running, auxiliary stopped. Verifying if bytes received for primary has increased.\n");
     if ((prim_ctx.bytes_received < primary_bytes_received) && (aux_ctx.bytes_received != auxiliary_bytes_received))
     {
         result = RMF_ERROR;
@@ -1132,13 +1159,31 @@ void test_l3_rmfAudioCapture_combined_jitter_check(void)
     {
         UT_LOG_INFO("Error joining primary capture monitor thread");
     }
-    UT_ASSERT_EQUAL((rmf_Error *)prim_ret_value, RMF_SUCCESS);
+    if (prim_ret_value != NULL) 
+    {
+        result = *(rmf_Error *)prim_ret_value;
+        UT_ASSERT_EQUAL(result, RMF_SUCCESS);
+    
+        free(prim_ret_value);
+    } else 
+    {
+        UT_LOG_INFO("Thread ret_value NULL, unable to assert for jitter check. Refer prints to confirm if test passed");
+    }
 
     if (pthread_join(aux_thread, &aux_ret_value) != 0) 
     {
         UT_LOG_INFO("Error joining auxiliary capture monitor thread");
     }
-    UT_ASSERT_EQUAL((rmf_Error *)aux_ret_value, RMF_SUCCESS);
+    if (aux_ret_value != NULL) 
+    {
+        result = *(rmf_Error *)aux_ret_value;
+        UT_ASSERT_EQUAL(result, RMF_SUCCESS);
+    
+        free(aux_ret_value);
+    } else 
+    {
+        UT_LOG_INFO("Thread ret_value NULL, unable to assert for jitter check. Refer prints to confirm if test passed");
+    }
 
     /* Validate if acceptable level of bytes received */
     result = validateBytesReceived(&prim_settings, (void *)&prim_ctx, MEASUREMENT_WINDOW_2MINUTES);
