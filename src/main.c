@@ -20,6 +20,7 @@
 
 extern int register_hal_l1_tests( void );
 extern int register_hal_l2_tests( void );
+extern int register_hal_l3_tests( void );
 
 int main(int argc, char** argv)
 {
@@ -48,6 +49,18 @@ int main(int argc, char** argv)
         printf("register_hal_l2_tests() returned failure\n");
         return 1;
     }
+
+    registerReturn = register_hal_l3_tests();
+    if (registerReturn == 0)
+    {
+        printf("register_hal_l3_tests() returned success\n");
+    }
+    else
+    {
+        printf("register_hal_l3_tests() returned failure\n");
+        return 1;
+    }
+
     /* Begin test executions */
     UT_run_tests();
     return 0;
