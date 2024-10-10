@@ -224,9 +224,10 @@ static rmf_Error test_l3_counting_data_cb(void *context_blob, void *AudioCapture
 {
     RMF_audio_capture_struct *ctx_data = (RMF_audio_capture_struct *)context_blob;
 
-    //UT_ASSERT_PTR_NOT_NULL(AudioCaptureBuffer);
-  //  UT_ASSERT_PTR_NOT_NULL_FATAL(context_blob);
-   // UT_ASSERT_TRUE(AudioCaptureBufferSize > 0);
+    if ((AudioCaptureBuffer == NULL) || (context_blob == NULL) || (AudioCaptureBufferSize <= 0))
+    {
+        UT_FAIL_FATAL ("Invalid values received in callback, audio capture failure");
+    }
 
     ctx_data->bytes_received += AudioCaptureBufferSize;
     ctx_data->cookie = 1;
@@ -262,10 +263,10 @@ static rmf_Error test_l3_tracking_data_cb(void *context_blob, void *AudioCapture
 {
     RMF_audio_capture_struct *ctx_data = (RMF_audio_capture_struct *)context_blob;
 
-   /* UT_ASSERT_PTR_NOT_NULL(AudioCaptureBuffer);
-    UT_ASSERT_PTR_NOT_NULL_FATAL(context_blob);
-    UT_ASSERT_TRUE(AudioCaptureBufferSize > 0);
-*/
+    if ((AudioCaptureBuffer == NULL) || (context_blob == NULL) || (AudioCaptureBufferSize <= 0))
+    {
+        UT_FAIL_FATAL ("Invalid values received in callback, audio capture failure");
+    }
     ctx_data->cookie = 1;
 
     if ( ctx_data->bytes_received + AudioCaptureBufferSize > ctx_data->buffer_size)
@@ -740,7 +741,7 @@ void test_l3_rmfAudioCapture_setup_callbacks(void)
             break;
         }
         default :
-            UT_LOG_ERROR("Invalid callback type choice\n");
+            UT_LOG_ERROR("Invalid callback type choice, callback not set up\n");
     }
     
     UT_LOG_INFO("Out %s\n", __FUNCTION__);
@@ -888,7 +889,7 @@ void test_l3_jitter_monitor(void)
         UT_LOG_ERROR("Invalid FIFO size, setting a default value of FIFO size/4 bytes : %d", gAudioCaptureData[audioCaptureIndex].jitter_threshold);
     }
 
-    UT_LOG_MENU_INFO("Enter buffer monitor interval in microseconds to check jitter : ");
+    UT_LOG_MENU_INFO("Enter interval in microseconds to monitor buffer for jitter : ");
     scanf("%d", &choice);
     readAndDiscardRestOfLine(stdin);
     gAudioCaptureData[audioCaptureIndex].jitter_monitor_sleep_interval = choice;
