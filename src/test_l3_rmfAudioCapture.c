@@ -718,13 +718,13 @@ void test_l3_rmfAudioCapture_setup_callbacks(void)
     int audioCaptureIndex = choice - 1; //0 - primary, 1 - auxiliary
 
     UT_LOG_MENU_INFO("------------------------------------------");
-    UT_LOG_MENU_INFO("Choose type of callback based on test :");
+    UT_LOG_MENU_INFO("Choose the type of test :");
     UT_LOG_MENU_INFO("------------------------------------------");
-    UT_LOG_MENU_INFO("\t#   %-20s","Supported types");
-    UT_LOG_MENU_INFO("\t1.  %-20s","Byte tracking tests (only bytes received is checked)");
+    UT_LOG_MENU_INFO("\t#   %-20s","Supported types of test");
+    UT_LOG_MENU_INFO("\t1.  %-20s","Byte counting tests (only bytes received is checked)");
     UT_LOG_MENU_INFO("\t2.  %-20s","Data capture tests (audio data is captured) ");
     UT_LOG_MENU_INFO("------------------------------------------");
-    UT_LOG_MENU_INFO("Select the callback type: ");
+    UT_LOG_MENU_INFO("Select the type of test: ");
     scanf("%d", &choice);
     readAndDiscardRestOfLine(stdin);
 
@@ -1040,7 +1040,7 @@ int test_rmfAudioCapture_l3_register(void)
     // List of test function names and strings
     UT_add_test(pSuite, "Open RMF Audio Capture Handle", test_l3_rmfAudioCapture_open_handle);
     UT_add_test(pSuite, "Update settings", test_l3_rmfAudioCapture_update_settings);
-    UT_add_test(pSuite, "Set test duration and callbacks", test_l3_rmfAudioCapture_setup_callbacks);
+    UT_add_test(pSuite, "Select the type of test", test_l3_rmfAudioCapture_setup_callbacks);
     UT_add_test(pSuite, "Start RMF Audio Capture", test_l3_rmfAudioCapture_start);
     UT_add_test(pSuite, "Check Bytes Received", test_l3_rmfAudioCapture_bytes_received);
     UT_add_test(pSuite, "Write output wav file", test_l3_write_output_file);
