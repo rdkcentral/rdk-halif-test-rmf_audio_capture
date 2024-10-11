@@ -20,6 +20,7 @@
 
 extern int test_rmfAudioCapture_l2_register(void);
 extern int test_l1_rmfAudioCapture_register();
+extern int test_rmfAudioCapture_l3_register(void);
 
 int register_hal_l2_tests( void )
 {
@@ -36,6 +37,15 @@ int register_hal_l1_tests( void )
     int registerFailed=0;
 
     registerFailed |= test_l1_rmfAudioCapture_register();
+
+    return registerFailed;
+}
+
+int register_hal_l3_tests( void )
+{
+    int registerFailed=0;
+
+    registerFailed |= test_rmfAudioCapture_l3_register();
 
     return registerFailed;
 }
