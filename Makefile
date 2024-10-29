@@ -76,7 +76,7 @@ build: $(SETUP_SKELETON_LIBS)
 skeleton:
 	echo $(CC)
 	mkdir -p $(HAL_LIB_DIR)
-	$(CC) -fPIC -shared -I$(ROOT_DIR)/../include -I$(ROOT_DIR)/ut-core/include $(SKELETON_SRCS) -o $(HAL_LIB_DIR)/lib$(HAL_LIB).so
+	$(CC) -fPIC -shared -I$(ROOT_DIR)/../include $(SKELETON_SRCS) -o $(HAL_LIB_DIR)/lib$(HAL_LIB).so
 list:
 	@echo UT [$@]
 	make -C ./ut-core list
