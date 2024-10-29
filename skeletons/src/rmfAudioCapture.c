@@ -17,7 +17,6 @@
 *  limitations under the License.
 */
 
-#include <ut.h>
 #include <string.h>
 #include <stdlib.h>
 #include <setjmp.h>
@@ -104,7 +103,7 @@ size_t readRawAudio(const char *filename, char **buffer) {
     FILE *file = fopen(filename, "rb");
     if (!file) 
     {
-        UT_LOG_ERROR("Failed to open input wav file");
+        printf("%s,  %d : Failed to open input wav file", __FILE__, __LINE__);
         return 0;
     }
 
@@ -112,7 +111,7 @@ size_t readRawAudio(const char *filename, char **buffer) {
 
     if (headerSize < 44) 
     {
-        UT_LOG_ERROR ("Could not read the complete WAV header");
+        printf ("%s,  %d : Could not read the complete WAV header", __FILE__, __LINE__);
         fclose(file);
         return 0;
     }
@@ -121,7 +120,7 @@ size_t readRawAudio(const char *filename, char **buffer) {
     if (wavHeader[0] != 'R' || wavHeader[1] != 'I' || 
         wavHeader[2] != 'F' || wavHeader[3] != 'F') 
     {
-        UT_LOG_ERROR("Not a valid input WAV file");
+        printf("%s,  %d : Not a valid input WAV file", __FILE__, __LINE__);
         fclose(file);
         return 0;
     }
@@ -131,7 +130,7 @@ size_t readRawAudio(const char *filename, char **buffer) {
     *buffer = (char *)malloc(dataSize);
     if (*buffer == NULL) 
     {
-        UT_LOG_ERROR("Failed to allocate memory to read from wav file");
+        printf("%s,  %d : Failed to allocate memory to read from wav file", __FILE__, __LINE__);
         fclose(file);
         return 0;
     }
@@ -165,14 +164,14 @@ void* sendAudioData(void* handle)
 
     if (filePath == NULL) 
     {
-        UT_LOG_ERROR("Environment variable for file path not set, Set INPUT_PRIMARY and/or INPUT_AUXILIARY as required.");
-        UT_LOG_ERROR("Not setting environment variable for input files when running with mock might result in incorrect test results !");
+        printf("%s,  %d : Environment variable for file path not set, Set INPUT_PRIMARY and/or INPUT_AUXILIARY as required.", __FILE__, __LINE__);
+        printf("%s,  %d : Not setting environment variable for input files when running with mock might result in incorrect test results !", __FILE__, __LINE__);
         return NULL;
     }
     
     if (access(filePath, F_OK) != 0 ) 
     {
-        UT_LOG_ERROR("File does not exist");
+        printf("%s,  %d : File does not exist", __FILE__, __LINE__);
         return NULL;
     }
     
@@ -186,7 +185,7 @@ void* sendAudioData(void* handle)
     dataSize = readRawAudio(filePath, &rawDataBuffer);
     if (dataSize == 0) 
     {
-        UT_LOG_ERROR("Failed to read audio data or file is empty");
+        printf("%s,  %d : Failed to read audio data or file is empty", __FILE__, __LINE__);
         free(rawDataBuffer);
         return NULL;
     }
@@ -257,7 +256,7 @@ rmf_Error RMF_AudioCapture_Start(RMF_AudioCaptureHandle handle, RMF_AudioCapture
       // Create the thread to simulate sending audio data
       if (pthread_create(&thread, NULL, sendAudioData, (void *)handle) != 0) 
       {
-          UT_LOG_ERROR("Failed to create thread to send audio data");
+          printf("%s,  %d : Failed to create thread to send audio data", __FILE__, __LINE__);
           result = RMF_INVALID_PARM;
       } else 
       {
