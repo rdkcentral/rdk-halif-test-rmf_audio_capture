@@ -360,7 +360,7 @@ static rmf_Error validateBytesReceived(void *context_blob, int testedTime)
     /* Check actual bytes received is over 90% of expected data size before  */
     uint64_t computed_bytes_received = testedTime * num_channels * sampling_rate * bits_per_sample / 8;
     double percentage_received = (double)ctx_data->bytes_received / (double)computed_bytes_received * 100;
-    UT_LOG_DEBUG("Actual bytes received: %" PRIu64 ", Expected bytes received: %" PRIu64 ", Computed percentage: %f\n",
+    UT_LOG_DEBUG("Actual bytes received: %" PRIu32 ", Expected bytes received: %" PRIu64 ", Computed percentage: %f\n",
                  ctx_data->bytes_received, computed_bytes_received, percentage_received);
     if ((percentage_received <= 90.0) || (percentage_received >= 110.0))
     {
@@ -668,7 +668,7 @@ void test_l3_rmfAudioCapture_update_settings(void)
                 scanf("%d", &choice);
                 readAndDiscardRestOfLine(stdin);
 
-                if(choice <= 0 || choice > gAudioCaptureData[audioCaptureIndex].settings.fifoSize)
+                if(choice <= 0 )
                 {
                     UT_LOG_ERROR("Invalid FIFO size, try again");
                     break;
@@ -678,11 +678,11 @@ void test_l3_rmfAudioCapture_update_settings(void)
             }
             case 4:
             {
-                UT_LOG_MENU_INFO("\t\tEnter data callback threshold in bytes, used to check jitter (max 1/4th of FIFO)");
+                UT_LOG_MENU_INFO("\t\tEnter data callback threshold in bytes");
                 scanf("%d", &choice);
                 readAndDiscardRestOfLine(stdin);
 
-                if(choice <= 0 || choice > (int)gAudioCaptureData[audioCaptureIndex].settings.fifoSize/4)
+                if(choice <= 0)
                 {
                     UT_LOG_ERROR("Invalid threshold size, try again");
                     break;
@@ -786,9 +786,9 @@ void test_l3_rmfAudioCapture_start(void)
 }
 
 /**
-* @brief This test starts audio capture
+* @brief This test returns bytes received so far
 *
-* This test starts audio capture
+* This test returns bytes received so far
 *
 * **Test Group ID:** 03@n
 * **Test Case ID:** 005@n
@@ -881,12 +881,14 @@ void test_l3_jitter_monitor(void)
     UT_LOG_MENU_INFO("Enter minimum threshold in bytes to check jitter : ");
     scanf("%d", &choice);
     readAndDiscardRestOfLine(stdin);
-    gAudioCaptureData[audioCaptureIndex].jitter_threshold = choice;
 
-    if((choice <= 0) || (choice > (gAudioCaptureData[audioCaptureIndex].settings.fifoSize / 4)))
+    if(choice <= 0)
     {
-        gAudioCaptureData[audioCaptureIndex].jitter_threshold = (int32_t) gAudioCaptureData[audioCaptureIndex].settings.fifoSize / 4;
-        UT_LOG_ERROR("Invalid FIFO size, setting a default value of FIFO size/4 bytes : %d", gAudioCaptureData[audioCaptureIndex].jitter_threshold);
+        UT_LOG_ERROR("Invalid threshold size, retaining value : %d", gAudioCaptureData[audioCaptureIndex].jitter_threshold);
+    } 
+    else 
+    {
+        gAudioCaptureData[audioCaptureIndex].jitter_threshold = choice;
     }
 
     UT_LOG_MENU_INFO("Enter interval in microseconds to monitor buffer for jitter : ");
@@ -946,6 +948,10 @@ void test_l3_jitter_result(void)
     if (ret_value != NULL) 
     {
         result = *(rmf_Error *)ret_value;
+        if (result != RMF_SUCCESS)
+        {
+            UT_LOG_ERROR("Jitter Detected !");
+        }
         UT_ASSERT_EQUAL(result, RMF_SUCCESS);
     
         free(ret_value);
