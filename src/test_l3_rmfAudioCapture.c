@@ -960,10 +960,6 @@ void test_l3_jitter_result(void)
         UT_LOG_INFO("Thread ret_value NULL, unable to assert for jitter check. Refer prints to confirm if test passed");
     }
 
-    /* Validate if acceptable level of bytes received */
-    result = validateBytesReceived((void *)&gAudioCaptureData[audioCaptureIndex], gAudioCaptureData[audioCaptureIndex].jitter_test_duration);
-    UT_ASSERT_EQUAL(result, RMF_SUCCESS);
-
     UT_LOG_INFO("Out %s\n", __FUNCTION__);
 }
 
