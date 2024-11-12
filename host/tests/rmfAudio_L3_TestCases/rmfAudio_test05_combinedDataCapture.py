@@ -28,12 +28,9 @@ import time
 dir_path = os.path.dirname(os.path.realpath(__file__))
 sys.path.append(os.path.join(dir_path, "../"))
 
-from rmfAudioClasses.rmfAudio import rmfAudioClass
-from raft.framework.plugins.ut_raft import utHelperClass
-from raft.framework.plugins.ut_raft.configRead import ConfigRead
-from raft.framework.plugins.ut_raft.utUserResponse import utUserResponse
+from rmfAudio_L3_TestCases.rmfAudioHelperClass import rmfAudioHelperClass
 
-class rmfAudio_test05_CombinedDataCapture(utHelperClass):
+class rmfAudio_test05_CombinedDataCapture(rmfAudioHelperClass):
     """
     Test class to open capture Primary and Auxiliary Audio Data and verify it with their source.
 
@@ -41,13 +38,6 @@ class rmfAudio_test05_CombinedDataCapture(utHelperClass):
     downloading necessary test assets, setting up RMF Audio Capture
     and performing verification of captured audio.
     """
-
-    # Class variables
-    testName  = "test05_combinedDataCapture"
-    testSetupPath = dir_path + "/rmfAudio_L3_testSetup.yml"
-    moduleName = "rmfaudiocapture"
-    rackDevice = "dut"
-
     def __init__(self):
         """
         Initializes the test class with test name, setup configuration, and sessions for the device.
@@ -55,78 +45,8 @@ class rmfAudio_test05_CombinedDataCapture(utHelperClass):
         Args:
             None
         """
-        super().__init__(self.testName, '1')
-
-        # Load test setup configuration
-        self.testSetup = ConfigRead(self.testSetupPath, self.moduleName)
-
-        # Open Session for hal test
-        self.hal_session = self.dut.getConsoleSession("ssh_hal_test")
-
-        cmds = self.testSetup.get("assets").get("device").get(self.testName).get("postcmd")
-        if cmds is not None:
-            for cmd in cmds:
-                self.hal_session.write(cmd)
-
-         # Create user response Class
-        self.testUserResponse = utUserResponse()
-
-        # Get path to device profile file
-        self.deviceProfile = dir_path + "/" + self.cpe.get("test").get("profile")
-
-    def testDownloadAssets(self):
-        """
-        Downloads the test artifacts and streams listed in the test setup configuration.
-
-        This function retrieves audio streams and other necessary files and
-        saves them on the DUT (Device Under Test).
-
-        Args:
-            None
-        """
-
-        # List of streams with path
-        self.testStreams = []
-
-        self.deviceDownloadPath = self.cpe.get("target_directory")
-
-        test = self.testSetup.get("assets").get("device").get(self.testName)
-
-        # Download test artifacts to device
-        url = test.get("artifacts")
-        if url is not None:
-            self.downloadToDevice(url, self.deviceDownloadPath, self.rackDevice)
-
-        # Download test streams to device
-        url =  test.get("streams")
-        if url is not None:
-            self.downloadToDevice(url, self.deviceDownloadPath, self.rackDevice)
-            for streampath in url:
-                self.testStreams.append(os.path.join(self.deviceDownloadPath, os.path.basename(streampath)))
-
-    def testCleanAssets(self):
-        """
-        Removes the downloaded assets and test streams from the DUT after test execution.
-
-        Args:
-            None
-        """
-        self.deleteFromDevice(self.testStreams)
-
-    def testRunPrerequisites(self):
-        """
-        Executes prerequisite commands listed in the test setup configuration file on the DUT.
-
-        Args:
-            None
-        """
-
-        # Run commands as part of test prerequisites
-        test = self.testSetup.get("assets").get("device").get(self.testName)
-        cmds = test.get("execute")
-        if cmds is not None:
-            for cmd in cmds:
-                self.writeCommands(cmd)
+        self.testName  = "test05_combinedDataCapture"
+        super().__init__(self.testName, '5')
 
     def testAudioCapture(self, file_path:str, index:int):
         """
@@ -153,8 +73,6 @@ class rmfAudio_test05_CombinedDataCapture(utHelperClass):
         The main test function that verifies primary and auxiliary data capture with input audio.
 
         This function:
-        - Downloads the required assets.
-        - Runs the prerequisite commands.
         - Starts Primary and Auxiliary Data capture.
         - Captures Audio data on primary and auxiliary interface at the same time.
         - Writes the captured audio data to a wav file.
@@ -163,22 +81,14 @@ class rmfAudio_test05_CombinedDataCapture(utHelperClass):
         Returns:
             bool: Final result of the test.
         """
-
-        # Download the assets listed in test setup configuration file
-        self.testDownloadAssets()
-
-        # Run Prerequisites listed in the test setup configuration file
-        self.testRunPrerequisites()
-
-        # Create the rmfaudiocapture class
-        self.testrmfAudio = rmfAudioClass(self.deviceProfile, self.hal_session)
-
         self.log.testStart(self.testName, '5')
 
         capture_duration = 10 # data capture duration
         settings_update = 0 # settings_update=0 (no updates to default settings), capture_format=1, sampling_rate=1, fifo_size=1, threshold=1
-        # For settings update for example capture_format, set settings_update to 1, followed by value for capture_format (1 for racFormat_e16BitStereo)
-        # sample : self.testrmfAudio.updateSettings(capture_type, 1, 1)
+        # For settings update, set settings_update to 1, followed by value for capture_format, Sampling Frequency, FIFO size, threshold. 
+        # Use -1 for settings parameter that you want to retain default value for.
+        # Sample shows 1 for settings update, 0(racFormat_e16BitStereo) for capture format, 5(racFreq_e48000) for sampling rate, 16384 for FIFO and -1 to retain default threshold value.
+        # sample : self.testrmfAudio.updateSettings(capture_type, 1, 0, 5, 16384, -1)
         test_type = 2 # test_type : 1 for byte counting tests (default), 2 for data tracking tests where audio data is captured.
         wav_file_name = ["/tmp/output_primary.wav", "/tmp/output_auxiliary.wav"]
         result = []
@@ -204,18 +114,12 @@ class rmfAudio_test05_CombinedDataCapture(utHelperClass):
             for capture_type in (1, 2):
                 index = capture_type - 1
                 self.testrmfAudio.writeWavFile(capture_type, wav_file_name[index])
-                self.testrmfAudio.CloseHandle(capture_type)
+                self.testrmfAudio.closeHandle(capture_type)
 
                 result.append(self.testAudioCapture(wav_file_name[index], index))
             self.log.stepResult(all(result), 'Combined audio capture')
         else:
             print(f'Auxiliary support in configuration file is : {aux_support}. Not running test')
-        
-        # Clean the assets downloaded to the device
-        self.testCleanAssets()
-
-        # Clean up the rmfaudiocapture instance
-        del self.testrmfAudio
 
         return result
 
