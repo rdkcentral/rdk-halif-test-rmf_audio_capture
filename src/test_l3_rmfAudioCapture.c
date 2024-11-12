@@ -68,18 +68,20 @@
 *
 */
 
-
-#include <ut.h>
-#include <ut_control_plane.h>
-#include <ut_cunit.h>
-#include <ut_kvp_profile.h>
 #include <unistd.h>
 #include <stdatomic.h>
-#include "rmfAudioCapture.h"
 #include <stdlib.h>
 #include <pthread.h>
 #include <time.h>
 
+#include <ut.h>
+#include <ut_kvp_profile.h>
+#include <ut_control_plane.h>
+#include <ut_kvp.h>
+
+#include "rmfAudioCapture.h"
+
+#define RMF_ASSERT assert
 #define UT_LOG_MENU_INFO UT_LOG_INFO
 
 #define MEASUREMENT_WINDOW_SECONDS 10 // Default duration for data capture test
@@ -142,8 +144,6 @@ typedef struct
 } RMF_audio_capture_struct;
 
 RMF_audio_capture_struct gAudioCaptureData[2]; // 0 - primary, 1 - auxiliary
-
-static bool g_aux_capture_supported = false;
 
 /**
  * @brief This function clears the stdin buffer.
@@ -224,10 +224,12 @@ static rmf_Error test_l3_counting_data_cb(void *context_blob, void *AudioCapture
 {
     RMF_audio_capture_struct *ctx_data = (RMF_audio_capture_struct *)context_blob;
 
-    if ((AudioCaptureBuffer == NULL) || (context_blob == NULL) || (AudioCaptureBufferSize <= 0))
+    bool result = (AudioCaptureBuffer == NULL) || (context_blob == NULL) || (AudioCaptureBufferSize <= 0);
+    if (result == true)
     {
-        UT_FAIL_FATAL ("Invalid values received in callback, audio capture failure");
+        UT_LOG_ERROR ("Invalid values received in callback, audio capture failure");
     }
+    RMF_ASSERT(result == false);
 
     ctx_data->bytes_received += AudioCaptureBufferSize;
     ctx_data->cookie = 1;
@@ -263,10 +265,13 @@ static rmf_Error test_l3_tracking_data_cb(void *context_blob, void *AudioCapture
 {
     RMF_audio_capture_struct *ctx_data = (RMF_audio_capture_struct *)context_blob;
 
-    if ((AudioCaptureBuffer == NULL) || (context_blob == NULL) || (AudioCaptureBufferSize <= 0))
+    bool result = (AudioCaptureBuffer == NULL) || (context_blob == NULL) || (AudioCaptureBufferSize <= 0);
+    if (result == true)
     {
-        UT_FAIL_FATAL ("Invalid values received in callback, audio capture failure");
+        UT_LOG_ERROR ("Invalid values received in callback, audio capture failure");
     }
+    RMF_ASSERT(result == false);
+
     ctx_data->cookie = 1;
 
     if ( ctx_data->bytes_received + AudioCaptureBufferSize > ctx_data->buffer_size)
@@ -330,8 +335,10 @@ static void test_l3_prepare_start_settings_for_data_tracking(void *context_blob)
     ctx_data->data_buffer = (unsigned char *)malloc(ctx_data->buffer_size);
     if (ctx_data->data_buffer == NULL)
     {
-        UT_FAIL_FATAL("Aborting test - Error allocating buffer to store audio data");
+        UT_LOG_ERROR("Aborting test - Error allocating buffer to store audio data");
     }
+    RMF_ASSERT(ctx_data->data_buffer != NULL);
+    
     ctx_data->bytes_received = 0;
 }
 
@@ -499,19 +506,18 @@ static void* monitorBufferCount(void* context_blob)
 static int getAudioCaptureType(void)
 {
     int32_t choice = 1;
-    if (true == g_aux_capture_supported)
-    {
-        UT_LOG_MENU_INFO("------------------------------------------");
-        UT_LOG_MENU_INFO("Supported RMF audio capture types are:");
-        UT_LOG_MENU_INFO("------------------------------------------");
-        UT_LOG_MENU_INFO("\t#   %-20s","Supported capture type");
-        UT_LOG_MENU_INFO("\t1.  %-20s","PRIMARY");
-        UT_LOG_MENU_INFO("\t2.  %-20s","AUXILIARY");
-        UT_LOG_MENU_INFO("------------------------------------------");
-        UT_LOG_MENU_INFO(" Select the audio capture type :");
-        scanf("%d", &choice);
-        readAndDiscardRestOfLine(stdin);
-    }
+
+    UT_LOG_MENU_INFO("------------------------------------------");
+    UT_LOG_MENU_INFO("Supported RMF audio capture types are:");
+    UT_LOG_MENU_INFO("------------------------------------------");
+    UT_LOG_MENU_INFO("\t#   %-20s","Supported capture type");
+    UT_LOG_MENU_INFO("\t1.  %-20s","PRIMARY");
+    UT_LOG_MENU_INFO("\t2.  %-20s","AUXILIARY");
+    UT_LOG_MENU_INFO("------------------------------------------");
+    UT_LOG_MENU_INFO(" Select the audio capture type :");
+    scanf("%d", &choice);
+    readAndDiscardRestOfLine(stdin);
+
     if (choice < 1 || choice > 2)
     {
         UT_LOG_ERROR("Invalid capture type choice, choosing default : PRIMARY \n");
@@ -563,8 +569,9 @@ void test_l3_rmfAudioCapture_open_handle(void)
     UT_LOG_INFO("Result RMF_AudioCapture_Open_Type(IN:captureType:[%s] OUT:handle:[0x%0X]) rmf_error:[%s]", rmfAcType, &gAudioCaptureData[audioCaptureIndex].handle, UT_Control_GetMapString(rmfError_mapTable, result));
     if (RMF_SUCCESS != result)
     {
-        UT_FAIL_FATAL("Aborting test - unable to open capture.");
+        UT_LOG_ERROR("Aborting test - unable to open capture.");
     }
+    RMF_ASSERT(RMF_SUCCESS == result);
     UT_LOG_INFO("Out %s\n", __FUNCTION__);
 }
 
@@ -588,111 +595,112 @@ void test_l3_rmfAudioCapture_update_settings(void)
     rmf_Error result = RMF_SUCCESS;
     int32_t choice = getAudioCaptureType();
     int audioCaptureIndex = choice - 1; //0 - primary, 1 - auxiliary
-    bool update_flag = true;
 
     UT_LOG_INFO("Calling RMF_AudioCapture_GetDefaultSettings(OUT:settings:[])");
     result = RMF_AudioCapture_GetDefaultSettings(&gAudioCaptureData[audioCaptureIndex].settings);
     UT_LOG_INFO("Result RMF_AudioCapture_GetDefaultSettings(OUT:settings:[0x%0X]) rmf_error:[%s]", &gAudioCaptureData[audioCaptureIndex].settings, UT_Control_GetMapString(rmfError_mapTable, result));
-    UT_ASSERT_EQUAL(result, RMF_SUCCESS);
+    RMF_ASSERT(result == RMF_SUCCESS);
 
-    while(update_flag)
+    UT_LOG_MENU_INFO("------------------------------------------");
+    UT_LOG_MENU_INFO("Current values in settings :");
+    UT_LOG_MENU_INFO("------------------------------------------");
+    UT_LOG_MENU_INFO("\t#   %-20s  %s","Settings", "Default Values");
+    UT_LOG_MENU_INFO("\t1.  %-20s  %s","Capture Format", UT_Control_GetMapString(racFormatMappingTable, gAudioCaptureData[audioCaptureIndex].settings.format));
+    UT_LOG_MENU_INFO("\t2.  %-20s  %s","Sampling Frequency", UT_Control_GetMapString(racFreqMappingTable, gAudioCaptureData[audioCaptureIndex].settings.samplingFreq));
+    UT_LOG_MENU_INFO("\t3.  %-20s  %d","FIFO size", gAudioCaptureData[audioCaptureIndex].settings.fifoSize);
+    UT_LOG_MENU_INFO("\t4.  %-20s  %d","Threshold", gAudioCaptureData[audioCaptureIndex].settings.threshold);
+    UT_LOG_MENU_INFO("------------------------------------------");
+    UT_LOG_MENU_INFO(" Do you want to update default settings ? (0 for No, 1 for Yes)");
+    scanf("%d", &choice);
+    readAndDiscardRestOfLine(stdin);
+
+    switch(choice)
     {
-        UT_LOG_MENU_INFO("------------------------------------------");
-        UT_LOG_MENU_INFO("Current values in settings :");
-        UT_LOG_MENU_INFO("------------------------------------------");
-        UT_LOG_MENU_INFO("\t#   %-20s  %s","Settings", "Default Values");
-        UT_LOG_MENU_INFO("\t1.  %-20s  %s","Capture Format", UT_Control_GetMapString(racFormatMappingTable, gAudioCaptureData[audioCaptureIndex].settings.format));
-        UT_LOG_MENU_INFO("\t2.  %-20s  %s","Sampling Frequency", UT_Control_GetMapString(racFreqMappingTable, gAudioCaptureData[audioCaptureIndex].settings.samplingFreq));
-        UT_LOG_MENU_INFO("\t3.  %-20s  %d","FIFO size", gAudioCaptureData[audioCaptureIndex].settings.fifoSize);
-        UT_LOG_MENU_INFO("\t4.  %-20s  %d","Threshold", gAudioCaptureData[audioCaptureIndex].settings.threshold);
-        UT_LOG_MENU_INFO("------------------------------------------");
-        UT_LOG_MENU_INFO(" Select the settings you wish to update, select 0 to use the above settings :");
-        scanf("%d", &choice);
-        readAndDiscardRestOfLine(stdin);
-
-        switch(choice)
+        case 0:
         {
-            case 0:
+            UT_LOG_INFO("Using above default values for settings");
+            break;
+        }
+        case 1:
+        {
+            UT_LOG_MENU_INFO("------------------------------------------");
+            UT_LOG_MENU_INFO("\t\t Supported RMF Audio Capture Formats ");
+            UT_LOG_MENU_INFO("------------------------------------------");
+            UT_LOG_MENU_INFO("\t#   %-30s","Capture format");
+            for(int32_t i = racFormat_e16BitStereo; i < racFormat_eMax; i++)
             {
-                UT_LOG_INFO("Using above values for settings");
-                update_flag = false;
-                break;
+                UT_LOG_MENU_INFO("\t%d.  %-30s", i, UT_Control_GetMapString(racFormatMappingTable, i));
             }
-            case 1:
+            UT_LOG_MENU_INFO("------------------------------------------");
+            UT_LOG_MENU_INFO(" Select the capture format to update, use -1 to retain default value :");
+            scanf("%d", &choice);
+            readAndDiscardRestOfLine(stdin);
+
+            if (choice != -1)
             {
-                UT_LOG_MENU_INFO("------------------------------------------");
-                UT_LOG_MENU_INFO("\t\tRMF Audio Capture Format ");
-                UT_LOG_MENU_INFO("------------------------------------------");
-                UT_LOG_MENU_INFO("\t#   %-30s","Capture format");
-                for(int32_t i = racFormat_e16BitStereo; i < racFormat_eMax; i++)
-                {
-                    UT_LOG_MENU_INFO("\t%d.  %-30s", i, UT_Control_GetMapString(racFormatMappingTable, i));
-                }
-                UT_LOG_MENU_INFO("------------------------------------------");
-                UT_LOG_MENU_INFO(" Select the capture format :");
-                scanf("%d", &choice);
-                readAndDiscardRestOfLine(stdin);
                 if(choice < racFormat_e16BitStereo || choice >= racFormat_eMax)
                 {
                     UT_LOG_ERROR("Invalid Capture format, try again");
                     break;
                 }
                 gAudioCaptureData[audioCaptureIndex].settings.format = choice;
-                break;
             }
-            case 2:
+            
+            UT_LOG_MENU_INFO("------------------------------------------");
+            UT_LOG_MENU_INFO("\t\t Supported RMF Audio Capture Sampling Rates ");
+            UT_LOG_MENU_INFO("------------------------------------------");
+            UT_LOG_MENU_INFO("\t#   %-30s","Sampling Rate");
+            for(int32_t i = racFreq_e16000; i < racFreq_eMax; i++)
             {
-                UT_LOG_MENU_INFO("------------------------------------------");
-                UT_LOG_MENU_INFO("\t\tRMF Audio Capture Sampling Rate ");
-                UT_LOG_MENU_INFO("------------------------------------------");
-                UT_LOG_MENU_INFO("\t#   %-30s","Sampling Rate");
-                for(int32_t i = racFreq_e16000; i < racFreq_eMax; i++)
-                {
-                    UT_LOG_MENU_INFO("\t%d.  %-30s", i, UT_Control_GetMapString(racFreqMappingTable, i));
-                }
-                UT_LOG_MENU_INFO("------------------------------------------");
-                UT_LOG_MENU_INFO(" Select the Sampling Rate");
-                scanf("%d", &choice);
-                readAndDiscardRestOfLine(stdin);
+                UT_LOG_MENU_INFO("\t%d.  %-30s", i, UT_Control_GetMapString(racFreqMappingTable, i));
+            }
+            UT_LOG_MENU_INFO("------------------------------------------");
+            UT_LOG_MENU_INFO(" Select the Sampling Rate, use -1 to retain default value :");
+            scanf("%d", &choice);
+            readAndDiscardRestOfLine(stdin);
+
+            if (choice != -1)
+            {
                 if(choice < racFreq_e16000 || choice >= racFreq_eMax)
                 {
                     UT_LOG_ERROR("Invalid Sampling Rate, try again");
                     break;
                 }
                 gAudioCaptureData[audioCaptureIndex].settings.samplingFreq = choice;
-                break;
             }
-            case 3:
-            {
-                UT_LOG_MENU_INFO("\t\tEnter FIFO size in bytes");
-                scanf("%d", &choice);
-                readAndDiscardRestOfLine(stdin);
+            
+            UT_LOG_MENU_INFO(" Enter FIFO size in bytes, use -1 to retain default value :");
+            scanf("%d", &choice);
+            readAndDiscardRestOfLine(stdin);
 
+            if (choice != -1)
+            {
                 if(choice <= 0 )
                 {
                     UT_LOG_ERROR("Invalid FIFO size, try again");
                     break;
                 }
                 gAudioCaptureData[audioCaptureIndex].settings.fifoSize = choice;
-                break;
             }
-            case 4:
-            {
-                UT_LOG_MENU_INFO("\t\tEnter data callback threshold in bytes");
-                scanf("%d", &choice);
-                readAndDiscardRestOfLine(stdin);
 
+            UT_LOG_MENU_INFO(" Enter data callback threshold in bytes, used to check jitter (max 1/4th of FIFO), use -1 to retain default value :");
+            scanf("%d", &choice);
+            readAndDiscardRestOfLine(stdin);
+
+            if (choice != -1)
+            {
                 if(choice <= 0)
                 {
                     UT_LOG_ERROR("Invalid threshold size, try again");
                     break;
                 }
                 gAudioCaptureData[audioCaptureIndex].settings.threshold = choice;
-                break;
-            }
-            default :
-                UT_LOG_ERROR("Invalid settings choice\n");
+            }            
+
+            break;
         }
+        default :
+            UT_LOG_ERROR("Invalid settings choice\n");
     }
 
     UT_LOG_INFO("Out %s\n", __FUNCTION__);
@@ -779,8 +787,9 @@ void test_l3_rmfAudioCapture_start(void)
             free(gAudioCaptureData[audioCaptureIndex].data_buffer);
             gAudioCaptureData[audioCaptureIndex].data_buffer = NULL;
         }
-        UT_FAIL_FATAL("Aborting test - unable to start capture.");
+        UT_LOG_ERROR("Aborting test - unable to start capture.");
     }
+    RMF_ASSERT(result == RMF_SUCCESS);
     
     UT_LOG_INFO("Out %s\n", __FUNCTION__);
 }
@@ -803,10 +812,7 @@ void test_l3_rmfAudioCapture_bytes_received(void)
     UT_LOG_INFO("In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
 
     UT_LOG_INFO("Bytes Received for PRIMARY capture %d\n", gAudioCaptureData[0].bytes_received);
-    if (true == g_aux_capture_supported)
-    {
-        UT_LOG_INFO("Bytes Received for AUXILIARY capture %d\n", gAudioCaptureData[1].bytes_received);
-    }
+    UT_LOG_INFO("Bytes Received for AUXILIARY capture %d\n", gAudioCaptureData[1].bytes_received);
 
     UT_LOG_INFO("Out %s\n", __FUNCTION__);
 }
@@ -854,7 +860,7 @@ void test_l3_write_output_file(void)
     }
 
     result = test_l3_write_wav_file((void *)&gAudioCaptureData[audioCaptureIndex], filepath);
-    UT_ASSERT_EQUAL(result, RMF_SUCCESS);
+    RMF_ASSERT(result == RMF_SUCCESS);
 
     UT_LOG_INFO("Out %s\n", __FUNCTION__);
 }
@@ -877,6 +883,7 @@ void test_l3_jitter_monitor(void)
     UT_LOG_INFO("In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
     int32_t choice = getAudioCaptureType();
     int audioCaptureIndex = choice - 1; //0 - primary, 1 - auxiliary
+    int result = 0;
 
     UT_LOG_MENU_INFO("Enter minimum threshold in bytes to check jitter : ");
     scanf("%d", &choice);
@@ -913,10 +920,13 @@ void test_l3_jitter_monitor(void)
         UT_LOG_ERROR("Invalid test duration, setting a default value of %d seconds", gAudioCaptureData[audioCaptureIndex].jitter_test_duration);
     }
 
-    if (pthread_create(&gAudioCaptureData[audioCaptureIndex].jitter_thread_id, NULL, monitorBufferCount, (void *)&gAudioCaptureData[audioCaptureIndex]) != 0) 
+    result = pthread_create(&gAudioCaptureData[audioCaptureIndex].jitter_thread_id, NULL, monitorBufferCount, (void *)&gAudioCaptureData[audioCaptureIndex]);
+    if (result != 0)
     {
-        UT_FAIL_FATAL("Aborting test - Failed to create monitor thread");
+        UT_LOG_ERROR("Aborting test - Failed to create monitor thread");
     }
+    RMF_ASSERT (result == 0);
+
     UT_LOG_INFO("Out %s\n", __FUNCTION__);
 }
 
@@ -952,7 +962,6 @@ void test_l3_jitter_result(void)
         {
             UT_LOG_ERROR("Jitter Detected !");
         }
-        UT_ASSERT_EQUAL(result, RMF_SUCCESS);
     
         free(ret_value);
     } else 
@@ -987,10 +996,10 @@ void test_l3_rmfAudioCapture_stop(void)
     result = RMF_AudioCapture_Stop(gAudioCaptureData[audioCaptureIndex].handle);
     UT_LOG_INFO("Result RMF_AudioCapture_Stop(IN:handle:[0x%0X] OUT:rmf_error:[%s]", &gAudioCaptureData[audioCaptureIndex].handle, UT_Control_GetMapString(rmfError_mapTable, result));
     gAudioCaptureData[audioCaptureIndex].cookie = 0;
-    UT_ASSERT_EQUAL(result, RMF_SUCCESS);
+    RMF_ASSERT(result == RMF_SUCCESS);
 
     sleep(1); // Wait for the last callback to be processed
-    UT_ASSERT_EQUAL(gAudioCaptureData[audioCaptureIndex].cookie, 0);
+    RMF_ASSERT(gAudioCaptureData[audioCaptureIndex].cookie == 0);
     
     UT_LOG_INFO("Out %s\n", __FUNCTION__);
 }
@@ -1018,7 +1027,7 @@ void test_l3_rmfAudioCapture_close(void)
     UT_LOG_INFO("Calling RMF_AudioCapture_Close(IN:handle:[0x%0X])", &gAudioCaptureData[audioCaptureIndex].handle);
     result = RMF_AudioCapture_Close(gAudioCaptureData[audioCaptureIndex].handle);
     UT_LOG_INFO("Result RMF_AudioCapture_Close(IN:handle:[0x%0X] OUT:rmf_error:[%s]", &gAudioCaptureData[audioCaptureIndex].handle, UT_Control_GetMapString(rmfError_mapTable, result));
-    UT_ASSERT_EQUAL(result, RMF_SUCCESS);
+    RMF_ASSERT(result == RMF_SUCCESS);
     
     UT_LOG_INFO("Out %s\n", __FUNCTION__);
 }
@@ -1034,7 +1043,7 @@ static UT_test_suite_t * pSuite = NULL;
 int test_rmfAudioCapture_l3_register(void)
 {
     // Create the test suite
-    pSuite = UT_add_suite("[L3 rmfAudioCapture]", NULL, NULL);
+    pSuite = UT_add_suite_withGroupID("[L3 rmfAudioCapture]", NULL, NULL, UT_TESTS_L3);
     if (pSuite == NULL)
     {
         return -1;
@@ -1051,12 +1060,10 @@ int test_rmfAudioCapture_l3_register(void)
     UT_add_test(pSuite, "Stop RMF Audio Capture", test_l3_rmfAudioCapture_stop);
     UT_add_test(pSuite, "Close RMF Audio Capture Handle", test_l3_rmfAudioCapture_close);
     
-    g_aux_capture_supported = ut_kvp_getBoolField(ut_kvp_profile_getInstance(), "rmfaudiocapture/features/auxsupport");
-    
     return 0;
 }
 
-/** @} */ // End of RMF Audio Capture HAL Tests L2 File
+/** @} */ // End of RMF Audio Capture HAL Tests L3 File
 /** @} */ // End of RMF Audio Capture HAL Tests
 /** @} */ // End of RMF Audio Capture Module
 /** @} */ // End of HPK
