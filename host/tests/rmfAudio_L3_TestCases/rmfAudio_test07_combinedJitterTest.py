@@ -28,12 +28,9 @@ import time
 dir_path = os.path.dirname(os.path.realpath(__file__))
 sys.path.append(os.path.join(dir_path, "../"))
 
-from rmfAudioClasses.rmfAudio import rmfAudioClass
-from raft.framework.plugins.ut_raft import utHelperClass
-from raft.framework.plugins.ut_raft.configRead import ConfigRead
-from raft.framework.plugins.ut_raft.utUserResponse import utUserResponse
+from rmfAudio_L3_TestCases.rmfAudioHelperClass import rmfAudioHelperClass
 
-class rmfAudio_test07_combinedJitterTest(utHelperClass):
+class rmfAudio_test07_combinedJitterTest(rmfAudioHelperClass):
     """
     Test class to open capture Primary and Auxiliary Audio Data and check if there is jitter detected.
 
@@ -41,13 +38,6 @@ class rmfAudio_test07_combinedJitterTest(utHelperClass):
     downloading necessary test assets, setting up RMF Audio Capture
     and performing verification of audio capture rate.
     """
-
-    # Class variables
-    testName  = "test07_combinedJitterTest"
-    testSetupPath = dir_path + "/rmfAudio_L3_testSetup.yml"
-    moduleName = "rmfaudiocapture"
-    rackDevice = "dut"
-
     def __init__(self):
         """
         Initializes the test class with test name, setup configuration, and sessions for the device.
@@ -55,86 +45,14 @@ class rmfAudio_test07_combinedJitterTest(utHelperClass):
         Args:
             None
         """
-        super().__init__(self.testName, '1')
-
-        # Load test setup configuration
-        self.testSetup = ConfigRead(self.testSetupPath, self.moduleName)
-
-        # Open Session for hal test
-        self.hal_session = self.dut.getConsoleSession("ssh_hal_test")
-
-        cmds = self.testSetup.get("assets").get("device").get(self.testName).get("postcmd")
-        if cmds is not None:
-            for cmd in cmds:
-                self.hal_session.write(cmd)
-
-         # Create user response Class
-        self.testUserResponse = utUserResponse()
-
-        # Get path to device profile file
-        self.deviceProfile = dir_path + "/" + self.cpe.get("test").get("profile")
-
-    def testDownloadAssets(self):
-        """
-        Downloads the test artifacts and streams listed in the test setup configuration.
-
-        This function retrieves audio streams and other necessary files and
-        saves them on the DUT (Device Under Test).
-
-        Args:
-            None
-        """
-
-        # List of streams with path
-        self.testStreams = []
-
-        self.deviceDownloadPath = self.cpe.get("target_directory")
-
-        test = self.testSetup.get("assets").get("device").get(self.testName)
-
-        # Download test artifacts to device
-        url = test.get("artifacts")
-        if url is not None:
-            self.downloadToDevice(url, self.deviceDownloadPath, self.rackDevice)
-
-        # Download test streams to device
-        url =  test.get("streams")
-        if url is not None:
-            self.downloadToDevice(url, self.deviceDownloadPath, self.rackDevice)
-            for streampath in url:
-                self.testStreams.append(os.path.join(self.deviceDownloadPath, os.path.basename(streampath)))
-
-    def testCleanAssets(self):
-        """
-        Removes the downloaded assets and test streams from the DUT after test execution.
-
-        Args:
-            None
-        """
-        self.deleteFromDevice(self.testStreams)
-
-    def testRunPrerequisites(self):
-        """
-        Executes prerequisite commands listed in the test setup configuration file on the DUT.
-
-        Args:
-            None
-        """
-
-        # Run commands as part of test prerequisites
-        test = self.testSetup.get("assets").get("device").get(self.testName)
-        cmds = test.get("execute")
-        if cmds is not None:
-            for cmd in cmds:
-                self.writeCommands(cmd)
+        self.testName  = "test07_combinedJitterTest"
+        super().__init__(self.testName, '7')
 
     def testFunction(self):
         """
         The main test function that verifies data capture with input audio.
 
         This function:
-        - Downloads the required assets.
-        - Runs the prerequisite commands.
         - Starts Primary and Auxiliary Data capture.
         - Tracks bytes received for Audio data on primary and auxiliary interface.
         - Monitors bytes received in regular intervals
@@ -142,16 +60,6 @@ class rmfAudio_test07_combinedJitterTest(utHelperClass):
         Returns:
             bool: Final result of the test.
         """
-
-        # Download the assets listed in test setup configuration file
-        self.testDownloadAssets()
-
-        # Run Prerequisites listed in the test setup configuration file
-        self.testRunPrerequisites()
-
-        # Create the rmfAudio class
-        self.testrmfAudio = rmfAudioClass(self.deviceProfile, self.hal_session)
-
         self.log.testStart(self.testName, '7')
 
         # 1 for primary data capture (default), 2 for auxiliary data capture.
@@ -159,8 +67,10 @@ class rmfAudio_test07_combinedJitterTest(utHelperClass):
         threshold = 16384 # 16K
         jitter_interval = 100000 # 100ms
         settings_update = 0 # settings_update=0 (no updates to default settings), capture_format=1, sampling_rate=1, fifo_size=1, threshold=1
-        # For settings update for example capture_format, set settings_update to 1, followed by value for capture_format (1 for racFormat_e16BitStereo)
-        # sample : self.testrmfAudio.updateSettings(capture_type, 1, 1)
+        # For settings update, set settings_update to 1, followed by value for capture_format, Sampling Frequency, FIFO size, threshold. 
+        # Use -1 for settings parameter that you want to retain default value for.
+        # Sample shows 1 for settings update, 0(racFormat_e16BitStereo) for capture format, 5(racFreq_e48000) for sampling rate, 16384 for FIFO and -1 to retain default threshold value.
+        # sample : self.testrmfAudio.updateSettings(capture_type, 1, 0, 5, 16384, -1)
         test_type = 1 # test_type : 1 for byte counting tests (default), 2 for data tracking tests where audio data is captured.
         result = []
         aux_support = self.testrmfAudio.checkAuxiliarySupport()
@@ -190,15 +100,6 @@ class rmfAudio_test07_combinedJitterTest(utHelperClass):
             self.log.stepResult(all(result), 'Combined jitter test')
         else:
             print(f'Auxiliary support in configuration file is : {aux_support}. Not running test')
-
-        # Clean the assets downloaded to the device
-        self.testCleanAssets()
-
-        # Terminate rmfAudio Module
-        self.testrmfAudio.terminate()
-
-        # Clean up the rmfAudio instance
-        del self.testrmfAudio
 
         return result
 
