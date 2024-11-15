@@ -156,6 +156,12 @@ static void readAndDiscardRestOfLine(FILE* in)
    while ( (c = fgetc(in)) != EOF && c != '\n');
 }
 
+static void readInt(int32_t *choice)
+{
+    scanf("%d", choice);
+    readAndDiscardRestOfLine(stdin);
+}
+
 /**
  * @brief Function to extract values from RMF_AudioCapture_Settings
  *
@@ -314,8 +320,7 @@ static void test_l3_prepare_start_settings_for_data_tracking(void *context_blob)
     UT_LOG_MENU_INFO("------------------------------------------");
     UT_LOG_MENU_INFO("Enter test duration in seconds for data capture test :");
     UT_LOG_MENU_INFO("------------------------------------------");
-    scanf("%d", &choice);
-    readAndDiscardRestOfLine(stdin);
+    readInt(&choice);
     ctx_data->data_capture_test_duration = choice;
     if (choice <= 0) 
     {
@@ -515,8 +520,7 @@ static int getAudioCaptureType(void)
     UT_LOG_MENU_INFO("\t2.  %-20s","AUXILIARY");
     UT_LOG_MENU_INFO("------------------------------------------");
     UT_LOG_MENU_INFO(" Select the audio capture type :");
-    scanf("%d", &choice);
-    readAndDiscardRestOfLine(stdin);
+    readInt(&choice);
 
     if (choice < 1 || choice > 2)
     {
@@ -611,8 +615,7 @@ void test_l3_rmfAudioCapture_update_settings(void)
     UT_LOG_MENU_INFO("\t4.  %-20s  %d","Threshold", gAudioCaptureData[audioCaptureIndex].settings.threshold);
     UT_LOG_MENU_INFO("------------------------------------------");
     UT_LOG_MENU_INFO(" Do you want to update default settings ? (0 for No, 1 for Yes)");
-    scanf("%d", &choice);
-    readAndDiscardRestOfLine(stdin);
+    readInt(&choice);
 
     switch(choice)
     {
@@ -633,8 +636,7 @@ void test_l3_rmfAudioCapture_update_settings(void)
             }
             UT_LOG_MENU_INFO("------------------------------------------");
             UT_LOG_MENU_INFO(" Select the capture format to update, use -1 to retain default value :");
-            scanf("%d", &choice);
-            readAndDiscardRestOfLine(stdin);
+            readInt(&choice);
 
             if (choice != -1)
             {
@@ -656,8 +658,7 @@ void test_l3_rmfAudioCapture_update_settings(void)
             }
             UT_LOG_MENU_INFO("------------------------------------------");
             UT_LOG_MENU_INFO(" Select the Sampling Rate, use -1 to retain default value :");
-            scanf("%d", &choice);
-            readAndDiscardRestOfLine(stdin);
+            readInt(&choice);
 
             if (choice != -1)
             {
@@ -670,8 +671,7 @@ void test_l3_rmfAudioCapture_update_settings(void)
             }
             
             UT_LOG_MENU_INFO(" Enter FIFO size in bytes, use -1 to retain default value :");
-            scanf("%d", &choice);
-            readAndDiscardRestOfLine(stdin);
+            readInt(&choice);
 
             if (choice != -1)
             {
@@ -684,8 +684,7 @@ void test_l3_rmfAudioCapture_update_settings(void)
             }
 
             UT_LOG_MENU_INFO(" Enter data callback threshold in bytes, used to check jitter (max 1/4th of FIFO), use -1 to retain default value :");
-            scanf("%d", &choice);
-            readAndDiscardRestOfLine(stdin);
+            readInt(&choice);
 
             if (choice != -1)
             {
@@ -733,8 +732,7 @@ void test_l3_rmfAudioCapture_setup_callbacks(void)
     UT_LOG_MENU_INFO("\t2.  %-20s","Data capture tests (audio data is captured) ");
     UT_LOG_MENU_INFO("------------------------------------------");
     UT_LOG_MENU_INFO("Select the type of test: ");
-    scanf("%d", &choice);
-    readAndDiscardRestOfLine(stdin);
+    readInt(&choice);
 
     switch(choice)
     {
@@ -886,8 +884,7 @@ void test_l3_jitter_monitor(void)
     int result = 0;
 
     UT_LOG_MENU_INFO("Enter minimum threshold in bytes to check jitter : ");
-    scanf("%d", &choice);
-    readAndDiscardRestOfLine(stdin);
+    readInt(&choice);
 
     if(choice <= 0)
     {
@@ -899,8 +896,7 @@ void test_l3_jitter_monitor(void)
     }
 
     UT_LOG_MENU_INFO("Enter interval in microseconds to monitor buffer for jitter : ");
-    scanf("%d", &choice);
-    readAndDiscardRestOfLine(stdin);
+    readInt(&choice);
     gAudioCaptureData[audioCaptureIndex].jitter_monitor_sleep_interval = choice;
 
     if(choice <= 0)
@@ -910,8 +906,7 @@ void test_l3_jitter_monitor(void)
     }
 
     UT_LOG_MENU_INFO("Enter test duration in seconds for jitter test : ");
-    scanf("%d", &choice);
-    readAndDiscardRestOfLine(stdin);
+    readInt(&choice);
     gAudioCaptureData[audioCaptureIndex].jitter_test_duration = choice;
 
     if(choice <= 0)
