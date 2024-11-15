@@ -29,8 +29,9 @@ dir_path = os.path.dirname(os.path.realpath(__file__))
 sys.path.append(os.path.join(dir_path, "../"))
 
 from rmfAudio_L3_TestCases.rmfAudioHelperClass import rmfAudioHelperClass
+from raft.framework.core.logModule import logModule
 
-class rmfAudio_test05_CombinedDataCapture(rmfAudioHelperClass):
+class rmfAudio_test05_combinedDataCapture(rmfAudioHelperClass):
     """
     Test class to open capture Primary and Auxiliary Audio Data and verify it with their source.
 
@@ -38,7 +39,7 @@ class rmfAudio_test05_CombinedDataCapture(rmfAudioHelperClass):
     downloading necessary test assets, setting up RMF Audio Capture
     and performing verification of captured audio.
     """
-    def __init__(self):
+    def __init__(self, log:logModule=None):
         """
         Initializes the test class with test name, setup configuration, and sessions for the device.
 
@@ -46,7 +47,7 @@ class rmfAudio_test05_CombinedDataCapture(rmfAudioHelperClass):
             None
         """
         self.testName  = "test05_combinedDataCapture"
-        super().__init__(self.testName, '5')
+        super().__init__(self.testName, '5', log)
 
     def testAudioCapture(self, file_path:str, index:int):
         """
@@ -81,8 +82,7 @@ class rmfAudio_test05_CombinedDataCapture(rmfAudioHelperClass):
         Returns:
             bool: Final result of the test.
         """
-        self.log.testStart(self.testName, '5')
-
+        result = False
         capture_duration = 10 # data capture duration
         settings_update = 0 # settings_update=0 (no updates to default settings), capture_format=1, sampling_rate=1, fifo_size=1, threshold=1
         # For settings update, set settings_update to 1, followed by value for capture_format, Sampling Frequency, FIFO size, threshold. 
@@ -104,6 +104,9 @@ class rmfAudio_test05_CombinedDataCapture(rmfAudioHelperClass):
                 self.testrmfAudio.selectTestType(capture_type, test_type, capture_duration)
 
             for capture_type in (1, 2):
+                ## TODO : Aux feature supported only in mock implementation now, enable below only for aux supported devices.
+                ##index = capture_type - 1
+                ##self.testPlayer.play(self.testStreams[index])
                 self.testrmfAudio.startCapture(capture_type)
 
             time.sleep(capture_duration)
@@ -119,10 +122,12 @@ class rmfAudio_test05_CombinedDataCapture(rmfAudioHelperClass):
                 result.append(self.testAudioCapture(wav_file_name[index], index))
             self.log.stepResult(all(result), 'Combined audio capture')
         else:
-            print(f'Auxiliary support in configuration file is : {aux_support}. Not running test')
+            self.log.stepResult(result, 'Auxiliary support in configuration file is False. Combined audio capture test not run')
 
         return result
 
 if __name__ == '__main__':
-    test = rmfAudio_test05_CombinedDataCapture()
+    summaryLogName = os.path.splitext(os.path.basename(__file__))[0] + "_summary"
+    summaryLog = logModule(summaryLogName, level=logModule.INFO)
+    test = rmfAudio_test05_combinedDataCapture(summaryLog)
     test.run(False)
