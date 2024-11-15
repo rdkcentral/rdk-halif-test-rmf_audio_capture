@@ -29,8 +29,9 @@ dir_path = os.path.dirname(os.path.realpath(__file__))
 sys.path.append(os.path.join(dir_path, "../"))
 
 from rmfAudio_L3_TestCases.rmfAudioHelperClass import rmfAudioHelperClass
+from raft.framework.core.logModule import logModule
 
-class rmfAudio_test04_AuxiliaryDataCapture(rmfAudioHelperClass):
+class rmfAudio_test04_auxiliaryDataCapture(rmfAudioHelperClass):
     """
     Test class to open capture auxiliary Audio Data and verify it with its source.
 
@@ -38,7 +39,7 @@ class rmfAudio_test04_AuxiliaryDataCapture(rmfAudioHelperClass):
     downloading necessary test assets, setting up RMF Audio Capture
     and performing verification of captured audio.
     """
-    def __init__(self):
+    def __init__(self, log:logModule=None):
         """
         Initializes the test class with test name, setup configuration, and sessions for the device.
 
@@ -46,7 +47,7 @@ class rmfAudio_test04_AuxiliaryDataCapture(rmfAudioHelperClass):
             None
         """
         self.testName  = "test04_auxiliaryDataCapture"
-        super().__init__(self.testName, '4')
+        super().__init__(self.testName, '4', log)
 
     def testAudioCapture(self, file_path:str):
         """
@@ -80,8 +81,7 @@ class rmfAudio_test04_AuxiliaryDataCapture(rmfAudioHelperClass):
         Returns:
             bool: Final result of the test.
         """
-        self.log.testStart(self.testName, '4')
-
+        result = False
         # 1 for primary data capture (default), 2 for auxiliary data capture.
         capture_type = 2
         capture_duration = 10 # data capture duration
@@ -100,21 +100,29 @@ class rmfAudio_test04_AuxiliaryDataCapture(rmfAudioHelperClass):
             # Retain default Settings in this sample
             self.testrmfAudio.updateSettings(capture_type, settings_update)
             self.testrmfAudio.selectTestType(capture_type, test_type, capture_duration)
+
+            ## TODO : Aux feature supported only in mock implementation now, enable below only for aux supported devices.
+            ##self.testPlayer.play(self.testStreams[0])
+
             self.testrmfAudio.startCapture(capture_type)
 
             time.sleep(capture_duration)
 
             self.testrmfAudio.stopCapture(capture_type)
+            ## TODO : Aux feature supported only in mock implementation now, enable below only for aux supported devices.
+            ##self.testPlayer.stop()
             self.testrmfAudio.writeWavFile(capture_type, auxiliary_wav_file_name)
             self.testrmfAudio.closeHandle(capture_type)
 
             result = self.testAudioCapture(auxiliary_wav_file_name)
             self.log.stepResult(result, 'Auxiliary audio capture')
         else:
-            print(f'Auxiliary support in configuration file is : {aux_support}. Not running test')
+            self.log.stepResult(result, 'Auxiliary support in configuration file is False. Auxiliary audio capture test not run')
 
         return result
 
 if __name__ == '__main__':
-    test = rmfAudio_test04_AuxiliaryDataCapture()
+    summaryLogName = os.path.splitext(os.path.basename(__file__))[0] + "_summary"
+    summaryLog = logModule(summaryLogName, level=logModule.INFO)
+    test = rmfAudio_test04_auxiliaryDataCapture(summaryLog)
     test.run(False)
