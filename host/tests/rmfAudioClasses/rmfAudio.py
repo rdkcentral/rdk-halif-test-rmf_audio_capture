@@ -39,6 +39,7 @@ sys.path.append(os.path.join(dir_path, "../"))
 from raft.framework.plugins.ut_raft.configRead import ConfigRead
 from raft.framework.plugins.ut_raft.utSuiteNavigator import UTSuiteNavigatorClass
 from raft.framework.plugins.ut_raft.interactiveShell import InteractiveShell
+from raft.framework.plugins.ut_raft.utBaseUtils import utBaseUtils
 
 class rmfAudioClass():
     """
@@ -47,26 +48,32 @@ class rmfAudioClass():
     This module provides common functionalities and extensions for RMF Audio Capture Module.
     """
 
-    moduleName = "rmfaudiocapture"
-    menuConfig = os.path.join(dir_path, "rmfAudio_test_suite.yml")
-    testSuite = "L3 rmfAudioCapture"
-
-    def __init__(self, deviceProfilePath:str, session=None ):
+    def __init__(self, moduleConfigProfileFile:str, session=None, targetWorkspace="/tmp" ):
         """
         Initializes the rmfAudioClass instance with configuration settings.
 
         Args:
-            deviceProfilePath (str): Path to the device profile configuration file.
+            moduleConfigProfileFile (str): Path to the device profile configuration file.
             session: Optional; session object for the user interface.
 
         Returns:
             None
         """
+        self.moduleName = "rmfaudiocapture"
+        self.testConfigFile = os.path.join(dir_path, "rmfAudio_testConfig.yml")
+        self.testSuite = "L3 rmfAudioCapture"
+
         # Load configurations for device profile and menu
-        self.deviceProfile = ConfigRead( deviceProfilePath, self.moduleName)
-        self.suitConfig    = ConfigRead(self.menuConfig, self.moduleName)
-        self.utMenu        = UTSuiteNavigatorClass(self.menuConfig, self.moduleName, session)
+        self.moduleConfigProfile = ConfigRead( moduleConfigProfileFile , self.moduleName)
+        self.testConfig    = ConfigRead(self.testConfigFile, self.moduleName)
+        self.testConfig.test.execute = os.path.join(targetWorkspace, self.testConfig.test.execute)
+        self.utMenu        = UTSuiteNavigatorClass(self.testConfig, None, session)
         self.testSession   = session
+        self.utils         = utBaseUtils()
+
+        for artifact in self.testConfig.test.artifacts:
+            filesPath = os.path.join(dir_path, artifact)
+            self.utils.rsync(self.testSession, filesPath, targetWorkspace)
 
         # Start the user interface menu
         self.utMenu.start()
@@ -100,7 +107,7 @@ class rmfAudioClass():
         Returns:
             bool : true/false based on auxsupport value in profile file yaml
         """
-        return self.deviceProfile.get("features").get("auxsupport")
+        return self.moduleConfigProfile.get("features").get("auxsupport")
 
     def openHandle(self, capture_type:int=1):
         """
@@ -167,38 +174,35 @@ class rmfAudioClass():
                 },
                 {
                     "query_type": "direct",
-                    "query": "Select the settings you wish to update, select 0 to use the above settings :",
+                    "query": "Do you want to update default settings ? (0 for No, 1 for Yes)",
                     "input": str(settings_update)
                 }
         ]
 
-        # If the selected audio port is HDMI ARC, prompt for the ARC type
+        # If the user chooses update settings, prompt for settings update
         if settings_update == 1:
             promptWithAnswers.append(
                 {
                     "query_type": "direct",
-                    "query": "Select the capture format :",
+                    "query": "Select the capture format to update, use -1 to retain default value :",
                     "input": str(capture_format)
                 })
-        elif settings_update == 2:
             promptWithAnswers.append(
                 {
                     "query_type": "direct",
-                    "query": "Select the Sampling Rate",
+                    "query": "Select the Sampling Rate, use -1 to retain default value :",
                     "input": str(sampling_rate)
                 })
-        elif settings_update == 3:
             promptWithAnswers.append(
                 {
                     "query_type": "direct",
-                    "query": "Enter FIFO size in bytes",
+                    "query": "Enter FIFO size in bytes, use -1 to retain default value :",
                     "input": str(fifo_size)
                 })
-        elif settings_update == 4:
             promptWithAnswers.append(
                 {
                     "query_type": "direct",
-                    "query": "Enter data callback threshold in bytes",
+                    "query": "Enter data callback threshold in bytes, used to check jitter (max 1/4th of FIFO), use -1 to retain default value :",
                     "input": str(threshold)
                 })
 
