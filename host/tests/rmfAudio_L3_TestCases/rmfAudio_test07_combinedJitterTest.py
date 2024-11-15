@@ -29,6 +29,7 @@ dir_path = os.path.dirname(os.path.realpath(__file__))
 sys.path.append(os.path.join(dir_path, "../"))
 
 from rmfAudio_L3_TestCases.rmfAudioHelperClass import rmfAudioHelperClass
+from raft.framework.core.logModule import logModule
 
 class rmfAudio_test07_combinedJitterTest(rmfAudioHelperClass):
     """
@@ -38,7 +39,7 @@ class rmfAudio_test07_combinedJitterTest(rmfAudioHelperClass):
     downloading necessary test assets, setting up RMF Audio Capture
     and performing verification of audio capture rate.
     """
-    def __init__(self):
+    def __init__(self, log:logModule=None):
         """
         Initializes the test class with test name, setup configuration, and sessions for the device.
 
@@ -46,7 +47,7 @@ class rmfAudio_test07_combinedJitterTest(rmfAudioHelperClass):
             None
         """
         self.testName  = "test07_combinedJitterTest"
-        super().__init__(self.testName, '7')
+        super().__init__(self.testName, '7', log)
 
     def testFunction(self):
         """
@@ -60,11 +61,10 @@ class rmfAudio_test07_combinedJitterTest(rmfAudioHelperClass):
         Returns:
             bool: Final result of the test.
         """
-        self.log.testStart(self.testName, '7')
-
+        result = False
         # 1 for primary data capture (default), 2 for auxiliary data capture.
         jitter_test_duration = 120 # jitter test duration in seconds
-        threshold = 16384 # 16K
+        threshold = 8192 # 8K
         jitter_interval = 100000 # 100ms
         settings_update = 0 # settings_update=0 (no updates to default settings), capture_format=1, sampling_rate=1, fifo_size=1, threshold=1
         # For settings update, set settings_update to 1, followed by value for capture_format, Sampling Frequency, FIFO size, threshold. 
@@ -83,6 +83,9 @@ class rmfAudio_test07_combinedJitterTest(rmfAudioHelperClass):
                 # Retain default Settings in this sample
                 self.testrmfAudio.updateSettings(capture_type, settings_update)
                 self.testrmfAudio.selectTestType(capture_type, test_type)
+                ## TODO : Aux feature supported only in mock implementation now, enable below only for aux supported devices.
+                ##index = capture_type - 1
+                ##self.testPlayer.play(self.testStreams[index])
                 self.testrmfAudio.startCapture(capture_type)
 
             time.sleep(0.1)
@@ -97,12 +100,17 @@ class rmfAudio_test07_combinedJitterTest(rmfAudioHelperClass):
                 self.testrmfAudio.stopCapture(capture_type)
                 self.testrmfAudio.closeHandle(capture_type)
 
+            ## TODO : Aux feature supported only in mock implementation now, enable below only for aux supported devices.
+            ##self.testPlayer.stop()
+
             self.log.stepResult(all(result), 'Combined jitter test')
         else:
-            print(f'Auxiliary support in configuration file is : {aux_support}. Not running test')
+            self.log.stepResult(result, 'Auxiliary support in configuration file is False. Combined jitter test test not run')
 
         return result
 
 if __name__ == '__main__':
-    test = rmfAudio_test07_combinedJitterTest()
+    summaryLogName = os.path.splitext(os.path.basename(__file__))[0] + "_summary"
+    summaryLog = logModule(summaryLogName, level=logModule.INFO)
+    test = rmfAudio_test07_combinedJitterTest(summaryLog)
     test.run(False)
