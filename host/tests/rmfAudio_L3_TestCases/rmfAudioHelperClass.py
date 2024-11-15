@@ -29,6 +29,7 @@ dir_path = os.path.dirname(os.path.realpath(__file__))
 sys.path.append(os.path.join(dir_path, "../"))
 
 from raft.framework.plugins.ut_raft import utHelperClass
+from raft.framework.plugins.ut_raft.utPlayer import utPlayer
 from raft.framework.plugins.ut_raft.configRead import ConfigRead
 from raft.framework.plugins.ut_raft.utUserResponse import utUserResponse
 from raft.framework.core.logModule import logModule
@@ -68,6 +69,7 @@ class rmfAudioHelperClass(utHelperClass):
 
         # Open Session for hal test
         self.hal_session = self.dut.getConsoleSession("ssh_hal_test")
+        self.player_session = self.dut.getConsoleSession("ssh_player")
 
         cmds = self.testSetup.get("assets").get("device").get(self.testName).get("postcmd")
         if cmds is not None:
@@ -76,6 +78,10 @@ class rmfAudioHelperClass(utHelperClass):
 
         # Set up paths and URLs for device test setup
         deviceTestSetup = self.cpe.get("test")
+        socVendor = self.cpe.get("soc_vendor")
+
+        # Create player Class
+        self.testPlayer = utPlayer(self.player_session, socVendor)
 
          # Create user response Class
         self.testUserResponse = utUserResponse()
@@ -98,22 +104,16 @@ class rmfAudioHelperClass(utHelperClass):
 
         # List of streams with path
         self.testStreams = []
+        url = []
 
-        self.deviceDownloadPath = self.cpe.get("target_directory")
-
-        test = self.testSetup.get("assets").get("device").get(self.testName)
-
-        # Download test artifacts to device
-        url = test.get("artifacts")
-        if url is not None:
-            self.downloadToDevice(url, self.deviceDownloadPath, self.rackDevice)
+        streamPaths = self.testSetup.get("assets").get("device").get(self.testName).get("streams")
 
         # Download test streams to device
-        url =  test.get("streams")
-        if url is not None:
-            self.downloadToDevice(url, self.deviceDownloadPath, self.rackDevice)
-            for streampath in url:
-                self.testStreams.append(os.path.join(self.deviceDownloadPath, os.path.basename(streampath)))
+        if streamPaths and self.streamDownloadURL:
+            for streamPath in streamPaths:
+                url.append(os.path.join(self.streamDownloadURL, streamPath))
+                self.testStreams.append(os.path.join(self.targetWorkspace, os.path.basename(streamPath)))
+            self.downloadToDevice(url, self.targetWorkspace, self.rackDevice)
 
     def testCleanAssets(self):
         """
@@ -122,7 +122,7 @@ class rmfAudioHelperClass(utHelperClass):
         Args:
             None
         """
-        #self.deleteFromDevice(self.testStreams)
+        self.deleteFromDevice(self.testStreams)
 
     def testRunPrerequisites(self):
         """
@@ -158,7 +158,7 @@ class rmfAudioHelperClass(utHelperClass):
         self.testRunPrerequisites()
 
         # Create the rmfaudiocapture class
-        self.testrmfAudio = rmfAudioClass(self.moduleConfigProfileFile, self.hal_session)
+        self.testrmfAudio = rmfAudioClass(self.moduleConfigProfileFile, self.hal_session, self.targetWorkspace)
 
         return True
 
