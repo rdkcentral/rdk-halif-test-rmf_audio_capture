@@ -29,6 +29,7 @@ dir_path = os.path.dirname(os.path.realpath(__file__))
 sys.path.append(os.path.join(dir_path, "../"))
 
 from rmfAudio_L3_TestCases.rmfAudioHelperClass import rmfAudioHelperClass
+from raft.framework.core.logModule import logModule
 
 class rmfAudio_test02_primaryJitterTest(rmfAudioHelperClass):
     """
@@ -38,7 +39,7 @@ class rmfAudio_test02_primaryJitterTest(rmfAudioHelperClass):
     downloading necessary test assets, setting up RMF Audio Capture
     and performing verification of audio capture rate.
     """
-    def __init__(self):
+    def __init__(self, log:logModule=None):
         """
         Initializes the test class with test name, setup configuration, and sessions for the device.
 
@@ -46,7 +47,7 @@ class rmfAudio_test02_primaryJitterTest(rmfAudioHelperClass):
             None
         """
         self.testName  = "test02_primaryJitterTest"
-        super().__init__(self.testName, '2')
+        super().__init__(self.testName, '2', log)
 
     def testFunction(self):
         """
@@ -60,14 +61,11 @@ class rmfAudio_test02_primaryJitterTest(rmfAudioHelperClass):
         Returns:
             bool: Final result of the test.
         """
-
-        self.log.testStart(self.testName, '2')
-        result = True
-
+        result = False
         # 1 for primary data capture (default), 2 for auxiliary data capture.
         capture_type = 1
         jitter_test_duration = 120 # jitter test duration in seconds
-        threshold = 16384 # 16K
+        threshold = 8192 # 8K
         jitter_interval = 100000 # 100ms
         settings_update = 0 # settings_update=0 (no updates to default settings), capture_format=1, sampling_rate=1, fifo_size=1, threshold=1
         # For settings update, set settings_update to 1, followed by value for capture_format, Sampling Frequency, FIFO size, threshold. 
@@ -81,6 +79,8 @@ class rmfAudio_test02_primaryJitterTest(rmfAudioHelperClass):
         # Retain default Settings in this sample
         self.testrmfAudio.updateSettings(capture_type, settings_update)
         self.testrmfAudio.selectTestType(capture_type, test_type)
+
+        self.testPlayer.play(self.testStreams[0])
         self.testrmfAudio.startCapture(capture_type)
         self.testrmfAudio.startJitterTest(capture_type, threshold, jitter_interval, jitter_test_duration)
         
@@ -88,11 +88,14 @@ class rmfAudio_test02_primaryJitterTest(rmfAudioHelperClass):
 
         result = self.testrmfAudio.checkJitterTestResult(capture_type)
         self.testrmfAudio.stopCapture(capture_type)
+        self.testPlayer.stop()
         self.testrmfAudio.closeHandle(capture_type)
         self.log.stepResult(result, 'Primary jitter test')
 
         return result
 
 if __name__ == '__main__':
-    test = rmfAudio_test02_primaryJitterTest()
+    summaryLogName = os.path.splitext(os.path.basename(__file__))[0] + "_summary"
+    summaryLog = logModule(summaryLogName, level=logModule.INFO)
+    test = rmfAudio_test02_primaryJitterTest(summaryLog)
     test.run(False)
