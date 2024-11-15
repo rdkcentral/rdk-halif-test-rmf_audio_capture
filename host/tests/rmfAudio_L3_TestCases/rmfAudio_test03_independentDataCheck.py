@@ -29,6 +29,7 @@ dir_path = os.path.dirname(os.path.realpath(__file__))
 sys.path.append(os.path.join(dir_path, "../"))
 
 from rmfAudio_L3_TestCases.rmfAudioHelperClass import rmfAudioHelperClass
+from raft.framework.core.logModule import logModule
 
 class rmfAudio_test03_independentDataCheck(rmfAudioHelperClass):
     """
@@ -38,7 +39,7 @@ class rmfAudio_test03_independentDataCheck(rmfAudioHelperClass):
     downloading necessary test assets, setting up RMF Audio Capture
     and performing both capture interfaces run independently.
     """
-    def __init__(self):
+    def __init__(self, log:logModule=None):
         """
         Initializes the test class with test name, setup configuration, and sessions for the device.
 
@@ -46,7 +47,7 @@ class rmfAudio_test03_independentDataCheck(rmfAudioHelperClass):
             None
         """
         self.testName  = "test03_independentDataCheck"
-        super().__init__(self.testName, '3')
+        super().__init__(self.testName, '3', log)
 
     def testFunction(self):
         """
@@ -61,8 +62,7 @@ class rmfAudio_test03_independentDataCheck(rmfAudioHelperClass):
         Returns:
             bool: Final result of the test.
         """
-        self.log.testStart(self.testName, '3')
-
+        result = False
         # 1 for primary data capture (default), 2 for auxiliary data capture.
         capture_type_primary = 1
         capture_type_auxiliary = 2
@@ -87,6 +87,8 @@ class rmfAudio_test03_independentDataCheck(rmfAudioHelperClass):
             self.testrmfAudio.updateSettings(capture_type_auxiliary, settings_update)
             self.testrmfAudio.selectTestType(capture_type_auxiliary, test_type)
 
+            ## TODO : Aux feature supported only in mock implementation now, enable below only for aux supported devices.
+            ##self.testPlayer.play(self.testStreams[0])
             self.testrmfAudio.startCapture(capture_type_primary)
             self.testrmfAudio.startCapture(capture_type_auxiliary)
             
@@ -126,13 +128,18 @@ class rmfAudio_test03_independentDataCheck(rmfAudioHelperClass):
             self.log.stepResult(result, 'Independent data test - check primary runs independently')
             self.testrmfAudio.stopCapture(capture_type_primary)
 
+            ## TODO : Aux feature supported only in mock implementation now, enable below only for aux supported devices.
+            ##self.testPlayer.stop()
+
             self.testrmfAudio.closeHandle(capture_type_primary)
             self.testrmfAudio.closeHandle(capture_type_auxiliary)
         else:
-            print(f'Auxiliary support in configuration file is : {aux_support}. Not running test')
+            self.log.stepResult(result, 'Auxiliary support in configuration file is False. Independent data test not run')
 
         return result
 
 if __name__ == '__main__':
-    test = rmfAudio_test03_independentDataCheck()
+    summaryLogName = os.path.splitext(os.path.basename(__file__))[0] + "_summary"
+    summaryLog = logModule(summaryLogName, level=logModule.INFO)
+    test = rmfAudio_test03_independentDataCheck(summaryLog)
     test.run(False)
