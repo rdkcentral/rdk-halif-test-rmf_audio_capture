@@ -29,6 +29,7 @@ dir_path = os.path.dirname(os.path.realpath(__file__))
 sys.path.append(os.path.join(dir_path, "../"))
 
 from rmfAudio_L3_TestCases.rmfAudioHelperClass import rmfAudioHelperClass
+from raft.framework.core.logModule import logModule
 
 class rmfAudio_test01_primaryDataCapture(rmfAudioHelperClass):
     """
@@ -38,7 +39,7 @@ class rmfAudio_test01_primaryDataCapture(rmfAudioHelperClass):
     downloading necessary test assets, setting up RMF Audio Capture
     and performing verification of captured audio.
     """
-    def __init__(self):
+    def __init__(self, log:logModule=None):
         """
         Initializes the test class with test name, setup configuration, and sessions for the device.
 
@@ -46,7 +47,7 @@ class rmfAudio_test01_primaryDataCapture(rmfAudioHelperClass):
             None
         """
         self.testName  = "test01_primaryDataCapture"
-        super().__init__(self.testName, '1')
+        super().__init__(self.testName, '1', log)
 
     def testAudioCapture(self, file_path:str):
         """
@@ -80,9 +81,9 @@ class rmfAudio_test01_primaryDataCapture(rmfAudioHelperClass):
         Returns:
             bool: Final result of the test.
         """
-        self.log.testStart(self.testName, '1')
-        result = True
-
+        result = False
+        #Start playing reference stream
+        self.testPlayer.play(self.testStreams[0])
         # 1 for primary data capture (default), 2 for auxiliary data capture.
         capture_type = 1
         capture_duration = 10 # data capture duration
@@ -99,11 +100,13 @@ class rmfAudio_test01_primaryDataCapture(rmfAudioHelperClass):
         # Retain default Settings in this sample
         self.testrmfAudio.updateSettings(capture_type, settings_update)
         self.testrmfAudio.selectTestType(capture_type, test_type, capture_duration)
+
         self.testrmfAudio.startCapture(capture_type)
 
         time.sleep(capture_duration)
 
         self.testrmfAudio.stopCapture(capture_type)
+        self.testPlayer.stop()
         self.testrmfAudio.writeWavFile(capture_type, primary_wav_file_name)
         self.testrmfAudio.closeHandle(capture_type)
 
@@ -113,5 +116,7 @@ class rmfAudio_test01_primaryDataCapture(rmfAudioHelperClass):
         return result
 
 if __name__ == '__main__':
-    test = rmfAudio_test01_primaryDataCapture()
+    summaryLogName = os.path.splitext(os.path.basename(__file__))[0] + "_summary"
+    summaryLog = logModule(summaryLogName, level=logModule.INFO)
+    test = rmfAudio_test01_primaryDataCapture(summaryLog)
     test.run(False)
