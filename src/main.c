@@ -18,36 +18,21 @@
 
 #include <ut.h>
 
-extern int register_hal_l1_tests( void );
-extern int register_hal_l2_tests( void );
+extern int UT_register_tests( void );
 
 int main(int argc, char** argv)
 {
-    int registerReturn = 0;
+    int registerFailed = 0;
     /* Register tests as required, then call the UT-main to support switches and triggering */
     UT_init( argc, argv );
-    /* Check if tests are registered successfully */
-    registerReturn = register_hal_l1_tests();
-    if (registerReturn == 0)
-    {
-        printf("register_hal_l1_tests() returned success\n");
-    }
-    else
-    {
-        printf("register_hal_l1_tests() returned failure\n");
-        return 1;
-    }
 
-    registerReturn = register_hal_l2_tests();
-    if (registerReturn == 0)
+    registerFailed = UT_register_tests();
+    if (registerFailed == 1)
     {
-        printf("register_hal_l2_tests() returned success\n");
+        UT_FAIL(" Failed to register hal tests");
+        return -1;
     }
-    else
-    {
-        printf("register_hal_l2_tests() returned failure\n");
-        return 1;
-    }
+    
     /* Begin test executions */
     UT_run_tests();
     return 0;

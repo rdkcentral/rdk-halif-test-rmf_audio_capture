@@ -16,26 +16,52 @@
 * limitations under the License.
 */
 
-/* L2 Testing Functions */
+#include <ut.h>
 
-extern int test_rmfAudioCapture_l2_register(void);
+/* L1 Testing Functions */
 extern int test_l1_rmfAudioCapture_register();
+/* L2 Testing Functions */
+extern int test_rmfAudioCapture_l2_register(void);
+/* L3 Testing Functions */
+extern int test_rmfAudioCapture_l3_register(void);
 
-int register_hal_l2_tests( void )
+int UT_register_tests ( void )
 {
     int registerFailed=0;
 
-    registerFailed |= test_rmfAudioCapture_l2_register();
+    /* Check if tests are registered successfully */
+    registerFailed = test_l1_rmfAudioCapture_register();
+    if (registerFailed == 0)
+    {
+        UT_LOG("test_l1_rmfAudioCapture_register() returned success\n");
+    }
+    else
+    {
+        UT_FAIL("test_l1_rmfAudioCapture_register() returned failure\n");
+        return 1;
+    }
 
-    return registerFailed;
-}
+    registerFailed = test_rmfAudioCapture_l2_register();
+    if (registerFailed == 0)
+    {
+        UT_LOG("test_rmfAudioCapture_l2_register() returned success\n");
+    }
+    else
+    {
+        UT_FAIL("test_rmfAudioCapture_l2_register() returned failure\n");
+        return 1;
+    }
 
-
-int register_hal_l1_tests( void )
-{
-    int registerFailed=0;
-
-    registerFailed |= test_l1_rmfAudioCapture_register();
+    registerFailed = test_rmfAudioCapture_l3_register();
+    if (registerFailed == 0)
+    {
+        UT_LOG("test_rmfAudioCapture_l3_register() returned success\n");
+    }
+    else
+    {
+        UT_FAIL("test_rmfAudioCapture_l3_register() returned failure\n");
+        return 1;
+    }
 
     return registerFailed;
 }
