@@ -65,8 +65,7 @@ class rmfAudio_test05_combinedDataCapture(rmfAudioHelperClass):
         # Download test streams to device
         url =  test.get("streams")
         if url[index] is not None:
-            filename = os.path.basename(url[index])
-            ref_file_path = os.path.join(self.cpe.get("target_directory"), filename)
+            ref_file_path = self.testStreams[index]
             return self.testrmfAudio.compareWavFiles(ref_file_path, file_path)
 
     def testFunction(self):
