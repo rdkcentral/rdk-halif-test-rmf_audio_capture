@@ -65,6 +65,7 @@ class rmfAudio_test04_auxiliaryDataCapture(rmfAudioHelperClass):
         url =  test.get("streams")
         if url is not None:
             ref_file_path = self.testStreams[0]
+            ref_file_path = ref_file_path.replace("\\", "/")
             return self.testrmfAudio.compareWavFiles(ref_file_path, file_path)
 
     def testFunction(self):
