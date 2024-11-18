@@ -24,7 +24,7 @@ rmfaudiocapture:
     test:
         artifacts:
         #List of artifacts folders, test class copies the content of folder to the target device workspace
-          - "../../bin/"
+          - "../../../bin/"
         # exectute command, this will appended with the target device workspace path
         execute: "<PATH on Device>run.sh -p <PATH on Device>rmfAudioCaptureAuxSupported.yaml" #Execute command
         type: UT-C # C (UT-C Cunit) / C++ (UT-G (g++ ut-core gtest backend))
