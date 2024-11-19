@@ -1,16 +1,12 @@
 # RMF Audio Capture L3 Low Level Test Specification and Procedure Documentation
 
 ## Table of Contents
-
-- [RMF Audio Capture L3 Low Level Test Specification and Procedure Documentation](#rmf-audio-capture-l3-low-level-test-specification-and-procedure-documentation)
-  - [Table of Contents](#table-of-contents)
-    - [Acronyms, Terms and Abbreviations](#acronyms-terms-and-abbreviations)
+  - [Acronyms, Terms and Abbreviations](#acronyms-terms-and-abbreviations)
   - [Overview](#overview)
   - [References](#references)
   - [Audio Streams Requirement](#audio-streams-requirement)
-  - [Level 3 Test Cases High Level Overview](#level-3-test-cases-high-level-overview)
-  - [Level 3 Python Test Cases High Level Overview](#level-3-python-test-cases-high-level-overview)
-    - [YAML File Inputs](#yaml-file-inputs)
+  - [Level 3 Test Procedure](#level-3-test-cases-high-level-overview)
+  - [Level 3 Python Test](#level-3-python-test-cases-high-level-overview)
 
 ### Acronyms, Terms and Abbreviations
 
