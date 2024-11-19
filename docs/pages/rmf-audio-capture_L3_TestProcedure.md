@@ -14,6 +14,7 @@
     - [rmfAudio\_test06\_auxiliaryJitterTest.py](#rmfaudio_test06_auxiliaryjittertestpy)
     - [rmfAudio\_test07\_combinedJitterTest.py](#rmfaudio_test07_combinedjittertestpy)
     - [rmfAudio\_L3\_Runall.py](#rmfaudio_l3_runallpy)
+    - [rmfAudio\_L3\_Runall_primary.py](#rmfAudio_L3_Runall_primary)
 
 ## Acronyms, Terms and Abbreviations
 
@@ -440,4 +441,12 @@ This python file runs all the tests
 
 ```bash
 python rmfAudio_L3_Runall.py --config </PATH>/ut/host/tests/configs/example_rack_config.yml --deviceConfig </PATH>/ut/host/tests/configs/deviceConfig.yml
+```
+
+### rmfAudio_L3_Runall_primary.py
+
+This python file runs all the tests for primary audio capture
+
+```bash
+python rmfAudio_L3_Runall_primary.py --config </PATH>/ut/host/tests/configs/example_rack_config.yml --deviceConfig </PATH>/ut/host/tests/configs/deviceConfig.yml
 ```
