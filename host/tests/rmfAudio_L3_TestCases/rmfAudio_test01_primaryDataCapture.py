@@ -83,7 +83,7 @@ class rmfAudio_test01_primaryDataCapture(rmfAudioHelperClass):
         """
         result = False
         #Start playing reference stream
-        self.testPlayer.play(self.testStreams[0])
+        self.testPlayer.play(self.testStreams[0].replace("\\", "/"))
         # 1 for primary data capture (default), 2 for auxiliary data capture.
         capture_type = 1
         capture_duration = 10 # data capture duration

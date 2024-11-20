@@ -373,6 +373,46 @@ class rmfAudioClass():
         else:
             return True
 
+    def getCurrentSettings(self, capture_type:int=1):
+        """
+        Gets current RMF audio capture settings
+
+        Args:
+            capture_type (int, optional): 1 for primary data capture (default), 2 for auxiliary data capture.
+
+        Returns:
+            None
+        """
+        promptWithAnswers = [
+                {
+                    "query_type": "direct",
+                    "query": "Select the audio capture type :",
+                    "input": str(capture_type)
+                }
+        ]
+
+        result = self.utMenu.select(self.testSuite, "Get current settings", promptWithAnswers)
+
+    def getStatus(self, capture_type:int=1):
+        """
+        Gets RMF audio capture status
+
+        Args:
+            capture_type (int, optional): 1 for primary data capture (default), 2 for auxiliary data capture.
+
+        Returns:
+            None
+        """
+        promptWithAnswers = [
+                {
+                    "query_type": "direct",
+                    "query": "Select the audio capture type :",
+                    "input": str(capture_type)
+                }
+        ]
+
+        result = self.utMenu.select(self.testSuite, "Get RMF Audio Capture status", promptWithAnswers)
+
     def stopCapture(self, capture_type:int=1):
         """
         Stops audio capture

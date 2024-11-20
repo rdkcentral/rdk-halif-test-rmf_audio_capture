@@ -968,9 +968,9 @@ void test_l3_jitter_result(void)
 }
 
 /**
-* @brief This test stops audio capture
+* @brief This test gets current audio capture settings
 *
-* This test stops audio capture
+* This test gets current audio capture settings
 *
 * **Test Group ID:** 03@n
 * **Test Case ID:** 009@n
@@ -978,9 +978,69 @@ void test_l3_jitter_result(void)
 * **Test Procedure:**
 * Refer to UT specification documentation [rmf-audio-capture_L3-Low-Level_TestSpecification.md](../docs/pages/rmf-audio-capture_L3-Low-Level_TestSpecification.md)
 */
-void test_l3_rmfAudioCapture_stop(void)
+void test_l3_rmfAudioCapture_getCurrent_settings(void)
 {
     gTestID = 9;
+
+    UT_LOG_INFO("In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+    rmf_Error result = RMF_SUCCESS;
+    RMF_AudioCapture_Settings current_settings;
+    memset(&current_settings, 0, sizeof(current_settings));
+    int32_t choice = getAudioCaptureType();
+    int audioCaptureIndex = choice - 1; //0 - primary, 1 - auxiliary
+
+    UT_LOG_INFO("Calling RMF_AudioCapture_GetCurrentSettings(IN:handle:[0x%0X] OUT:settings:[])", &gAudioCaptureData[audioCaptureIndex].handle);
+    result = RMF_AudioCapture_GetCurrentSettings(gAudioCaptureData[audioCaptureIndex].handle, &current_settings);
+    UT_LOG_INFO("Result RMF_AudioCapture_GetCurrentSettings(IN:handle:[0x%0X] OUT:settings:[0x%0X]", &gAudioCaptureData[audioCaptureIndex].handle, &current_settings);
+    RMF_ASSERT(result == RMF_SUCCESS);
+
+    UT_LOG_INFO("Out %s\n", __FUNCTION__);
+}
+
+
+/**
+* @brief This test gets audio capture status
+*
+* This test gets audio capture status
+*
+* **Test Group ID:** 03@n
+* **Test Case ID:** 0010@n
+*
+* **Test Procedure:**
+* Refer to UT specification documentation [rmf-audio-capture_L3-Low-Level_TestSpecification.md](../docs/pages/rmf-audio-capture_L3-Low-Level_TestSpecification.md)
+*/
+void test_l3_rmfAudioCapture_get_status(void)
+{
+    gTestID = 10;
+
+    UT_LOG_INFO("In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
+    rmf_Error result = RMF_SUCCESS;
+    RMF_AudioCapture_Status status;
+    int32_t choice = getAudioCaptureType();
+    int audioCaptureIndex = choice - 1; //0 - primary, 1 - auxiliary
+
+    UT_LOG_INFO("Calling RMF_AudioCapture_GetStatus(IN:handle:[0x%0X] OUT:status:[])", &gAudioCaptureData[audioCaptureIndex].handle);
+    result = RMF_AudioCapture_GetStatus(gAudioCaptureData[audioCaptureIndex].handle, &status);
+    UT_LOG_INFO("Result RMF_AudioCapture_GetStatus(IN:handle:[0x%0X] OUT:status:[0x%0X]", &gAudioCaptureData[audioCaptureIndex].handle, &status);
+    RMF_ASSERT(result == RMF_SUCCESS);
+
+    UT_LOG_INFO("Out %s\n", __FUNCTION__);
+}
+
+/**
+* @brief This test stops audio capture
+*
+* This test stops audio capture
+*
+* **Test Group ID:** 03@n
+* **Test Case ID:** 0011@n
+*
+* **Test Procedure:**
+* Refer to UT specification documentation [rmf-audio-capture_L3-Low-Level_TestSpecification.md](../docs/pages/rmf-audio-capture_L3-Low-Level_TestSpecification.md)
+*/
+void test_l3_rmfAudioCapture_stop(void)
+{
+    gTestID = 11;
 
     UT_LOG_INFO("In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
     rmf_Error result = RMF_SUCCESS;
@@ -1005,14 +1065,14 @@ void test_l3_rmfAudioCapture_stop(void)
 * This test closes audio capture interface
 *
 * **Test Group ID:** 03@n
-* **Test Case ID:** 0010@n
+* **Test Case ID:** 0012@n
 *
 * **Test Procedure:**
 * Refer to UT specification documentation [rmf-audio-capture_L3-Low-Level_TestSpecification.md](../docs/pages/rmf-audio-capture_L3-Low-Level_TestSpecification.md)
 */
 void test_l3_rmfAudioCapture_close(void)
 {
-    gTestID = 10;
+    gTestID = 12;
 
     UT_LOG_INFO("In %s [%02d%03d]\n", __FUNCTION__, gTestGroup, gTestID);
     rmf_Error result = RMF_SUCCESS;
@@ -1045,13 +1105,15 @@ int test_rmfAudioCapture_l3_register(void)
     }
     // List of test function names and strings
     UT_add_test(pSuite, "Open RMF Audio Capture Handle", test_l3_rmfAudioCapture_open_handle);
-    UT_add_test(pSuite, "Update settings", test_l3_rmfAudioCapture_update_settings);
+    UT_add_test(pSuite, "Get and update default settings", test_l3_rmfAudioCapture_update_settings);
     UT_add_test(pSuite, "Select the type of test", test_l3_rmfAudioCapture_setup_callbacks);
     UT_add_test(pSuite, "Start RMF Audio Capture", test_l3_rmfAudioCapture_start);
     UT_add_test(pSuite, "Check Bytes Received", test_l3_rmfAudioCapture_bytes_received);
     UT_add_test(pSuite, "Write output wav file", test_l3_write_output_file);
     UT_add_test(pSuite, "Start Jitter test", test_l3_jitter_monitor);
     UT_add_test(pSuite, "Check jitter test result", test_l3_jitter_result);
+    UT_add_test(pSuite, "Get current settings", test_l3_rmfAudioCapture_getCurrent_settings);
+    UT_add_test(pSuite, "Get RMF Audio Capture status", test_l3_rmfAudioCapture_get_status);
     UT_add_test(pSuite, "Stop RMF Audio Capture", test_l3_rmfAudioCapture_stop);
     UT_add_test(pSuite, "Close RMF Audio Capture Handle", test_l3_rmfAudioCapture_close);
     
