@@ -90,6 +90,7 @@ class rmfAudioHelperClass(utHelperClass):
         self.moduleConfigProfileFile = os.path.join(dir_path, deviceTestSetup.get("profile"))
         self.targetWorkspace = self.cpe.get("target_directory")
         self.targetWorkspace = os.path.join(self.targetWorkspace, self.moduleName)
+        self.streamDownloadURL = deviceTestSetup.get("streams_download_url")
 
     def testDownloadAssets(self):
         """

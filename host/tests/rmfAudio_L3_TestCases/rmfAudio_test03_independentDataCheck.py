@@ -88,7 +88,7 @@ class rmfAudio_test03_independentDataCheck(rmfAudioHelperClass):
             self.testrmfAudio.selectTestType(capture_type_auxiliary, test_type)
 
             ## TODO : Aux feature supported only in mock implementation now, enable below only for aux supported devices.
-            ##self.testPlayer.play(self.testStreams[0].replace("\\", "/"))
+            ##self.testPlayer.play(self.testStreams[0])
             self.testrmfAudio.startCapture(capture_type_primary)
             self.testrmfAudio.startCapture(capture_type_auxiliary)
             

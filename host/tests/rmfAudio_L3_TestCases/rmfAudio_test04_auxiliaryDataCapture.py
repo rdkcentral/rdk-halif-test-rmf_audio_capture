@@ -65,7 +65,6 @@ class rmfAudio_test04_auxiliaryDataCapture(rmfAudioHelperClass):
         url =  test.get("streams")
         if url is not None:
             ref_file_path = self.testStreams[0]
-            ref_file_path = ref_file_path.replace("\\", "/")
             return self.testrmfAudio.compareWavFiles(ref_file_path, file_path)
 
     def testFunction(self):
@@ -102,7 +101,7 @@ class rmfAudio_test04_auxiliaryDataCapture(rmfAudioHelperClass):
             self.testrmfAudio.selectTestType(capture_type, test_type, capture_duration)
 
             ## TODO : Aux feature supported only in mock implementation now, enable below only for aux supported devices.
-            ##self.testPlayer.play(self.testStreams[0].replace("\\", "/"))
+            ##self.testPlayer.play(self.testStreams[0])
 
             self.testrmfAudio.startCapture(capture_type)
 

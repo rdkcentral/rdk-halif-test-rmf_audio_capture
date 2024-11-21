@@ -83,7 +83,7 @@ class rmfAudio_test06_auxiliaryJitterTest(rmfAudioHelperClass):
             self.testrmfAudio.selectTestType(capture_type, test_type)
 
             ## TODO : Aux feature supported only in mock implementation now, enable below only for aux supported devices.
-            ##self.testPlayer.play(self.testStreams[0].replace("\\", "/"))
+            ##self.testPlayer.play(self.testStreams[0])
             
             self.testrmfAudio.startCapture(capture_type)
 

@@ -21,44 +21,46 @@
 #* ******************************************************************************
 rmfaudiocapture:
   description: "RMF Audio Capture test setup"
+  assets:
+    device:
       test01_primaryDataCapture:
         postcmd: #Setting this env. variable is required to run with mock implementation
           - "export INPUT_PRIMARY=<PATH on Device>/Sin_120s_48k_stereo.wav"
         streams:
-          - "streams/Sin_120s_48k_stereo.wav"
+          - "Sin_120s_48k_stereo.wav"
       test02_primaryJitterTest:
         postcmd:  #Setting this env. variable is required to run with mock implementation
           - "export INPUT_PRIMARY=<PATH on Device>/Sin_120s_48k_stereo.wav"
         streams:
-          - "streams/Sin_120s_48k_stereo.wav"
+          - "Sin_120s_48k_stereo.wav"
       test03_independentDataCheck:
         postcmd:  #Setting this env. variable is required to run with mock implementation
           - "export INPUT_PRIMARY=<PATH on Device>/Sin_10s_48k_stereo.wav"
           - "export INPUT_AUXILIARY=<PATH on Device>/Triangle_10s_480k_stereo.wav"
         streams:
-          - "streams/Sin_10s_48k_stereo.wav"
-          - "streams/Triangle_10s_480k_stereo.wav"
+          - "Sin_10s_48k_stereo.wav"
+          - "Triangle_10s_480k_stereo.wav"
       test04_auxiliaryDataCapture:
         postcmd:  #Setting this env. variable is required to run with mock implementation
           - "export INPUT_AUXILIARY=<PATH on Device>/Triangle_10s_480k_stereo.wav"
-        streams: 
-          - "streams/Triangle_10s_480k_stereo.wav"
+        streams:
+          - "Triangle_10s_480k_stereo.wav"
       test05_combinedDataCapture:
         postcmd:  #Setting this env. variable is required to run with mock implementation
           - "export INPUT_PRIMARY=<PATH on Device>/Sin_10s_48k_stereo.wav"
           - "export INPUT_AUXILIARY=<PATH on Device>/Triangle_10s_480k_stereo.wav"
         streams:
-          - "streams/Sin_10s_48k_stereo.wav"
-          - "streams/Triangle_10s_480k_stereo.wav"
+          - "Sin_10s_48k_stereo.wav"
+          - "Triangle_10s_480k_stereo.wav"
       test06_auxiliaryJitterTest:
         postcmd:  #Setting this env. variable is required to run with mock implementation
           - "export INPUT_AUXILIARY=<PATH on Device>/Triangle_10s_480k_stereo.wav"
-        streams: 
-          - "streams/Triangle_10s_480k_stereo.wav"
+        streams:
+          - "Triangle_10s_480k_stereo.wav"
       test07_combinedJitterTest:
         postcmd:  #Setting this env. variable is required to run with mock implementation
           - "export INPUT_PRIMARY=<PATH on Device>/Sin_10s_48k_stereo.wav"
           - "export INPUT_AUXILIARY=<PATH on Device>/Triangle_10s_480k_stereo.wav"
         streams:
-          - "streams/Sin_10s_48k_stereo.wav"
-          - "streams/Triangle_10s_480k_stereo.wav"
+          - "Sin_10s_48k_stereo.wav"
+          - "Triangle_10s_480k_stereo.wav"

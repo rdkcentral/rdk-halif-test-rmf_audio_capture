@@ -59,6 +59,7 @@ rackConfig:
         slot1:
             # [ name: "required", description: "optional"]
             name: "slot1"
+            devices:
                 # [ devices: ]
                 # [ type: "serial": port: "COM7" baudRate: "(default)115200" dataBits: "optional(8)" stopBits: "optional(1)" parity: "optional(None)" FlowControl: "optional(None)" ]
                 # [ type: "ssh": port: 22 username: "test" password: "test" ]
@@ -69,8 +70,11 @@ rackConfig:
                     platform: "linux PC"
                     consoles:
                         - default:
-                            type: "serial"
-                            port: "/dev/ttyUSB0"
+                            type: "ssh"
+                            port: 20022
+                            username: "root"
+                            ip: "" #IP address
+                            password: ''                        - ssh_player:
                         - ssh_player:
                             type: "ssh"
                             port: 20022

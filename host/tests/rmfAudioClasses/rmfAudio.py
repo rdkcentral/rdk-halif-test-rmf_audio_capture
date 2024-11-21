@@ -206,7 +206,7 @@ class rmfAudioClass():
                     "input": str(threshold)
                 })
 
-        result = self.utMenu.select(self.testSuite, "Update settings", promptWithAnswers)
+        result = self.utMenu.select(self.testSuite, "Get and update default settings", promptWithAnswers)
 
     def selectTestType(self, capture_type:int=1, test_type:int=1, datacapture_duration:int=10):
         """

@@ -80,7 +80,7 @@ class rmfAudio_test02_primaryJitterTest(rmfAudioHelperClass):
         self.testrmfAudio.updateSettings(capture_type, settings_update)
         self.testrmfAudio.selectTestType(capture_type, test_type)
 
-        self.testPlayer.play(self.testStreams[0].replace("\\", "/"))
+        self.testPlayer.play(self.testStreams[0])
         self.testrmfAudio.startCapture(capture_type)
         self.testrmfAudio.startJitterTest(capture_type, threshold, jitter_interval, jitter_test_duration)
         

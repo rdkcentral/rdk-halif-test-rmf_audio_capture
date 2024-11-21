@@ -65,7 +65,6 @@ class rmfAudio_test01_primaryDataCapture(rmfAudioHelperClass):
         url =  test.get("streams")
         if url is not None:
             ref_file_path = self.testStreams[0]
-            ref_file_path = ref_file_path.replace("\\", "/")
             return self.testrmfAudio.compareWavFiles(ref_file_path, file_path)
 
     def testFunction(self):
@@ -83,7 +82,7 @@ class rmfAudio_test01_primaryDataCapture(rmfAudioHelperClass):
         """
         result = False
         #Start playing reference stream
-        self.testPlayer.play(self.testStreams[0].replace("\\", "/"))
+        self.testPlayer.play(self.testStreams[0])
         # 1 for primary data capture (default), 2 for auxiliary data capture.
         capture_type = 1
         capture_duration = 10 # data capture duration
