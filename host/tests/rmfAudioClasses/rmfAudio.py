@@ -26,11 +26,6 @@ import os
 import sys
 from enum import Enum, auto
 import re
-import librosa
-import numpy as np
-import time
-import paramiko
-import io
 
 # Add parent directory to the system path for module imports
 dir_path = os.path.dirname(os.path.realpath(__file__))
@@ -432,112 +427,6 @@ class rmfAudioClass():
         ]
 
         result = self.utMenu.select(self.testSuite, "Stop RMF Audio Capture", promptWithAnswers)
-
-    def extract_pitch(self, y):
-        """
-        Extracts the pitch from an audio signal using the YIN algorithm.
-    
-        This function applies the YIN algorithm to estimate the pitch 
-        of the given audio signal over time. The pitch values are returned 
-        as a NumPy array.
-
-        Args:
-            y (NumPy array) : The audio time series (waveform) as a 1D NumPy array.
-
-        Returns:
-            A NumPy array containing the estimated pitch values 
-                (in Hz) for each frame. Frames with no detected pitch 
-                will be represented as NaN.
-        """
-        # Apply the YIN algorithm to estimate the pitch
-        pitches = librosa.yin(y, fmin=librosa.note_to_hz('C2'), fmax=librosa.note_to_hz('C7'))
-        
-        # Use NaN for frames with no detected pitch
-        return np.array(pitches)
-
-    def compare_pitches(self, pitch1, pitch2):
-        """
-        Compares two pitch arrays and calculates the correlation.
-    
-        This function aligns two pitch arrays to the same length and 
-        computes the Pearson correlation coefficient between them.
-
-        Args:
-            pitch1, pitch2 (NumPy array) : contains the pitch values from two audio files
-
-        Returns:
-            correlation: The Pearson correlation coefficient between the two pitch 
-                arrays, ranging from -1 to 1, where 1 indicates a perfect 
-                positive correlation, -1 indicates a perfect negative 
-                correlation, and 0 indicates no correlation.
-        """
-        # Align lengths
-        min_length = min(len(pitch1), len(pitch2))
-        pitch1 = pitch1[:min_length]
-        pitch2 = pitch2[:min_length]
-
-        # Calculate correlation or mean squared error
-        correlation = np.corrcoef(pitch1, pitch2)[0, 1]
-        return correlation
-
-    def compareWavFiles(self, url, file_path):
-        """
-        Compares the pitch of two audio files and determines if they match.
-
-        This function loads two audio files from remote location, extracts their pitch using the YIN algorithm,
-        and calculates the correlation between the extracted pitches. If the correlation 
-        exceeds a specified threshold, it concludes that the audio files match.
-
-        Args:
-            file1, file2: The paths to audio files for comparison.
-
-        Returns:
-            None
-        """
-        threshold=0.95 # Set threshold for comparison
-
-        host = self.testSession.address
-        port = self.testSession.port
-        username = self.testSession.username
-        password = self.testSession.password
-
-        ssh = paramiko.SSHClient()
-        ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
-        ssh.connect(hostname=host, port=port, username=username, password=password)
-
-        sftp = ssh.open_sftp()
-
-        with sftp.open(url, 'r') as remote_file:
-            ref_content = remote_file.read()
-
-        with sftp.open(file_path, 'r') as remote_file:
-            wav_content = remote_file.read()
-
-        sftp.close()
-        ssh.close()
-
-        # Create a BytesIO object from the bytes
-        wav_file_content = io.BytesIO(wav_content)
-        ref_file_content = io.BytesIO(ref_content)
-
-        # Load the audio files
-        y1, sr1 = librosa.load(ref_file_content)
-        y2, sr2 = librosa.load(wav_file_content)
-
-        # Extract pitch from both audio files
-        pitch1 = self.extract_pitch(y1)
-        pitch2 = self.extract_pitch(y2)
-
-        # Compare pitches
-        correlation = self.compare_pitches(pitch1, pitch2)
-        
-        # Determine if they match based on the threshold
-        if correlation >= threshold:
-            print(f"The audio files match with a correlation of {correlation:.2f}")
-            return True
-        else:
-            print(f"The audio files do not match (correlation: {correlation:.2f})")
-            return False
 
     def __del__(self):
         """

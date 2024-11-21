@@ -59,13 +59,8 @@ class rmfAudio_test04_auxiliaryDataCapture(rmfAudioHelperClass):
         Returns:
             bool: True if audio capture is a match, False otherwise.
         """
-        test = self.testSetup.get("assets").get("device").get(self.testName)
-
-        # Download test streams to device
-        url =  test.get("streams")
-        if url is not None:
-            ref_file_path = self.testStreams[0]
-            return self.testrmfAudio.compareWavFiles(ref_file_path, file_path)
+        ref_file_path = self.testStreams[0]
+        return self.compareWavFiles(ref_file_path, file_path)
 
     def testFunction(self):
         """
