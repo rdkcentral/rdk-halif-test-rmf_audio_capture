@@ -74,7 +74,7 @@ rackConfig:
                             port: 20022
                             username: "root"
                             ip: "" #IP address
-                            password: ''                        - ssh_player:
+                            password: ''
                         - ssh_player:
                             type: "ssh"
                             port: 20022
