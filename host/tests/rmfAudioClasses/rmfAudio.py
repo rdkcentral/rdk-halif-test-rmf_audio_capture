@@ -387,6 +387,11 @@ class rmfAudioClass():
         ]
 
         result = self.utMenu.select(self.testSuite, "Get current settings", promptWithAnswers)
+        curr_settings_string = r'settings\.\w+:\[([^\]]+)\]'
+
+        current_settings = re.findall(curr_settings_string, result)
+        # Returns in this order of settings : cbBufferReady, cbBufferReadyParm, cbStatusChange, cbStatusParm, fifoSize, threshold, racFormat, racFreq, delayCompensation_ms
+        return current_settings
 
     def getStatus(self, capture_type:int=1):
         """
@@ -407,6 +412,11 @@ class rmfAudioClass():
         ]
 
         result = self.utMenu.select(self.testSuite, "Get RMF Audio Capture status", promptWithAnswers)
+        curr_status_string = r'status\.\w+:\[([^\]]+)\]'
+
+        current_status = re.findall(curr_status_string, result)
+        # Returns in this order of status : started, racFormat, racFreq, fifoDepth, overflows, underflows
+        return current_status
 
     def stopCapture(self, capture_type:int=1):
         """

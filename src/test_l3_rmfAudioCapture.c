@@ -505,8 +505,7 @@ static void* monitorBufferCount(void* context_blob)
 /**
  * @brief Function to choose if test steps are for Primary/Auxiliary audio capture
  *
- * This function is in functions that require user to choose audio capture type.
- * Menu is displayed only when auxiliary capture is supported as per yaml.
+ * This function requires user to choose audio capture type.
  */
 static int getAudioCaptureType(void)
 {
@@ -991,7 +990,9 @@ void test_l3_rmfAudioCapture_getCurrent_settings(void)
 
     UT_LOG_INFO("Calling RMF_AudioCapture_GetCurrentSettings(IN:handle:[0x%0X] OUT:settings:[])", &gAudioCaptureData[audioCaptureIndex].handle);
     result = RMF_AudioCapture_GetCurrentSettings(gAudioCaptureData[audioCaptureIndex].handle, &current_settings);
-    UT_LOG_INFO("Result RMF_AudioCapture_GetCurrentSettings(IN:handle:[0x%0X] OUT:settings:[0x%0X]", &gAudioCaptureData[audioCaptureIndex].handle, &current_settings);
+    UT_LOG_INFO("Result RMF_AudioCapture_GetCurrentSettings(IN:handle:[0x%0X] OUT:settings:[0x%0X] settings.cbBufferReady:[0x%0X] settings.cbBufferReadyParm:[0x%0X]", &gAudioCaptureData[audioCaptureIndex].handle, &current_settings, (void*)current_settings.cbBufferReady, current_settings.cbBufferReadyParm);
+    UT_LOG_INFO("Result RMF_AudioCapture_GetCurrentSettings(OUT:settings.cbStatusChange:[0x%0X] settings.cbStatusParm:[0x%0X] settings.fifoSize:[%zu]", (void *)current_settings.cbStatusChange, current_settings.cbStatusParm, current_settings.fifoSize);
+    UT_LOG_INFO("Result RMF_AudioCapture_GetCurrentSettings(OUT: settings.threshold:[%zu] settings.racFormat:[%d] settings.racFreq:[%d] settings.delayCompensation_ms:[%u]", current_settings.threshold, current_settings.format, current_settings.samplingFreq, current_settings.delayCompensation_ms);
     RMF_ASSERT(result == RMF_SUCCESS);
 
     UT_LOG_INFO("Out %s\n", __FUNCTION__);
@@ -1021,7 +1022,8 @@ void test_l3_rmfAudioCapture_get_status(void)
 
     UT_LOG_INFO("Calling RMF_AudioCapture_GetStatus(IN:handle:[0x%0X] OUT:status:[])", &gAudioCaptureData[audioCaptureIndex].handle);
     result = RMF_AudioCapture_GetStatus(gAudioCaptureData[audioCaptureIndex].handle, &status);
-    UT_LOG_INFO("Result RMF_AudioCapture_GetStatus(IN:handle:[0x%0X] OUT:status:[0x%0X]", &gAudioCaptureData[audioCaptureIndex].handle, &status);
+    UT_LOG_INFO("Result RMF_AudioCapture_GetStatus(IN:handle:[0x%0X] OUT:status:[0x%0X] status.started:[%d] status.racFormat:[%d] status.racFreq:[%d] status.fifoDepth:[%zu]", &gAudioCaptureData[audioCaptureIndex].handle, &status, status.started, status.format, status.samplingFreq, status.fifoDepth);
+    UT_LOG_INFO("Result RMF_AudioCapture_GetStatus(IN:handle:[0x%0X] OUT:status:[0x%0X] status.overflows:[%u] status.underflows:[%u]", &gAudioCaptureData[audioCaptureIndex].handle, &status, status.overflows, status.underflows);
     RMF_ASSERT(result == RMF_SUCCESS);
 
     UT_LOG_INFO("Out %s\n", __FUNCTION__);
