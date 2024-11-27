@@ -11,6 +11,7 @@
 
 - `L1` - Functional Tests
 - `L2` - Module functional Testing
+- `L3` - Module testing with External Stimulus is required to validate and control device
 - `HAL`- Hardware Abstraction Layer
 - `High-Level Test Specification` : These specification will provide a broad overview of the system's functionality from the callers' perspective. It focuses on major use cases, system behavior, and overall caller experience.
 - `Low-Level Test Specification` : These specification will delve deeper into the technical details. They will define specific test cases with inputs, expected outputs, and pass/fail criteria for individual functionalities, modules, or APIs.
@@ -26,6 +27,8 @@ This repository contains the Unit Test Suites(L1 & L2) for RMF Audio Capture `HA
 |1|`HAL` Specification Document|This document provides specific information on the APIs for which tests are written in this module|[rmf-audio-capture_halSpec.md](https://github.com/rdkcentral/rdk-halif-rmf_audio_capture/blob/main/docs/pages/rmf-audio-capture_halSpec.md "rmf-audio-capture_halSpec.md")|
 |2|High Level Test Specification Document|High Level Test Specification Documentation this module|[rmf-audio-capture_High-Level_TestSpec.md](docs/pages/rmf-audio-capture_High-Level_TestSpec.md)|
 |3|`L2` Low Level Test Specification Document|`L2`Low Level Test Specification Documentation this module|[rmf-audio-capture_L2-Low-Level_TestSpecification.md](docs/pages/rmf-audio-capture_L2-Low-Level_TestSpecification.md)|
+|4|`L3` Low Level Test Specification Document|`L3`Low Level Test Specification Documentation this module|[rmf-audio-capture_L3_Low-Level_TestSpecification.md](docs/pages/rmf-audio-capture_L3_Low-Level_TestSpecification.md)|
+|5|`L3` Low Level Test Procedure Document|`L3`Low Level Test Procedure Documentation this module|[rmf-audio-capture_L3_TestProcedure.md](docs/pages/rmf-audio-capture_L3_TestProcedure.md)|
 
 ## Notes
 
@@ -44,3 +47,5 @@ Alternatively, use the run.sh script with the profile file:
  ```
 
 - Profile files define the configuration for the platform available here [profile yaml file](./profiles/)
+
+- Install Python Environment and Activation Scripts please check the[HPK Documentation](https://github.com/rdkcentral/rdk-hpk-documentation/blob/main/README.md)
