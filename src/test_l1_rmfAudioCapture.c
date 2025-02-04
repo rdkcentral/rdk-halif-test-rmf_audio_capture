@@ -78,11 +78,11 @@
 static int gTestGroup = 1;
 static int gTestID = 1;
 /* Global flags to support features */
-static bool extendedEnumsSupported=false; //Default to not supported
+static bool gExtendedEnumsSupported=false; //Default to not supported
 
 #define CHECK_FOR_EXTENDED_ERROR_CODE( result, enhanced, old )\
 {\
-   if ( extendedEnumsSupported == true )\
+   if ( gExtendedEnumsSupported == true )\
    {\
       UT_ASSERT_EQUAL( result, enhanced );\
    }\
@@ -1442,7 +1442,7 @@ int test_l1_rmfAudioCapture_register ( void )
         UT_add_test( pSuite, "RMF_Open_Type_auxiliary_L1_positive" ,test_l1_rmfAudioCapture_positive_RMF_AudioCapture_Open_Type_auxiliary );
         UT_add_test( pSuite, "RMF_Open_Type_auxiliary_L1_negative" ,test_l1_rmfAudioCapture_negative_RMF_AudioCapture_Open_Type_auxiliary );
     }
-    extendedEnumsSupported = ut_kvp_getBoolField( ut_kvp_profile_getInstance(), "rmfAudioCapture/features/extendedEnumsSupported" );
+    gExtendedEnumsSupported = ut_kvp_getBoolField( ut_kvp_profile_getInstance(), "rmfAudioCapture/features/extendedEnumsSupported" );
 
     return 0;
 }
