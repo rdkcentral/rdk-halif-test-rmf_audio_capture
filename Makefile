@@ -29,6 +29,9 @@ YELLOW:='\033[0;33m'
 NC:='\033[0m'
 ECHOE = /bin/echo -e
 
+VERSION := $(shell git describe --tags --abbrev=0| head -n1)
+KCFLAGS := -DHALIF_TEST_TAG_VERSION=\"$(VERSION)\"
+
 SRC_DIRS = $(ROOT_DIR)/src
 INC_DIRS := $(ROOT_DIR)/../include
 HAL_LIB  := rmfAudioCapture
@@ -71,6 +74,8 @@ export TOP_DIR
 export HAL_LIB_DIR
 export HAL_LIB
 export TARGET_EXEC
+export KCFLAGS
+#export TARGET_EXEC
 
 .PHONY: clean list build cleanlibs clean cleanall skeleton
 
