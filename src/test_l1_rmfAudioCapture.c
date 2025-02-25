@@ -1442,7 +1442,8 @@ int test_l1_rmfAudioCapture_register ( void )
         UT_add_test( pSuite, "RMF_Open_Type_auxiliary_L1_positive" ,test_l1_rmfAudioCapture_positive_RMF_AudioCapture_Open_Type_auxiliary );
         UT_add_test( pSuite, "RMF_Open_Type_auxiliary_L1_negative" ,test_l1_rmfAudioCapture_negative_RMF_AudioCapture_Open_Type_auxiliary );
     }
-    gExtendedEnumsSupported = ut_kvp_getBoolField( ut_kvp_profile_getInstance(), "rmfAudioCapture/features/extendedEnumsSupported" );
+    gExtendedEnumsSupported = ut_kvp_getBoolField( ut_kvp_profile_getInstance(), "rmfaudiocapture/features/extendedEnumsSupported" );
+    UT_LOG("gExtendedEnumsSupported= %d", gExtendedEnumsSupported);
 
     return 0;
 }
