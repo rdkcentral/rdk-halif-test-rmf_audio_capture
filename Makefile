@@ -29,7 +29,7 @@ YELLOW:='\033[0;33m'
 NC:='\033[0m'
 ECHOE = /bin/echo -e
 
-VERSION := $(shell git describe --tags --abbrev=0| head -n1)
+VERSION := $(shell git describe --tags | head -n1)
 KCFLAGS := -DHALIF_TEST_TAG_VERSION=\"$(VERSION)\"
 
 SRC_DIRS = $(ROOT_DIR)/src
