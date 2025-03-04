@@ -345,7 +345,7 @@ void test_l2_rmfAudioCapture_combined_data_check(void)
 
     result = RMF_AudioCapture_Open_Type(&prim_handle, RMF_AC_TYPE_PRIMARY);
     
-    if ((RMF_SUCCESS != result) && (aux_handle == NULL))
+    if ((RMF_SUCCESS != result) || (prim_handle == NULL))
     {
         UT_LOG_DEBUG("Aborting test - unable to open primary capture interface. Error code: %d", result);
         result = RMF_AudioCapture_Stop(aux_handle);
