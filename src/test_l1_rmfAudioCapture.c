@@ -891,8 +891,8 @@ void test_l1_rmfAudioCapture_positive_RMF_AudioCapture_Stop (void)
 
     ///Step08: Open interface
     result = RMF_AudioCapture_Open(&handle);
-    UT_ASSERT_PTR_NOT_NULL_FATAL(handle);
     UT_ASSERT_EQUAL_FATAL(result, RMF_SUCCESS);
+    UT_ASSERT_PTR_NOT_NULL_FATAL(handle);
     //Step09: Get default settings
     result = RMF_AudioCapture_GetDefaultSettings(&settings);
     UT_ASSERT_EQUAL(result, RMF_SUCCESS);
