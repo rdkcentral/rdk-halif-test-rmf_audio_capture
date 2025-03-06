@@ -2,19 +2,12 @@
 
 ## Table of Contents
 
-
-- [RMF Audio Capture HAL L1 and L2 Test Procedure](#rmf-audio-capture-hal-l1-and-l2-test-procedure)
-  - [Table of Contents](#table-of-contents)
-  - [Acronyms, Terms and Abbreviations](#acronyms-terms-and-abbreviations)
-  - [Run L1 and L2 Test directly (without python)](#run-l1-and-l2-test-directly-without-python)
-  - [Run L1 and L2 using python](#run-l1-and-l2-using-python)
-    - [Setting Up Test Environment](#setting-up-test-environment)
-    - [Update Configuration Files](#update-configuration-files)
-      - [Rack Configuration File](#rack-configuration-file)
-      - [Device Configuration File](#device-configuration-file)
-      - [Test Setup Configuration File](#test-setup-configuration-file)
-      - [Test Configuration](#test-configuration)
-    - [Run Test Cases](#run-test-cases)
+- [Acronyms, Terms and Abbreviations](#acronyms-terms-and-abbreviations)
+- [Run L1 and L2 Test directly (without python)](#run-l1-and-l2-test-directly-without-python)
+- [Run L1 and L2 using python](#run-l1-and-l2-using-python)
+  - [Setting Up Test Environment](#setting-up-test-environment)
+  - [Update Configuration Files](#update-configuration-files)
+  - [Run Test Cases](#run-test-cases)
 
 ## Acronyms, Terms and Abbreviations
 
@@ -27,7 +20,7 @@
 
 ## Run L1 and L2 Test directly (without python)
 
-Refer [Running L1 and L2 Test suits](https://github.com/rdkcentral/rdk-hpk-documentation/tree/1.4.5?tab=readme-ov-file#running-the-l1-l2-test-suite-on-the-target)
+Refer [Running L1 and L2 Test suites](https://github.com/rdkcentral/rdk-hpk-documentation/tree/1.4.5?tab=readme-ov-file#running-the-l1-l2-test-suite-on-the-target)
 
 ## Run L1 and L2 using python
 
@@ -39,7 +32,7 @@ To execute `HAL` `L1` and `L2` Python test cases, need a Python environment. Fol
 
 #### Rack Configuration File
 
-Example Rack configuration File: [example_rack_config.yml](../../../../ut/host/tests/configs/example_rack_config.yml)
+Example Rack configuration File: [example_rack_config.yml](../../../ut/host/tests/configs/example_rack_config.yml)
 
 For more details refer [RAFT](https://github.com/rdkcentral/python_raft/blob/1.0.0/README.md) and [example_rack_config.yml](https://github.com/rdkcentral/python_raft/blob/1.0.0/examples/configs/example_rack_config.yml)
 
@@ -75,7 +68,7 @@ rackConfig:
         workspaceDirectory: './logs/workspace'   # Local working directory
 ```
 #### Device Configuration File
-Example Device configuration File: [deviceConfig.yml](ut/host/tests/configs/deviceConfig.yml)
+Example Device configuration File: [deviceConfig.yml](../../../ut/host/tests/configs/deviceConfig.yml)
 For more details refer [RAFT](https://github.com/rdkcentral/python_raft/blob/1.0.0/README.md) and [example_device_config.yml](https://github.com/rdkcentral/python_raft/blob/1.0.0/examples/configs/example_device_config.yml)
 Update below fields in the device configuration file:
 - Set the path for `target_directory` where `HAL` binaries will be copied onto the device.
@@ -91,7 +84,7 @@ deviceConfig:
         target_directory: "/tmp/"  # Target Directory on device
         prompt: "" # Prompt string on console
         test:
-            profile: "../../../../profiles/source/Source_FPD.yaml"
+            profile: "../../../profiles/rmfAudioCaptureAuxSupported.yaml"
 ```
 
 #### Test Setup Configuration File
@@ -103,64 +96,58 @@ This `yaml` contains the list of test_suites and test_cases to run
 To execute each test_case individually, update the YAML file as shown in the example below:
 
 ```yaml
-dsFPD:
-  description: "dsFPD Device Settings L1 and L2 test setup"
-  test_suites:
-    - name: "L1 dsFPD"
+rmfaudiocapture:
+  description: "RMF Audio Capture L1 and L2 test setup"
+  test_suites: # List of L1 and L2 test suites
+    - name: "L1 rmfAudioCapture"
       test_cases:
-        - dsFPInit_pos
-    - name: "L1 dsFPD"
+        - RMF_Open_Type_primary_L1_pos
+    - name: "L1 rmfAudioCapture"
       test_cases:
-        - dsFPTerm_pos
-    - name: "L1 dsFPD"
+        - RMF_Open_Type_primary_L1_neg
+    - name: "L1 rmfAudioCapture"
       test_cases:
-        - dsSetFPState_pos
+        - RMF_Open_L1_pos
 ```
 
 To execute all test_cases within a test_suite, update the YAML file as shown in the example below:
 
 ```yaml
-dsFPD:
-  description: "dsFPD Device Settings L1 and L2 test setup"
-  test_suites:
-    - name: "L1 dsFPD"
-      test_cases:
+rmfaudiocapture:
+  description: "RMF Audio Capture L1 and L2 test setup"
+  test_suites: # List of L1 and L2 test suites
+    - name: "L1 rmfAudioCapture" # Name of the test suit to run
+      test_cases: # List of test cases to execute, to run all test cases in test suite with R option use `all`
         - all
 ```
 
 To execute multiple test_suites, update the YAML file as shown in the example below:
 
 ```yaml
-dsFPD:
-  description: "dsFPD Device Settings L1 and L2 test setup"
+rmfaudiocapture:
+  description: "RMF Audio Capture L1 and L2 test setup"
   test_suites: # List of L1 and L2 test suites
-    - name: "L1 dsFPD" # Name of the test suit to run
+    - name: "L1 rmfAudioCapture" # Name of the test suit to run
       test_cases: # List of test cases to execute, to run all test cases in test suite with R option use `all`
-        - dsSetFPState_pos
-        - dsSetFPBlink_pos
-        - dsSetFPBrightness_pos
-    - name: "L1 dsFPD"
-      test_cases: # Runs all tests in the test suit
         - all
-    - name: "L1 dsFPD" # Name of the test suit to run
-      test_cases: # List of test cases to execute, if empty test runs all test cases with `r` option
-        - dsSetFPState_neg
-        - dsSetFPBlink_neg
-        - dsSetFPBrightness_neg
-        - dsGetFPBrightness_neg
-    - name: "L2 dsFPD"
+    - name: "L1 rmfAudioCapture" # Name of the test suit to run
+      test_cases: 
+        - "RMF_Open_Type_primary_L1_pos"
+        - "RMF_Open_Type_primary_L1_neg"
+        - "RMF_Open_L1_pos"
+        - "RMF_Open_L1_neg"
+    - name: "L2 rmfAudioCapture"
       test_cases:
-        - SetFPstateON_SetBrightness
-        - SetFPstateOFF_SetBrightness
-        - SetFPstateOFF_SetBlink
-        - SetFPstateON_Multi_SetColor
+        - "l2_rmf_primary_data_check"
+        - "l2_rmf_auxiliary_data_check"
+        - "l2_rmf_combined_data_check"
 ```
 #### Test Configuration
-Example Test Setup configuration File: [dsFPD_testConfig.yml](../../../host/tests/dsClasses/dsFPD_testConfig.yml)
+Example Test Setup configuration File: [rmfAudio_testConfig.yml](../../host/tests/rmfAudioClasses/rmfAudio_testConfig.yml)
 Execute command to run the HAL binary was provided in this file.
 ```yaml
-dsFPD:
-    description: "dsFPD Device Settings testing profile / menu system for UT"
+rmfaudiocapture:
+    description: "RMF Audio Capture testing profile / menu system for UT"
     test:
         artifacts:
         #List of artifacts folders, test class copies the content of folder to the target device workspace
@@ -172,5 +159,5 @@ dsFPD:
 ### Run Test Cases
 Once the environment is set up, you can execute the test cases with the following command
 ```bash
-python dsFPD_L1_L2_tests.py --config </PATH>/ut/host/tests/configs/example_rack_config.yml --deviceConfig </PATH>/ut/host/tests/configs/deviceConfig.yml
+python rmfAudio_L1_L2_tests.py --config </PATH>/ut/host/tests/configs/example_rack_config.yml --deviceConfig </PATH>/ut/host/tests/configs/deviceConfig.yml
 ```
