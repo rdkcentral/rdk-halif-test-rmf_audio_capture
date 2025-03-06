@@ -33,7 +33,8 @@ SRC_DIRS = $(ROOT_DIR)/src
 INC_DIRS := $(ROOT_DIR)/../include
 HAL_LIB  := rmfAudioCapture
 SKELETON_SRCS := $(ROOT_DIR)/skeletons/src/*
-#TARGET_EXEC :=hal_test_$(HAL_LIB)
+TARGET_EXEC :=hal_test_$(HAL_LIB)
+
 # Check if TARGET is unset
 ifeq ($(TARGET),)
     $(info TARGET NOT SET )
@@ -69,7 +70,7 @@ export TARGET
 export TOP_DIR
 export HAL_LIB_DIR
 export HAL_LIB
-#export TARGET_EXEC
+export TARGET_EXEC
 
 .PHONY: clean list build cleanlibs clean cleanall skeleton
 
