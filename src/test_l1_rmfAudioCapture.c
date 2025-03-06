@@ -1415,32 +1415,32 @@ int test_l1_rmfAudioCapture_register ( void )
         return -1;
     }
 
-    UT_add_test( pSuite, "RMF_Open_Type_primary_L1_positive" ,test_l1_rmfAudioCapture_positive_RMF_AudioCapture_Open_Type_primary );
-    UT_add_test( pSuite, "RMF_Open_Type_primary_L1_negative" ,test_l1_rmfAudioCapture_negative_RMF_AudioCapture_Open_Type_primary );
-    UT_add_test( pSuite, "RMF_Open_L1_positive" ,test_l1_rmfAudioCapture_positive_RMF_AudioCapture_Open );
-    UT_add_test( pSuite, "RMF_Open_L1_negative" ,test_l1_rmfAudioCapture_negative_RMF_AudioCapture_Open );
-    UT_add_test( pSuite, "RMF_Close_L1_positive" ,test_l1_rmfAudioCapture_positive_RMF_AudioCapture_Close );
-    UT_add_test( pSuite, "RMF_Close_L1_negative" ,test_l1_rmfAudioCapture_negative_RMF_AudioCapture_Close );
+    UT_add_test( pSuite, "RMF_Open_Type_primary_L1_pos" ,test_l1_rmfAudioCapture_positive_RMF_AudioCapture_Open_Type_primary );
+    UT_add_test( pSuite, "RMF_Open_Type_primary_L1_neg" ,test_l1_rmfAudioCapture_negative_RMF_AudioCapture_Open_Type_primary );
+    UT_add_test( pSuite, "RMF_Open_L1_pos" ,test_l1_rmfAudioCapture_positive_RMF_AudioCapture_Open );
+    UT_add_test( pSuite, "RMF_Open_L1_neg" ,test_l1_rmfAudioCapture_negative_RMF_AudioCapture_Open );
+    UT_add_test( pSuite, "RMF_Close_L1_pos" ,test_l1_rmfAudioCapture_positive_RMF_AudioCapture_Close );
+    UT_add_test( pSuite, "RMF_Close_L1_neg" ,test_l1_rmfAudioCapture_negative_RMF_AudioCapture_Close );
 
-    UT_add_test( pSuite, "RMF_GetDefaultSettings_L1_positive" ,test_l1_rmfAudioCapture_positive_RMF_AudioCapture_GetDefaultSettings );
-    UT_add_test( pSuite, "RMF_GetDefaultSettings_L1_negative" ,test_l1_rmfAudioCapture_negative_RMF_AudioCapture_GetDefaultSettings );
+    UT_add_test( pSuite, "RMF_GetDefaultSettings_L1_pos" ,test_l1_rmfAudioCapture_positive_RMF_AudioCapture_GetDefaultSettings );
+    UT_add_test( pSuite, "RMF_GetDefaultSettings_L1_neg" ,test_l1_rmfAudioCapture_negative_RMF_AudioCapture_GetDefaultSettings );
 
 
-    UT_add_test( pSuite, "RMF_Start_L1_positive" ,test_l1_rmfAudioCapture_positive_RMF_AudioCapture_Start );
-    UT_add_test( pSuite, "RMF_Start_L1_negative" ,test_l1_rmfAudioCapture_negative_RMF_AudioCapture_Start );
-    UT_add_test( pSuite, "RMF_Stop_L1_positive" ,test_l1_rmfAudioCapture_positive_RMF_AudioCapture_Stop );
-    UT_add_test( pSuite, "RMF_Stop_L1_negative" ,test_l1_rmfAudioCapture_negative_RMF_AudioCapture_Stop );
+    UT_add_test( pSuite, "RMF_Start_L1_pos" ,test_l1_rmfAudioCapture_positive_RMF_AudioCapture_Start );
+    UT_add_test( pSuite, "RMF_Start_L1_neg" ,test_l1_rmfAudioCapture_negative_RMF_AudioCapture_Start );
+    UT_add_test( pSuite, "RMF_Stop_L1_pos" ,test_l1_rmfAudioCapture_positive_RMF_AudioCapture_Stop );
+    UT_add_test( pSuite, "RMF_Stop_L1_neg" ,test_l1_rmfAudioCapture_negative_RMF_AudioCapture_Stop );
 
-    UT_add_test( pSuite, "RMF_GetStatus_L1_positive" ,test_l1_rmfAudioCapture_positive_RMF_AudioCapture_GetStatus );
-    UT_add_test( pSuite, "RMF_GetStatus_L1_negative" ,test_l1_rmfAudioCapture_negative_RMF_AudioCapture_GetStatus );
+    UT_add_test( pSuite, "RMF_GetStatus_L1_pos" ,test_l1_rmfAudioCapture_positive_RMF_AudioCapture_GetStatus );
+    UT_add_test( pSuite, "RMF_GetStatus_L1_neg" ,test_l1_rmfAudioCapture_negative_RMF_AudioCapture_GetStatus );
 
-    UT_add_test( pSuite, "RMF_GetCurrentSettings_L1_positive" ,test_l1_rmfAudioCapture_positive_RMF_AudioCapture_GetCurrentSettings );
-    UT_add_test( pSuite, "RMF_GetCurrentSettings_L1_negative" ,test_l1_rmfAudioCapture_negative_RMF_AudioCapture_GetCurrentSettings );
+    UT_add_test( pSuite, "RMF_GetCurrentSettings_L1_pos" ,test_l1_rmfAudioCapture_positive_RMF_AudioCapture_GetCurrentSettings );
+    UT_add_test( pSuite, "RMF_GetCurrentSettings_L1_neg" ,test_l1_rmfAudioCapture_negative_RMF_AudioCapture_GetCurrentSettings );
 
     if(true == test_l1_is_aux_capture_supported())
     {
-        UT_add_test( pSuite, "RMF_Open_Type_auxiliary_L1_positive" ,test_l1_rmfAudioCapture_positive_RMF_AudioCapture_Open_Type_auxiliary );
-        UT_add_test( pSuite, "RMF_Open_Type_auxiliary_L1_negative" ,test_l1_rmfAudioCapture_negative_RMF_AudioCapture_Open_Type_auxiliary );
+        UT_add_test( pSuite, "RMF_Open_Type_auxiliary_L1_pos" ,test_l1_rmfAudioCapture_positive_RMF_AudioCapture_Open_Type_auxiliary );
+        UT_add_test( pSuite, "RMF_Open_Type_auxiliary_L1_neg" ,test_l1_rmfAudioCapture_negative_RMF_AudioCapture_Open_Type_auxiliary );
     }
     gExtendedEnumsSupported = ut_kvp_getBoolField( ut_kvp_profile_getInstance(), "rmfaudiocapture/features/extendedEnumsSupported" );
     UT_LOG("gExtendedEnumsSupported= %d", gExtendedEnumsSupported);
