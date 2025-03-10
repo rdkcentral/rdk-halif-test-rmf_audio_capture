@@ -65,6 +65,7 @@ class rmfAudioHelperClass(utHelperClass):
         self.testSetupPath = os.path.join(dir_path, "rmfAudio_L3_testSetup.yml")
         self.moduleName = "rmfaudiocapture"
         self.rackDevice = "dut"
+        self.testsuite  = "L3 rmfAudioCapture"
 
         super().__init__(testName, qcId, log)
 
@@ -163,7 +164,7 @@ class rmfAudioHelperClass(utHelperClass):
         self.testRunPrerequisites()
 
         # Create the rmfaudiocapture class
-        self.testrmfAudio = rmfAudioClass(self.moduleConfigProfileFile, self.hal_session, self.targetWorkspace)
+        self.testrmfAudio = rmfAudioClass(self.moduleConfigProfileFile, self.hal_session, self.testsuite, self.targetWorkspace)
 
         return True
 
