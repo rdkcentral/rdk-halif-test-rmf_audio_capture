@@ -43,7 +43,7 @@ class rmfAudioClass():
     This module provides common functionalities and extensions for RMF Audio Capture Module.
     """
 
-    def __init__(self, moduleConfigProfileFile:str, session=None, targetWorkspace="/tmp" ):
+    def __init__(self, moduleConfigProfileFile:str, session=None, testSuite:str="L3 rmfAudioCapture", targetWorkspace="/tmp" ):
         """
         Initializes the rmfAudioClass instance with configuration settings.
 
@@ -56,12 +56,13 @@ class rmfAudioClass():
         """
         self.moduleName = "rmfaudiocapture"
         self.testConfigFile = os.path.join(dir_path, "rmfAudio_testConfig.yml")
-        self.testSuite = "L3 rmfAudioCapture"
+        self.testSuite = testSuite
 
         # Load configurations for device profile and menu
         self.moduleConfigProfile = ConfigRead( moduleConfigProfileFile , self.moduleName)
         self.testConfig    = ConfigRead(self.testConfigFile, self.moduleName)
         self.testConfig.test.execute = os.path.join(targetWorkspace, self.testConfig.test.execute)
+        self.testConfig.test.execute = self.testConfig.test.execute + f" -p {os.path.basename(moduleConfigProfileFile)}"
         self.utMenu        = UTSuiteNavigatorClass(self.testConfig, None, session)
         self.testSession   = session
         self.utils         = utBaseUtils()
@@ -69,6 +70,9 @@ class rmfAudioClass():
         for artifact in self.testConfig.test.artifacts:
             filesPath = os.path.join(dir_path, artifact)
             self.utils.rsync(self.testSession, filesPath, targetWorkspace)
+
+        # Copy the profile file to the target
+        self.utils.scpCopy(self.testSession, moduleConfigProfileFile, targetWorkspace)
 
         # Start the user interface menu
         self.utMenu.start()
@@ -103,6 +107,20 @@ class rmfAudioClass():
             bool : true/false based on auxsupport value in profile file yaml
         """
         return self.moduleConfigProfile.get("features").get("auxsupport")
+
+    def runTest(self, test_case:str=None):
+        """
+        Runs the test case passed to this funtion
+        Args:
+            test_case (str, optional): test case name to run, default runs all test
+        Returns:
+            bool: True - test pass, False - test fails
+        """
+        output = self.utMenu.select( self.testSuite, test_case)
+        results = self.utMenu.collect_results(output)
+        if results == None:
+            results = False
+        return results
 
     def openHandle(self, capture_type:int=1):
         """

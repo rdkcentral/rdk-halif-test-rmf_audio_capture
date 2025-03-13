@@ -404,12 +404,12 @@ int test_rmfAudioCapture_l2_register(void)
         return -1;
     }
     // List of test function names and strings
-    UT_add_test(pSuite, "test_l2_rmfAudioCapture_primary_data_check", test_l2_rmfAudioCapture_primary_data_check);
+    UT_add_test(pSuite, "l2_rmf_primary_data_check", test_l2_rmfAudioCapture_primary_data_check);
     g_aux_capture_supported = ut_kvp_getBoolField(ut_kvp_profile_getInstance(), "rmfaudiocapture/features/auxsupport");
     if (true == g_aux_capture_supported)
     {
-        UT_add_test(pSuite, "test_l2_rmfAudioCapture_auxiliary_data_check", test_l2_rmfAudioCapture_auxiliary_data_check);
-        UT_add_test(pSuite, "test_l2_rmfAudioCapture_combined_data_check", test_l2_rmfAudioCapture_combined_data_check);
+        UT_add_test(pSuite, "l2_rmf_auxiliary_data_check", test_l2_rmfAudioCapture_auxiliary_data_check);
+        UT_add_test(pSuite, "l2_rmf_combined_data_check", test_l2_rmfAudioCapture_combined_data_check);
     }
 
     return 0;
