@@ -193,6 +193,7 @@ void test_l1_rmfAudioCapture_positive_RMF_AudioCapture_Open_Type_primary (void)
     //Step01: Open interface
     result = RMF_AudioCapture_Open_Type(&handle, RMF_AC_TYPE_PRIMARY);
     UT_ASSERT_EQUAL_FATAL(result, RMF_SUCCESS);
+    UT_ASSERT_PTR_NOT_NULL_FATAL(handle);
 
     //Step02: Close interface
     result = RMF_AudioCapture_Close(handle);
@@ -201,6 +202,7 @@ void test_l1_rmfAudioCapture_positive_RMF_AudioCapture_Open_Type_primary (void)
     //Step03: Open interface
     result = RMF_AudioCapture_Open_Type(&handle, RMF_AC_TYPE_PRIMARY);
     UT_ASSERT_EQUAL_FATAL(result, RMF_SUCCESS);
+    UT_ASSERT_PTR_NOT_NULL_FATAL(handle);
 
     //Step04: Close interface
     result = RMF_AudioCapture_Close(handle);
@@ -249,6 +251,7 @@ void test_l1_rmfAudioCapture_negative_RMF_AudioCapture_Open_Type_primary (void)
     //Step03: Oen interface
     result = RMF_AudioCapture_Open_Type(&handle, RMF_AC_TYPE_PRIMARY);
     UT_ASSERT_EQUAL_FATAL(result, RMF_SUCCESS);
+    UT_ASSERT_PTR_NOT_NULL_FATAL(handle);
 
     //Step04: Open inetrface when already open
     result = RMF_AudioCapture_Open_Type(&handle, RMF_AC_TYPE_PRIMARY);
@@ -296,6 +299,7 @@ void test_l1_rmfAudioCapture_positive_RMF_AudioCapture_Open (void)
     //Step01: Open interface
     result = RMF_AudioCapture_Open(&handle);
     UT_ASSERT_EQUAL_FATAL(result, RMF_SUCCESS);
+    UT_ASSERT_PTR_NOT_NULL_FATAL(handle);
 
     //Step02: Close interface
     result = RMF_AudioCapture_Close(handle);
@@ -304,6 +308,7 @@ void test_l1_rmfAudioCapture_positive_RMF_AudioCapture_Open (void)
     //Step03: Open interface
     result = RMF_AudioCapture_Open(&handle);
     UT_ASSERT_EQUAL_FATAL(result, RMF_SUCCESS);
+    UT_ASSERT_PTR_NOT_NULL_FATAL(handle);
 
     //Step04: Close interface
     result = RMF_AudioCapture_Close(handle);
@@ -312,6 +317,7 @@ void test_l1_rmfAudioCapture_positive_RMF_AudioCapture_Open (void)
     //Step05: Open interface with type
     result = RMF_AudioCapture_Open_Type(&handle, RMF_AC_TYPE_PRIMARY);
     UT_ASSERT_EQUAL_FATAL(result, RMF_SUCCESS);
+    UT_ASSERT_PTR_NOT_NULL_FATAL(handle);
     //Step06: Close interface
     result = RMF_AudioCapture_Close(handle);
     UT_ASSERT_EQUAL_FATAL(result, RMF_SUCCESS);
@@ -319,6 +325,7 @@ void test_l1_rmfAudioCapture_positive_RMF_AudioCapture_Open (void)
     //Step07: Open interface
     result = RMF_AudioCapture_Open(&handle);
     UT_ASSERT_EQUAL_FATAL(result, RMF_SUCCESS);
+    UT_ASSERT_PTR_NOT_NULL_FATAL(handle);
     //Step08: Close interface
     result = RMF_AudioCapture_Close(handle);
     UT_ASSERT_EQUAL_FATAL(result, RMF_SUCCESS);
@@ -364,6 +371,7 @@ void test_l1_rmfAudioCapture_negative_RMF_AudioCapture_Open (void)
     //Step02: Open interface
     result = RMF_AudioCapture_Open(&handle);
     UT_ASSERT_EQUAL_FATAL(result, RMF_SUCCESS);
+    UT_ASSERT_PTR_NOT_NULL_FATAL(handle);
 
     //Step03: Open inetrface when already open
     result = RMF_AudioCapture_Open(&handle);
@@ -380,6 +388,7 @@ void test_l1_rmfAudioCapture_negative_RMF_AudioCapture_Open (void)
     //Step06: Open interface with type
     result = RMF_AudioCapture_Open_Type(&handle, RMF_AC_TYPE_PRIMARY);
     UT_ASSERT_EQUAL_FATAL(result, RMF_SUCCESS);
+    UT_ASSERT_PTR_NOT_NULL_FATAL(handle);
     //Step07: Open interface again
     result = RMF_AudioCapture_Open(&handle);
     CHECK_FOR_EXTENDED_ERROR_CODE(result, RMF_INVALID_STATE, TEST_RMF_OSAL_EBUSY);
@@ -419,6 +428,7 @@ void test_l1_rmfAudioCapture_positive_RMF_AudioCapture_Close (void)
     //Step01: Open interface
     result = RMF_AudioCapture_Open(&handle);
     UT_ASSERT_EQUAL_FATAL(result, RMF_SUCCESS);
+    UT_ASSERT_PTR_NOT_NULL_FATAL(handle);
 
     //Step02: close interface
     result = RMF_AudioCapture_Close(handle);
@@ -463,6 +473,7 @@ void test_l1_rmfAudioCapture_negative_RMF_AudioCapture_Close (void)
     //Step02: Open interface
     result = RMF_AudioCapture_Open(&handle);
     UT_ASSERT_EQUAL_FATAL(result, RMF_SUCCESS);
+    UT_ASSERT_PTR_NOT_NULL_FATAL(handle);
 
     //Step03: Close Interface with invalid handle
     result = RMF_AudioCapture_Close(NULL);
@@ -510,6 +521,7 @@ void test_l1_rmfAudioCapture_positive_RMF_AudioCapture_GetDefaultSettings (void)
     //Step01: Open interface
     result = RMF_AudioCapture_Open(&handle);
     UT_ASSERT_EQUAL_FATAL(result, RMF_SUCCESS);
+    UT_ASSERT_PTR_NOT_NULL_FATAL(handle);
 
     //Step02: get default settings
     result = RMF_AudioCapture_GetDefaultSettings(&settings);
@@ -566,6 +578,7 @@ void test_l1_rmfAudioCapture_negative_RMF_AudioCapture_GetDefaultSettings (void)
     //Step02: Open interface
     result = RMF_AudioCapture_Open(&handle);
     UT_ASSERT_EQUAL_FATAL(result, RMF_SUCCESS);
+    UT_ASSERT_PTR_NOT_NULL_FATAL(handle);
 
     //Step03: Get default settings
     result = RMF_AudioCapture_GetDefaultSettings(NULL);
@@ -627,6 +640,7 @@ void test_l1_rmfAudioCapture_positive_RMF_AudioCapture_Start (void)
     //Step01: Open interface
     result = RMF_AudioCapture_Open(&handle);
     UT_ASSERT_EQUAL_FATAL(result, RMF_SUCCESS);
+    UT_ASSERT_PTR_NOT_NULL_FATAL(handle);
 
     //Step02: get default settings
     result = RMF_AudioCapture_GetDefaultSettings(&settings);
@@ -683,6 +697,7 @@ void test_l1_rmfAudioCapture_positive_RMF_AudioCapture_Start (void)
     //Step11: Open interface
     result = RMF_AudioCapture_Open(&handle);
     UT_ASSERT_EQUAL_FATAL(result, RMF_SUCCESS);
+    UT_ASSERT_PTR_NOT_NULL_FATAL(handle);
     //Step12: Get default settings and validate
     result = RMF_AudioCapture_GetDefaultSettings(&settings);
     UT_ASSERT_EQUAL(result, RMF_SUCCESS);
@@ -751,6 +766,7 @@ void test_l1_rmfAudioCapture_negative_RMF_AudioCapture_Start (void)
     //Step02: Open interface
     result = RMF_AudioCapture_Open(&handle);
     UT_ASSERT_EQUAL_FATAL(result, RMF_SUCCESS);
+    UT_ASSERT_PTR_NOT_NULL_FATAL(handle);
 
     //Step03: Get default settings
     result = RMF_AudioCapture_GetDefaultSettings(&settings);
@@ -849,6 +865,7 @@ void test_l1_rmfAudioCapture_positive_RMF_AudioCapture_Stop (void)
     //Step01: Open interface
     result = RMF_AudioCapture_Open(&handle);
     UT_ASSERT_EQUAL_FATAL(result, RMF_SUCCESS);
+    UT_ASSERT_PTR_NOT_NULL_FATAL(handle);
 
     //Step02: Get default settings
     result = RMF_AudioCapture_GetDefaultSettings(&settings);
@@ -875,6 +892,7 @@ void test_l1_rmfAudioCapture_positive_RMF_AudioCapture_Stop (void)
     ///Step08: Open interface
     result = RMF_AudioCapture_Open(&handle);
     UT_ASSERT_EQUAL_FATAL(result, RMF_SUCCESS);
+    UT_ASSERT_PTR_NOT_NULL_FATAL(handle);
     //Step09: Get default settings
     result = RMF_AudioCapture_GetDefaultSettings(&settings);
     UT_ASSERT_EQUAL(result, RMF_SUCCESS);
@@ -933,6 +951,7 @@ void test_l1_rmfAudioCapture_negative_RMF_AudioCapture_Stop (void)
     //Step02: Open interface
     result = RMF_AudioCapture_Open(&handle);
     UT_ASSERT_EQUAL_FATAL(result, RMF_SUCCESS);
+    UT_ASSERT_PTR_NOT_NULL_FATAL(handle);
 
     //Step03: Audiocapture stop before start
     result = RMF_AudioCapture_Stop(handle);
@@ -1004,6 +1023,7 @@ void test_l1_rmfAudioCapture_positive_RMF_AudioCapture_GetStatus (void)
     //Step01: Open interface
     result = RMF_AudioCapture_Open(&handle);
     UT_ASSERT_EQUAL_FATAL(result, RMF_SUCCESS);
+    UT_ASSERT_PTR_NOT_NULL_FATAL(handle);
 
     //Step02: Get the status of interface
     result = RMF_AudioCapture_GetStatus (handle, &status);
@@ -1082,6 +1102,7 @@ void test_l1_rmfAudioCapture_negative_RMF_AudioCapture_GetStatus (void)
     //Step02: Open interface
     result = RMF_AudioCapture_Open(&handle);
     UT_ASSERT_EQUAL_FATAL(result, RMF_SUCCESS);
+    UT_ASSERT_PTR_NOT_NULL_FATAL(handle);
 
     //Step03: get the status of interface with invalid handle
     result = RMF_AudioCapture_GetStatus(NULL, &status);
@@ -1168,6 +1189,7 @@ void test_l1_rmfAudioCapture_positive_RMF_AudioCapture_GetCurrentSettings (void)
     //Step01: Open interface
     result = RMF_AudioCapture_Open(&handle);
     UT_ASSERT_EQUAL_FATAL(result, RMF_SUCCESS);
+    UT_ASSERT_PTR_NOT_NULL_FATAL(handle);
 
     //Step02: Get default settings
     result = RMF_AudioCapture_GetDefaultSettings(&settings);
@@ -1263,6 +1285,7 @@ void test_l1_rmfAudioCapture_negative_RMF_AudioCapture_GetCurrentSettings (void)
     //Step02: Open interface
     result = RMF_AudioCapture_Open(&handle);
     UT_ASSERT_EQUAL_FATAL(result, RMF_SUCCESS);
+    UT_ASSERT_PTR_NOT_NULL_FATAL(handle);
 
     //Step03: Get current settings before start
     result = RMF_AudioCapture_GetCurrentSettings(handle, &current_settings);
@@ -1338,6 +1361,7 @@ void test_l1_rmfAudioCapture_positive_RMF_AudioCapture_Open_Type_auxiliary (void
     //Step01: Open interface with auxilary type
     result = RMF_AudioCapture_Open_Type(&handle, RMF_AC_TYPE_AUXILIARY);
     UT_ASSERT_EQUAL_FATAL(result, RMF_SUCCESS);
+    UT_ASSERT_PTR_NOT_NULL_FATAL(handle);
 
     //Step02: Close interface
     result = RMF_AudioCapture_Close(handle);
@@ -1346,6 +1370,7 @@ void test_l1_rmfAudioCapture_positive_RMF_AudioCapture_Open_Type_auxiliary (void
     //Step03: Open interface with auxilary type
     result = RMF_AudioCapture_Open_Type(&handle, RMF_AC_TYPE_AUXILIARY);
     UT_ASSERT_EQUAL_FATAL(result, RMF_SUCCESS);
+    UT_ASSERT_PTR_NOT_NULL_FATAL(handle);
 
     //Step04: Close interface
     result = RMF_AudioCapture_Close(handle);
@@ -1388,6 +1413,7 @@ void test_l1_rmfAudioCapture_negative_RMF_AudioCapture_Open_Type_auxiliary (void
     //Step02: Open interface
     result = RMF_AudioCapture_Open_Type(&handle, RMF_AC_TYPE_AUXILIARY);
     UT_ASSERT_EQUAL_FATAL(result, RMF_SUCCESS);
+    UT_ASSERT_PTR_NOT_NULL_FATAL(handle);
 
     //Step03: open interface again
     result = RMF_AudioCapture_Open_Type(&handle, RMF_AC_TYPE_AUXILIARY);

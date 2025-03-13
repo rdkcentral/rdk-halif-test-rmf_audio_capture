@@ -570,11 +570,13 @@ void test_l3_rmfAudioCapture_open_handle(void)
     UT_LOG_INFO("Calling RMF_AudioCapture_Open_Type(IN:captureType:[%s] OUT:handle:[])", rmfAcType);
     result = RMF_AudioCapture_Open_Type(&gAudioCaptureData[audioCaptureIndex].handle, rmfAcType);
     UT_LOG_INFO("Result RMF_AudioCapture_Open_Type(IN:captureType:[%s] OUT:handle:[0x%0X]) rmf_error:[%s]", rmfAcType, &gAudioCaptureData[audioCaptureIndex].handle, UT_Control_GetMapString(rmfError_mapTable, result));
-    if (RMF_SUCCESS != result)
+    if ((RMF_SUCCESS != result) || (gAudioCaptureData[audioCaptureIndex].handle == NULL))
     {
         UT_LOG_ERROR("Aborting test - unable to open capture.");
     }
     RMF_ASSERT(RMF_SUCCESS == result);
+    RMF_ASSERT(NULL != gAudioCaptureData[audioCaptureIndex].handle);
+
     UT_LOG_INFO("Out %s\n", __FUNCTION__);
 }
 
