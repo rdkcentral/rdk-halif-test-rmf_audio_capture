@@ -75,24 +75,28 @@ class rmfAudio_L1_L2_tests(utHelperClass):
 
         finalresult = True
 
+        copyArtifacts = True
         for testsuite in testsuites:
             testsuite_name = testsuite.get("name")
 
             # Create the dsVideoDevice class
-            testrmfaudio = rmfAudioClass(self.moduleConfigProfileFile, self.hal_session, testsuite_name, self.targetWorkspace)
+            testrmfaudio = rmfAudioClass(self.moduleConfigProfileFile, self.hal_session, testsuite_name, self.targetWorkspace, copyArtifacts)
+            copyArtifacts = False
             test_cases = testsuite.get("test_cases")
 
             if len(test_cases) == 1 and test_cases[0] == "all":
                 self.log.stepStart(f'Test Suit: {testsuite_name} Run all Tests cases')
                 # If 'all' test case mentioned in list, run all tests with 'r' option
                 result = testrmfaudio.runTest()
-                finalresult &= result
+                if not result:
+                    finalresult = False
                 self.log.stepResult(result, f'Test Suit: {testsuite_name} Run all Tests cases')
             else:
                 for test_case in testsuite.get("test_cases"):
                     self.log.stepStart(f'Test Suit: {testsuite_name} Test Case: {test_case}')
                     result = testrmfaudio.runTest(test_case)
-                    finalresult &= result
+                    if not result:
+                        finalresult = False
                     self.log.stepResult(result, f'Test Suit: {testsuite_name} Test Case: {test_case}')
 
             del testrmfaudio
