@@ -43,7 +43,7 @@ class rmfAudioClass():
     This module provides common functionalities and extensions for RMF Audio Capture Module.
     """
 
-    def __init__(self, moduleConfigProfileFile:str, session=None, testSuite:str="L3 rmfAudioCapture", targetWorkspace="/tmp" ):
+    def __init__(self, moduleConfigProfileFile:str, session=None, testSuite:str="L3 rmfAudioCapture", targetWorkspace="/tmp", copyArtifacts:bool=True ):
         """
         Initializes the rmfAudioClass instance with configuration settings.
 
@@ -67,12 +67,13 @@ class rmfAudioClass():
         self.testSession   = session
         self.utils         = utBaseUtils()
 
-        for artifact in self.testConfig.test.artifacts:
-            filesPath = os.path.join(dir_path, artifact)
-            self.utils.rsync(self.testSession, filesPath, targetWorkspace)
+        if copyArtifacts:
+            for artifact in self.testConfig.test.artifacts:
+                filesPath = os.path.join(dir_path, artifact)
+                self.utils.rsync(self.testSession, filesPath, targetWorkspace)
 
-        # Copy the profile file to the target
-        self.utils.scpCopy(self.testSession, moduleConfigProfileFile, targetWorkspace)
+            # Copy the profile file to the target
+            self.utils.scpCopy(self.testSession, moduleConfigProfileFile, targetWorkspace)
 
         # Start the user interface menu
         self.utMenu.start()
