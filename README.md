@@ -7,6 +7,8 @@
 - [Reference Documents](#reference-documents)
 - [How to build the test suite](#how-to-build-the-test-suite)
 - [Notes](#notes)
+- [Manual way of running the L1 and L2 test cases](#manual-way-of-running-the-l1-and-l2-test-cases)
+- [Setting Python environment for running the L1 L2 and L3 automation test cases](#setting-python-environment-for-running-the-l1-l2-and-l3-automation-test-cases)
 
 ## Acronyms, Terms and Abbreviations
 
@@ -28,8 +30,9 @@ This repository contains the Unit Test Suites(`L1` , `L2` and `L3`) for RMF Audi
 |1|`HAL` Specification Document|This document provides specific information on the APIs for which tests are written in this module|[rmf-audio-capture_halSpec.md](https://github.com/rdkcentral/rdk-halif-rmf_audio_capture/blob/main/docs/pages/rmf-audio-capture_halSpec.md "rmf-audio-capture_halSpec.md")|
 |2|High Level Test Specification Document|High Level Test Specification Documentation this module|[rmf-audio-capture_High-Level_TestSpec.md](docs/pages/rmf-audio-capture_High-Level_TestSpec.md)|
 |3|`L2` Low Level Test Specification Document|`L2`Low Level Test Specification Documentation this module|[rmf-audio-capture_L2-Low-Level_TestSpecification.md](docs/pages/rmf-audio-capture_L2-Low-Level_TestSpecification.md)|
-|4|`L3` Low Level Test Specification Document|`L3`Low Level Test Specification Documentation this module|[rmf-audio-capture_L3_Low-Level_TestSpecification.md](docs/pages/rmf-audio-capture_L3_Low-Level_TestSpecification.md)|
-|5|`L3` Low Level Test Procedure Document|`L3`Low Level Test Procedure Documentation this module|[rmf-audio-capture_L3_TestProcedure.md](docs/pages/rmf-audio-capture_L3_TestProcedure.md)|
+|4|`L1` and `L2` Test Procedure Document|`L1` and `L2` Test Procedure Document|[rmf-audio-capture_L1_L2_TestProcedure.md](docs/pages/rmf-audio-capture_L1_L2_TestProcedure.md)|
+|5|`L3` Low Level Test Specification Document|`L3`Low Level Test Specification Documentation this module|[rmf-audio-capture_L3_Low-Level_TestSpecification.md](docs/pages/rmf-audio-capture_L3_Low-Level_TestSpecification.md)|
+|6|`L3` Low Level Test Procedure Document|`L3`Low Level Test Procedure Documentation this module|[rmf-audio-capture_L3_TestProcedure.md](docs/pages/rmf-audio-capture_L3_TestProcedure.md)|
 
 ## Notes
 
@@ -83,7 +86,7 @@ build_ut.sh TARGET=arm
 
 - `build_ut.sh` script will clone the hal-test repo, ut-core and generate a `hal_test_rmfAudioCapture` binary in `ut/bin/` upon successful completion.
 
-### Running the `L1` and `L2` test cases
+### Manual way of running the `L1` and `L2` test cases
 
 ```bash
  ./hal_test_rmfAudioCapture -p rmfAudioCaptureAuxSupported.yaml
@@ -97,8 +100,9 @@ Alternatively, use the run.sh script with the profile file:
 
 - Profile files define the configuration for the platform available here [profile yaml file](./profiles/)
 
-### Running the `L3` test cases
+### Setting Python environment for running the `L1` `L2` and `L3` automation test cases
 
-- For running the L3 test suite, a host PC or server with a Python environment is required.
+- For running the `L1` `L2` and `L3` test suite, a host PC or server with a Python environment is required.
 - Install Python Environment and Activation Scripts as detailed in the [HPK Documentation](https://github.com/rdkcentral/rdk-hpk-documentation/blob/main/README.md)
-- To run the test cases follow the [rmf-audio-capture_L3_TestProcedure.md](docs/pages/rmf-audio-capture_L3_TestProcedure.md)
+- To run the `L1` `L2` test cases follow the [rmf-audio-capture_L1_L2_TestProcedure.md](docs/pages/rmf-audio-capture_L1_L2_TestProcedure.md)
+- To run the `L3` test cases follow the [rmf-audio-capture_L3_TestProcedure.md](docs/pages/rmf-audio-capture_L3_TestProcedure.md)
