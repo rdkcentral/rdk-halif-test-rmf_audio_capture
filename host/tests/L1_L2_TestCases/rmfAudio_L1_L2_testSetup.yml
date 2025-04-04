@@ -39,48 +39,48 @@ rmfaudiocapture:
     - name: "L1 rmfAudioCapture"
       test_cases:
         - RMF_Open_Type_primary_L1_neg
-   # - name: "L1 rmfAudioCapture"
-   #   test_cases:
-   #     - RMF_Open_L1_pos
-   # - name: "L1 rmfAudioCapture"
-   #   test_cases:
-   #     - RMF_Open_L1_neg
-   # - name: "L1 rmfAudioCapture"
-   #   test_cases:
-   #     - RMF_Close_L1_pos
-   # - name: "L1 rmfAudioCapture"
-   #   test_cases:
-   #     - RMF_Close_L1_neg
-   # - name: "L1 rmfAudioCapture"
-   #   test_cases:
-   #     - RMF_GetDefaultSettings_L1_pos
-   # - name: "L1 rmfAudioCapture"
-   #   test_cases:
-   #     - RMF_GetDefaultSettings_L1_neg
-   # - name: "L1 rmfAudioCapture"
-   #   test_cases:
-   #     - RMF_Start_L1_pos
-   # - name: "L1 rmfAudioCapture"
-   #   test_cases:
-   #     - RMF_Start_L1_neg
-   # - name: "L1 rmfAudioCapture"
-   #   test_cases:
-   #     - RMF_Stop_L1_pos
-   # - name: "L1 rmfAudioCapture"
-   #   test_cases:
-   #     - RMF_Stop_L1_neg
-   # - name: "L1 rmfAudioCapture"
-   #   test_cases:
-   #     - RMF_GetStatus_L1_pos
-   # - name: "L1 rmfAudioCapture"
-   #   test_cases:
-   #     - RMF_GetStatus_L1_neg
-   # - name: "L1 rmfAudioCapture"
-   #   test_cases:
-   #     - RMF_GetCurrentSettings_L1_pos
-   # - name: "L1 rmfAudioCapture"
-   #   test_cases:
-   #     - RMF_GetCurrentSettings_L1_neg
+    - name: "L1 rmfAudioCapture"
+      test_cases:
+        - RMF_Open_L1_pos
+    - name: "L1 rmfAudioCapture"
+      test_cases:
+        - RMF_Open_L1_neg
+    - name: "L1 rmfAudioCapture"
+      test_cases:
+        - RMF_Close_L1_pos
+    - name: "L1 rmfAudioCapture"
+      test_cases:
+        - RMF_Close_L1_neg
+    - name: "L1 rmfAudioCapture"
+      test_cases:
+        - RMF_GetDefaultSettings_L1_pos
+    - name: "L1 rmfAudioCapture"
+      test_cases:
+        - RMF_GetDefaultSettings_L1_neg
+    - name: "L1 rmfAudioCapture"
+      test_cases:
+        - RMF_Start_L1_pos
+    - name: "L1 rmfAudioCapture"
+      test_cases:
+        - RMF_Start_L1_neg
+    - name: "L1 rmfAudioCapture"
+      test_cases:
+        - RMF_Stop_L1_pos
+    - name: "L1 rmfAudioCapture"
+      test_cases:
+        - RMF_Stop_L1_neg
+    - name: "L1 rmfAudioCapture"
+      test_cases:
+        - RMF_GetStatus_L1_pos
+    - name: "L1 rmfAudioCapture"
+      test_cases:
+        - RMF_GetStatus_L1_neg
+    - name: "L1 rmfAudioCapture"
+      test_cases:
+        - RMF_GetCurrentSettings_L1_pos
+    - name: "L1 rmfAudioCapture"
+      test_cases:
+        - RMF_GetCurrentSettings_L1_neg
    # - name: "L1 rmfAudioCapture"
    #   test_cases:
    #     - RMF_Open_Type_auxiliary_L1_pos
@@ -91,7 +91,7 @@ rmfaudiocapture:
     ######################################
     # Entries to run selected test case
     ######################################
-    #- name: "L1 dsFPD"
+    #- name: "L1 rmfAudioCapture"
     #  test_cases:
     #    - "RMF_Open_Type_primary_L1_pos"
     #    - "RMF_Open_Type_primary_L1_neg"
@@ -115,9 +115,9 @@ rmfaudiocapture:
     #######################################
     # Entries to run individual test cases
     #######################################
-   # - name: "L2 rmfAudioCapture"
-   #   test_cases:
-   #     - l2_rmf_primary_data_check
+    - name: "L2 rmfAudioCapture"
+      test_cases:
+        - l2_rmf_primary_data_check
    # - name: "L2 rmfAudioCapture"
    #   test_cases:
    #     - l2_rmf_auxiliary_data_check
