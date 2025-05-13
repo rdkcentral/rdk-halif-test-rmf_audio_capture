@@ -117,7 +117,7 @@ class rmfAudioClass():
         Returns:
             bool: True - test pass, False - test fails
         """
-        output = self.utMenu.select( self.testSuite, test_case)
+        output = self.utMenu.select( self.testSuite, test_case, None, 25)
         results = self.utMenu.collect_results(output)
         if results == None:
             results = False
