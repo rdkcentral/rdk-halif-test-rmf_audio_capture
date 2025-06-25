@@ -2,15 +2,13 @@
 
 ## Table of Contents
 
-- [Unit Testing Suite For RMF Audio Capture HAL](#unit-testing-suite-for-rmf-audio-capture-hal)
-  - [Table of Contents](#table-of-contents)
-  - [Acronyms, Terms and Abbreviations](#acronyms-terms-and-abbreviations)
-  - [Description](#description)
-  - [Reference Documents](#reference-documents)
-  - [Notes](#notes)
-  - [How to build the test suite](#how-to-build-the-test-suite)
-    - [Manual way of running the `L1` and `L2` test cases](#manual-way-of-running-the-l1-and-l2-test-cases)
-    - [Setting Python environment for running the `L1` `L2` and `L3` automation test cases](#setting-python-environment-for-running-the-l1-l2-and-l3-automation-test-cases)
+- [Acronyms, Terms and Abbreviations](#acronyms-terms-and-abbreviations)
+- [Description](#description)
+- [Reference Documents](#reference-documents)
+- [How to build the test suite](#how-to-build-the-test-suite)
+- [Notes](#notes)
+- [Manual way of running the L1 and L2 test cases](#manual-way-of-running-the-l1-and-l2-test-cases)
+- [Setting Python environment for running the L1 L2 and L3 automation test cases](#setting-python-environment-for-running-the-l1-l2-and-l3-automation-test-cases)
 
 ## Acronyms, Terms and Abbreviations
 
