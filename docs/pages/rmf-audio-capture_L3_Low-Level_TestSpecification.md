@@ -1,12 +1,15 @@
 # RMF Audio Capture L3 Low Level Test Specification and Procedure Documentation
 
 ## Table of Contents
-  - [Acronyms, Terms and Abbreviations](#acronyms-terms-and-abbreviations)
+- [RMF Audio Capture L3 Low Level Test Specification and Procedure Documentation](#rmf-audio-capture-l3-low-level-test-specification-and-procedure-documentation)
+  - [Table of Contents](#table-of-contents)
+    - [Acronyms, Terms and Abbreviations](#acronyms-terms-and-abbreviations)
   - [Overview](#overview)
   - [References](#references)
   - [Audio Streams Requirement](#audio-streams-requirement)
-  - [Level 3 Test Procedure](#level-3-test-cases-high-level-overview)
-  - [Level 3 Python Test](#level-3-python-test-cases-high-level-overview)
+  - [Level 3 Test Cases High Level Overview](#level-3-test-cases-high-level-overview)
+  - [Level 3 Python Test Cases High Level Overview](#level-3-python-test-cases-high-level-overview)
+    - [YAML File Inputs](#yaml-file-inputs)
 
 ### Acronyms, Terms and Abbreviations
 
@@ -102,8 +105,8 @@ classDiagram
 
 - **testSetupConfig.yaml**
   - This configuration file contains the list of requirements for tests to execute. Eg: Copying the streams, setting environment variables etc.
-  - Example configuration file [rmfAudio_L3_testSetup.yml](../../../host/tests/rmfAudio_L3_TestCases/rmfAudio_L3_testSetup.yml)
+  - Example configuration file [rmfAudio_L3_testSetup.yml](../../host/tests/rmfAudio_L3_TestCases/rmfAudio_L3_testSetup.yml)
 
 - **testConfig.yaml**
   - This configuration file contains the list of menu items for C/C++ L3 test running on `DUT`
-  - Example configuration file [rmfAudio_testConfig.yml](../../../host/tests/rmfAudioClasses/rmfAudio_testConfig.yml)
+  - Example configuration file [rmfAudio_testConfig.yml](../../host/tests/rmfAudioClasses/rmfAudio_testConfig.yml)
