@@ -98,9 +98,7 @@ Alternatively, use the run.sh script with the profile file:
 ./run.sh -p /absolute/path/to/profile/file
  ```
 
-- Profile files define the configuration for the platform available here 
-  [Aux Not Supported profile yaml file](https://github.com/rdkcentral/rdk-halif-test-rmf_audio_capture/blob/main/profiles/rmfAudioCaptureAuxNotSupported.yaml),
-  [Aux Supported profile yaml file](https://github.com/rdkcentral/rdk-halif-test-rmf_audio_capture/blob/main/profiles/rmfAudioCaptureAuxSupported.yaml)
+- Profile files define the configuration for the platform available here [profile yaml file](https://github.com/rdkcentral/rdk-halif-test-rmf_audio_capture/blob/main/profiles/)
 
 ### Setting Python environment for running the `L1` `L2` and `L3` automation test cases
 
