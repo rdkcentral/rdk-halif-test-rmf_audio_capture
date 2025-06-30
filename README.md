@@ -46,6 +46,11 @@ Alternatively, use the run.sh script with the profile file:
 ./run.sh -p /absolute/path/to/profile/file
  ```
 
-- Profile files define the configuration for the platform available here [profile yaml file](./profiles/)
+- Profile files define the configuration for the platform available here at [aux supported](./profiles/rmfAudioCaptureAuxSupported.yaml) and  [aux not supported](./profiles/rmfAudioCaptureAuxNotSupported.yaml)
 
-- Install Python Environment and Activation Scripts please check the[HPK Documentation](https://github.com/rdkcentral/rdk-hpk-documentation/blob/main/README.md)
+### Setting Python environment for running the `L1` `L2` and `L3` automation test cases
+
+- For running the `L1` `L2` and `L3` test suite, a host PC or server with a Python environment is required.
+- Install Python Environment and Activation Scripts as detailed in the [HPK Documentation](https://github.com/rdkcentral/rdk-hpk-documentation/blob/main/README.md)
+- To run the `L1` `L2` test cases follow the [rmf-audio-capture_L1_L2_TestProcedure.md](docs/pages/rmf-audio-capture_L1_L2_TestProcedure.md)
+- To run the `L3` test cases follow the [rmf-audio-capture_L3_TestProcedure.md](docs/pages/rmf-audio-capture_L3_TestProcedure.md)
