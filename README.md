@@ -52,5 +52,5 @@ Alternatively, use the run.sh script with the profile file:
 
 - For running the `L1` `L2` and `L3` test suite, a host PC or server with a Python environment is required.
 - Install Python Environment and Activation Scripts as detailed in the [HPK Documentation](https://github.com/rdkcentral/rdk-hpk-documentation/blob/main/README.md)
-- To run the `L1` `L2` test cases follow the [rmf-audio-capture_L1_L2_TestProcedure.md](docs/pages/rmf-audio-capture_L1_L2_TestProcedure.md)
+- To run the `L1` `L2` test cases follow the [rmf-audio-capture_L1_L2_TestProcedure.md](docs/pages/rmf-audio-capture_L2-Low-Level_TestSpecification.md)
 - To run the `L3` test cases follow the [rmf-audio-capture_L3_TestProcedure.md](docs/pages/rmf-audio-capture_L3_TestProcedure.md)
