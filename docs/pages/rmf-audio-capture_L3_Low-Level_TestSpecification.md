@@ -37,6 +37,7 @@ This document describes the L3 Test Procedure for the RMF Audio Capture module.
 ## Level 3 Test Cases High Level Overview
 
 Below are top test use-case for the RMF audio capture.
+
 | #   | Test-case              | Description                                                                                                                                                                                                                    | HAL APIs                                                                                                                                 | Streams Number |
 | --- | ---------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------- | -------------- |
 | 1   | Primary data capture   | Play a reference stream, run primary audio capture, verify that captured audio is faithful to the source within margin of error                                                                                                | `RMF_AudioCapture_Open_Type, RMF_AudioCapture_GetDefaultSettings, RMF_AudioCapture_Start, RMF_AudioCapture_Stop, RMF_AudioCapture_Close` | 1              |
