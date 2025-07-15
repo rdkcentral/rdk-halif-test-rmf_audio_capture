@@ -1,12 +1,5 @@
 # RMF AUDIO CAPTURE L2 Low Level Test Specification and Procedure Documentation
 
-## Table of Contents
-
-- [Overview](#overview)
-- [Acronyms, Terms and Abbreviations](#acronyms-terms-and-abbreviations)
-- [References](#references)
-- [Level 2 Test Procedure](#level-2-test-procedure)
-
 ## Overview
 
 This document describes the level 2 testing suite for the RMF AUDIO CAPTURE module.

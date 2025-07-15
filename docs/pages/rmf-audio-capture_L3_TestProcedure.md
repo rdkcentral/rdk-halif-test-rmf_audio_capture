@@ -1,21 +1,5 @@
 # RMF Audio Capture HAL L3 Python Test Procedure
 
-## Table of Contents
-
-  - [Acronyms, Terms and Abbreviations](#acronyms-terms-and-abbreviations)
-  - [Setting Up Test Environment](#setting-up-test-environment)
-  - [Streams Required](#streams-required)
-  - [Test Cases](#test-cases)
-    - [rmfAudio\_test01\_primaryDataCapture.py](#rmfaudio_test01_primarydatacapturepy)
-    - [rmfAudio\_test02\_primaryJitterTest.py](#rmfaudio_test02_primaryjittertestpy)
-    - [rmfAudio\_test03\_independentDataCheck.py](#rmfaudio_test03_independentdatacheckpy)
-    - [rmfAudio\_test04\_auxiliaryDataCapture.py](#rmfaudio_test04_auxiliarydatacapturepy)
-    - [rmfAudio\_test05\_combinedDataCapture.py](#rmfaudio_test05_combineddatacapturepy)
-    - [rmfAudio\_test06\_auxiliaryJitterTest.py](#rmfaudio_test06_auxiliaryjittertestpy)
-    - [rmfAudio\_test07\_combinedJitterTest.py](#rmfaudio_test07_combinedjittertestpy)
-    - [rmfAudio\_L3\_Runall.py](#rmfaudio_l3_runallpy)
-    - [rmfAudio\_L3\_Runall_primary.py](#rmfaudio_l3_runall_primarypy)
-
 ## Acronyms, Terms and Abbreviations
 
 - `HAL`    - Hardware Abstraction Layer

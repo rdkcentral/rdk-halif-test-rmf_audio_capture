@@ -1,14 +1,5 @@
 # RMF Audio Capture High Level Test Specification Documentation
 
-## Table of Contents
-
-- [Acronyms, Terms and Abbreviations](#acronyms-terms-and-abbreviations)
-- [Introduction](#introduction)
-- [Test Scenarios](#test-scenarios)
-  - [Check primary audio capture](#check-primary-audio-capture)
-  - [Check auxiliary audio capture](#check-auxiliary-audio-capture)
-  - [Check concurrent audio capture](#check-concurrent-audio-capture)
-
 ### Acronyms, Terms and Abbreviations
 
 - `HAL` - Hardware Abstraction Layer, may include some common components
