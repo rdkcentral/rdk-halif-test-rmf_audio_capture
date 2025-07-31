@@ -98,12 +98,12 @@ classDiagram
 - **componentProfile.yaml/platformProfile.yaml**
   - Contains component-specific configurations
   - Contains platform wide configuration broken down into separate components
-  - Example configuration file [rmfAudioCaptureAuxSupported](https://github.com/rdkcentral/rdk-halif-test-rmf_audio_capture/blob/develop/profiles/rmfAudioCaptureAuxSupported.yaml)
+  - Example configuration file [rmfAudioCaptureAuxSupported]( ../../profiles/rmfAudioCaptureAuxSupported.yaml)
 
 - **testSetupConfig.yaml**
   - This configuration file contains the list of requirements for tests to execute. Eg: Copying the streams, setting environment variables etc.
-  - Example configuration file [rmfAudio_L3_testSetup.yml](../../../host/tests/rmfAudio_L3_TestCases/rmfAudio_L3_testSetup.yml)
+  - Example configuration file [rmfAudio_L3_testSetup.yml](../../host/tests/rmfAudio_L3_TestCases/rmfAudio_L3_testSetup.yml)
 
 - **testConfig.yaml**
   - This configuration file contains the list of menu items for C/C++ L3 test running on `DUT`
-  - Example configuration file [rmfAudio_testConfig.yml](../../../host/tests/rmfAudioClasses/rmfAudio_testConfig.yml)
+  - Example configuration file [rmfAudio_testConfig.yml](../../host/tests/rmfAudioClasses/rmfAudio_testConfig.yml)
