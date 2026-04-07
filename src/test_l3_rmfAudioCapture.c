@@ -81,7 +81,6 @@
 
 #include "rmfAudioCapture.h"
 
-#define RMF_ASSERT UT_ASSERT
 #define UT_LOG_MENU_INFO UT_LOG_INFO
 
 #define MEASUREMENT_WINDOW_SECONDS 10 // Default duration for data capture test
@@ -231,12 +230,7 @@ static rmf_Error test_l3_counting_data_cb(void *context_blob, void *AudioCapture
     RMF_audio_capture_struct *ctx_data = (RMF_audio_capture_struct *)context_blob;
 
     bool result = (AudioCaptureBuffer == NULL) || (context_blob == NULL) || (AudioCaptureBufferSize <= 0);
-    if (result == true)
-    {
-        UT_LOG_ERROR ("Invalid values received in callback, audio capture failure");
-    }
-    RMF_ASSERT(result == false);
-
+    UT_ASSERT_FALSE_MSG(result, "Invalid values received in callback, audio capture failure");
     ctx_data->bytes_received += AudioCaptureBufferSize;
     ctx_data->cookie = 1;
 
@@ -272,12 +266,7 @@ static rmf_Error test_l3_tracking_data_cb(void *context_blob, void *AudioCapture
     RMF_audio_capture_struct *ctx_data = (RMF_audio_capture_struct *)context_blob;
 
     bool result = (AudioCaptureBuffer == NULL) || (context_blob == NULL) || (AudioCaptureBufferSize <= 0);
-    if (result == true)
-    {
-        UT_LOG_ERROR ("Invalid values received in callback, audio capture failure");
-    }
-    RMF_ASSERT(result == false);
-
+    UT_ASSERT_FALSE_MSG(result, "Invalid values received in callback, audio capture failure");
     ctx_data->cookie = 1;
 
     if ( ctx_data->bytes_received + AudioCaptureBufferSize > ctx_data->buffer_size)
@@ -342,8 +331,7 @@ static void test_l3_prepare_start_settings_for_data_tracking(void *context_blob)
     {
         UT_LOG_ERROR("Aborting test - Error allocating buffer to store audio data");
     }
-    RMF_ASSERT(ctx_data->data_buffer != NULL);
-    
+    UT_ASSERT_PTR_NOT_NULL(ctx_data->data_buffer);
     ctx_data->bytes_received = 0;
 }
 
@@ -574,9 +562,8 @@ void test_l3_rmfAudioCapture_open_handle(void)
     {
         UT_LOG_ERROR("Aborting test - unable to open capture.");
     }
-    RMF_ASSERT(RMF_SUCCESS == result);
-    RMF_ASSERT(NULL != gAudioCaptureData[audioCaptureIndex].handle);
-
+    UT_ASSERT_EQUAL(RMF_SUCCESS, result);
+    UT_ASSERT_PTR_NOT_NULL(gAudioCaptureData[audioCaptureIndex].handle);
     UT_LOG_INFO("Out %s\n", __FUNCTION__);
 }
 
@@ -604,8 +591,7 @@ void test_l3_rmfAudioCapture_update_settings(void)
     UT_LOG_INFO("Calling RMF_AudioCapture_GetDefaultSettings(OUT:settings:[])");
     result = RMF_AudioCapture_GetDefaultSettings(&gAudioCaptureData[audioCaptureIndex].settings);
     UT_LOG_INFO("Result RMF_AudioCapture_GetDefaultSettings(OUT:settings:[0x%0X]) rmf_error:[%s]", &gAudioCaptureData[audioCaptureIndex].settings, UT_Control_GetMapString(rmfError_mapTable, result));
-    RMF_ASSERT(result == RMF_SUCCESS);
-
+    UT_ASSERT_EQUAL(RMF_SUCCESS, result);
     UT_LOG_MENU_INFO("------------------------------------------");
     UT_LOG_MENU_INFO("Current values in settings :");
     UT_LOG_MENU_INFO("------------------------------------------");
@@ -788,8 +774,7 @@ void test_l3_rmfAudioCapture_start(void)
         }
         UT_LOG_ERROR("Aborting test - unable to start capture.");
     }
-    RMF_ASSERT(result == RMF_SUCCESS);
-    
+    UT_ASSERT_EQUAL(RMF_SUCCESS, result);
     UT_LOG_INFO("Out %s\n", __FUNCTION__);
 }
 
@@ -859,8 +844,7 @@ void test_l3_write_output_file(void)
     }
 
     result = test_l3_write_wav_file((void *)&gAudioCaptureData[audioCaptureIndex], filepath);
-    RMF_ASSERT(result == RMF_SUCCESS);
-
+    UT_ASSERT_EQUAL(RMF_SUCCESS, result);
     UT_LOG_INFO("Out %s\n", __FUNCTION__);
 }
 
@@ -921,8 +905,7 @@ void test_l3_jitter_monitor(void)
     {
         UT_LOG_ERROR("Aborting test - Failed to create monitor thread");
     }
-    RMF_ASSERT (result == 0);
-
+    UT_ASSERT_EQUAL(0, result);
     UT_LOG_INFO("Out %s\n", __FUNCTION__);
 }
 
@@ -995,8 +978,7 @@ void test_l3_rmfAudioCapture_getCurrent_settings(void)
     UT_LOG_INFO("Result RMF_AudioCapture_GetCurrentSettings(IN:handle:[0x%0X] OUT:settings:[0x%0X] settings.cbBufferReady:[0x%0X] settings.cbBufferReadyParm:[0x%0X]", &gAudioCaptureData[audioCaptureIndex].handle, &current_settings, (void*)current_settings.cbBufferReady, current_settings.cbBufferReadyParm);
     UT_LOG_INFO("Result RMF_AudioCapture_GetCurrentSettings(OUT:settings.cbStatusChange:[0x%0X] settings.cbStatusParm:[0x%0X] settings.fifoSize:[%zu]", (void *)current_settings.cbStatusChange, current_settings.cbStatusParm, current_settings.fifoSize);
     UT_LOG_INFO("Result RMF_AudioCapture_GetCurrentSettings(OUT: settings.threshold:[%zu] settings.racFormat:[%d] settings.racFreq:[%d] settings.delayCompensation_ms:[%u]", current_settings.threshold, current_settings.format, current_settings.samplingFreq, current_settings.delayCompensation_ms);
-    RMF_ASSERT(result == RMF_SUCCESS);
-
+    UT_ASSERT_EQUAL(RMF_SUCCESS, result);
     UT_LOG_INFO("Out %s\n", __FUNCTION__);
 }
 
@@ -1026,8 +1008,7 @@ void test_l3_rmfAudioCapture_get_status(void)
     result = RMF_AudioCapture_GetStatus(gAudioCaptureData[audioCaptureIndex].handle, &status);
     UT_LOG_INFO("Result RMF_AudioCapture_GetStatus(IN:handle:[0x%0X] OUT:status:[0x%0X] status.started:[%d] status.racFormat:[%d] status.racFreq:[%d] status.fifoDepth:[%zu]", &gAudioCaptureData[audioCaptureIndex].handle, &status, status.started, status.format, status.samplingFreq, status.fifoDepth);
     UT_LOG_INFO("Result RMF_AudioCapture_GetStatus(IN:handle:[0x%0X] OUT:status:[0x%0X] status.overflows:[%u] status.underflows:[%u]", &gAudioCaptureData[audioCaptureIndex].handle, &status, status.overflows, status.underflows);
-    RMF_ASSERT(result == RMF_SUCCESS);
-
+    UT_ASSERT_EQUAL(RMF_SUCCESS, result);
     UT_LOG_INFO("Out %s\n", __FUNCTION__);
 }
 
@@ -1055,11 +1036,9 @@ void test_l3_rmfAudioCapture_stop(void)
     result = RMF_AudioCapture_Stop(gAudioCaptureData[audioCaptureIndex].handle);
     UT_LOG_INFO("Result RMF_AudioCapture_Stop(IN:handle:[0x%0X] OUT:rmf_error:[%s]", &gAudioCaptureData[audioCaptureIndex].handle, UT_Control_GetMapString(rmfError_mapTable, result));
     gAudioCaptureData[audioCaptureIndex].cookie = 0;
-    RMF_ASSERT(result == RMF_SUCCESS);
-
+    UT_ASSERT_EQUAL(RMF_SUCCESS, result);
     sleep(1); // Wait for the last callback to be processed
-    RMF_ASSERT(gAudioCaptureData[audioCaptureIndex].cookie == 0);
-    
+    UT_ASSERT_EQUAL(0, gAudioCaptureData[audioCaptureIndex].cookie);
     UT_LOG_INFO("Out %s\n", __FUNCTION__);
 }
 
@@ -1086,8 +1065,7 @@ void test_l3_rmfAudioCapture_close(void)
     UT_LOG_INFO("Calling RMF_AudioCapture_Close(IN:handle:[0x%0X])", &gAudioCaptureData[audioCaptureIndex].handle);
     result = RMF_AudioCapture_Close(gAudioCaptureData[audioCaptureIndex].handle);
     UT_LOG_INFO("Result RMF_AudioCapture_Close(IN:handle:[0x%0X] OUT:rmf_error:[%s]", &gAudioCaptureData[audioCaptureIndex].handle, UT_Control_GetMapString(rmfError_mapTable, result));
-    RMF_ASSERT(result == RMF_SUCCESS);
-    
+    UT_ASSERT_EQUAL(RMF_SUCCESS, result);
     UT_LOG_INFO("Out %s\n", __FUNCTION__);
 }
 
