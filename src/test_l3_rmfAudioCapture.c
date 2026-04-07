@@ -81,7 +81,7 @@
 
 #include "rmfAudioCapture.h"
 
-#define RMF_ASSERT assert
+#define RMF_ASSERT UT_ASSERT
 #define UT_LOG_MENU_INFO UT_LOG_INFO
 
 #define MEASUREMENT_WINDOW_SECONDS 10 // Default duration for data capture test
