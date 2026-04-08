@@ -1073,7 +1073,7 @@ void test_l3_rmfAudioCapture_close(void)
     UT_LOG_INFO("Calling RMF_AudioCapture_Close(IN:handle:[0x%0X])", &gAudioCaptureData[audioCaptureIndex].handle);
     result = RMF_AudioCapture_Close(gAudioCaptureData[audioCaptureIndex].handle);
     UT_LOG_INFO("Result RMF_AudioCapture_Close(IN:handle:[0x%0X] OUT:rmf_error:[%s]", &gAudioCaptureData[audioCaptureIndex].handle, UT_Control_GetMapString(rmfError_mapTable, result));
-    UT_ASSERT_EQUAL(RMF_SUCCESS, result);
+    UT_ASSERT_EQUAL(result, RMF_SUCCESS);
     UT_LOG_INFO("Out %s\n", __FUNCTION__);
 }
 
