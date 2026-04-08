@@ -570,7 +570,7 @@ void test_l3_rmfAudioCapture_open_handle(void)
     {
         UT_LOG_ERROR("Aborting test - unable to open capture.");
     }
-    UT_ASSERT_EQUAL(RMF_SUCCESS, result);
+    UT_ASSERT_EQUAL(result, RMF_SUCCESS);
     UT_ASSERT_PTR_NOT_NULL(gAudioCaptureData[audioCaptureIndex].handle);
     UT_LOG_INFO("Out %s\n", __FUNCTION__);
 }
