@@ -599,7 +599,7 @@ void test_l3_rmfAudioCapture_update_settings(void)
     UT_LOG_INFO("Calling RMF_AudioCapture_GetDefaultSettings(OUT:settings:[])");
     result = RMF_AudioCapture_GetDefaultSettings(&gAudioCaptureData[audioCaptureIndex].settings);
     UT_LOG_INFO("Result RMF_AudioCapture_GetDefaultSettings(OUT:settings:[0x%0X]) rmf_error:[%s]", &gAudioCaptureData[audioCaptureIndex].settings, UT_Control_GetMapString(rmfError_mapTable, result));
-    UT_ASSERT_EQUAL(RMF_SUCCESS, result);
+    UT_ASSERT_EQUAL(result, RMF_SUCCESS);
     UT_LOG_MENU_INFO("------------------------------------------");
     UT_LOG_MENU_INFO("Current values in settings :");
     UT_LOG_MENU_INFO("------------------------------------------");
