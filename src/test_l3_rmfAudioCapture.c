@@ -231,6 +231,10 @@ static rmf_Error test_l3_counting_data_cb(void *context_blob, void *AudioCapture
 
     bool result = (AudioCaptureBuffer == NULL) || (context_blob == NULL) || (AudioCaptureBufferSize <= 0);
     UT_ASSERT_FALSE_MSG(result, "Invalid values received in callback, audio capture failure");
+    if (result)
+    {
+        return RMF_ERROR;
+    }
     ctx_data->bytes_received += AudioCaptureBufferSize;
     ctx_data->cookie = 1;
 
