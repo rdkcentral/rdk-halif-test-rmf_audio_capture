@@ -339,7 +339,7 @@ static void test_l3_prepare_start_settings_for_data_tracking(void *context_blob)
     {
         UT_LOG_ERROR("Aborting test - Error allocating buffer to store audio data");
     }
-    UT_ASSERT_PTR_NOT_NULL(ctx_data->data_buffer);
+    UT_ASSERT_PTR_NOT_NULL_FATAL(ctx_data->data_buffer);
     ctx_data->bytes_received = 0;
 }
 
