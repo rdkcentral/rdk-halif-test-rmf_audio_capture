@@ -783,9 +783,9 @@ void test_l3_rmfAudioCapture_start(void)
             gAudioCaptureData[audioCaptureIndex].data_buffer = NULL;
         }
         UT_LOG_ERROR("Aborting test - unable to start capture.");
-        UT_ASSERT_EQUAL(RMF_SUCCESS, closeResult);
+        UT_ASSERT_EQUAL_FATAL(RMF_SUCCESS, closeResult);
     }
-    UT_ASSERT_EQUAL(result, RMF_SUCCESS);
+    UT_ASSERT_EQUAL_FATAL(result, RMF_SUCCESS);
     UT_LOG_INFO("Out %s\n", __FUNCTION__);
 }
 
